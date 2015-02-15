@@ -7,7 +7,10 @@ import (
 )
 
 func find_content(path string, f os.FileInfo, err error) error {
-	fmt.Printf("%s\n", path)
+	ext := filepath.Ext(path)
+	if ext == ".json" {
+		fmt.Printf("%s\n", path)
+	}
 	return nil
 }
 
