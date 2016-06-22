@@ -24,20 +24,21 @@ Any key in the resulting source configuration that ends `_markdown`
 will be converted to HTML, eg `body_markdown` is converted and the 
 result stored in `body`.
 
-    # example TOML file with 
-    body_markdown = """
-    # Part One
+```toml
+# example TOML file with 
+body_markdown = """
+# Part One
 
-    I come from Markdown.
-    """
-    body = 'I get replaced with HTML created from `body_markdown` above'
-    category = 'article'
-    published = 2016-06-04T11:00:00Z
-    series = 'series-in-three-parts'
-    tag = ['series', 'one']
-    title = 'Part One'
-    type = 'post'
-
+I come from Markdown.
+"""
+body = 'I get replaced with HTML created from `body_markdown` above'
+category = 'article'
+published = 2016-06-04T11:00:00Z
+series = 'series-in-three-parts'
+tag = ['series', 'one']
+title = 'Part One'
+type = 'post'
+```
 
 Usage
 -----
@@ -45,34 +46,35 @@ Usage
 Currently, flourish doesn't actually generate anything, it is still in
 development.
 
-    from datetime import datetime
-    from flourish import Flourish
+```python
+from datetime import datetime
+from flourish import Flourish
 
-    source_dir = 'tests/source'
-    fl = Flourish(source_dir)
+source_dir = 'tests/source'
+fl = Flourish(source_dir)
 
-    # get everything, in filesystem order
-    for source in fl.sources.all():
-        print source
+# get everything, in filesystem order
+for source in fl.sources.all():
+    print source
 
-    # get everything in reverse order of 'publication'
-    for source in fl.sources.all().order_by('-published')
-        print source
+# get everything in reverse order of 'publication'
+for source in fl.sources.all().order_by('-published')
+    print source
 
-    # get a slice
-    for source in fl.sources.all()[0:2]:
-        print source
+# get a slice
+for source in fl.sources.all()[0:2]:
+    print source
 
-    # get one thing by "slug" (its filename minus .toml)
-    print fl.sources.get('series/part-one')
+# get one thing by "slug" (its filename minus .toml)
+print fl.sources.get('series/part-one')
 
-    # get sources by attribute
-    posts = fl.sources.filter(type='post')
-    older = fl.sources.filter(published__lte=datetime(2016, 1, 1))
-    future = fl.sources.filter(published__gt=datetime.now())
-    twos = fl.sources.filter(tag__contains='two')
-    series = fl.sources.filter(series__set='')
-
+# get sources by attribute
+posts = fl.sources.filter(type='post')
+older = fl.sources.filter(published__lte=datetime(2016, 1, 1))
+future = fl.sources.filter(published__gt=datetime.now())
+twos = fl.sources.filter(tag__contains='two')
+series = fl.sources.filter(series__set='')
+```
 
 
 [toml]: https://github.com/toml-lang/toml
