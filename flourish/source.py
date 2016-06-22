@@ -25,5 +25,8 @@ class TomlSourceFile(object):
             return self._config[key]
         raise AttributeError
 
+    def __repr__(self):
+        return '<flourish.TomlSourceFile object (%s)>' % self._source
+
     class DoesNotExist(Exception):
         pass
