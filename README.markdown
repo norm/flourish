@@ -15,6 +15,29 @@ How it works
 Flourish first gathers all [TOML][toml] files found under a source directory
 and allows this to be iterated and queried for individual items.
 
+Any source TOML file can have one or more Markdown blocks added to it
+if they share the same slug part of the filename. For example, a
+`blog-post.toml` file will read in `blog-post.summary.markdown` as
+though it were specified as the key `summary_markdown` in the TOML.
+
+Any key in the resulting source configuration that ends `_markdown`
+will be converted to HTML, eg `body_markdown` is converted and the 
+result stored in `body`.
+
+    # example TOML file with 
+    body_markdown = """
+    # Part One
+
+    I come from Markdown.
+    """
+    body = 'I get replaced with HTML created from `body_markdown` above'
+    category = 'article'
+    published = 2016-06-04T11:00:00Z
+    series = 'series-in-three-parts'
+    tag = ['series', 'one']
+    title = 'Part One'
+    type = 'post'
+
 
 Usage
 -----

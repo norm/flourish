@@ -1,3 +1,8 @@
+body_markdown = """
+# Part Three
+
+Embedded Markdown.
+"""
 category = 'article'
 published = 2016-06-04T13:00:00Z
 series = 'series-in-three-parts'
