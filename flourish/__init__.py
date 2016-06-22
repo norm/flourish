@@ -7,6 +7,7 @@ from .source import TomlSourceFile
 
 
 class Flourish(object):
+    _filters = []
     _order_by = []
     _slice = None
     _source_files = []
@@ -15,6 +16,7 @@ class Flourish(object):
         'source_dir',
     ]
     DATA = [
+        '_filters',
         '_order_by',
         '_slice',
         '_source_files',
@@ -56,6 +58,12 @@ class Flourish(object):
             if source.slug == slug:
                 return source
         raise TomlSourceFile.DoesNotExist
+
+    def filter(self, **kwargs):
+        _clone = self.clone()
+        for _key, _value in kwargs.iteritems():
+            _clone._filters.append((_key, _value))
+        return _clone
 
     def order_by(self, *args):
         return self.clone(_order_by=args)
@@ -99,13 +107,43 @@ class Flourish(object):
         return obj
         return None
 
-    def __iter__(self):
+    def _get_filtered_sources(self):
         _sources = []
         for _source in self._source_files:
-            _sources.append(_source)
+            _add = True
+            if len(self._filters):
+                for _filter in self._filters:
+                    if '__' in _filter[0]:
+                        _field, _operator = _filter[0].split('__', 2)
+                    else:
+                        _field, _operator = _filter[0], 'equal_or_inside'
+                    _operation = OPERATORS.get(_operator)
+                    if _operation is None:
+                        # FIXME write test and raise more useful error
+                        raise RuntimeError
+                    if _operator == 'unset':
+                        try:
+                            getattr(_source, _field)
+                            _add = False
+                        except AttributeError:
+                            pass
+                    else:
+                        try:
+                            _result = _operation(
+                                getattr(_source, _field), _filter[1]
+                            )
+                            if not _result:
+                                _add = False
+                        except AttributeError:
+                            _add = False
+            if _add:
+                _sources.append(_source)
         if self._slice is not None:
             _sources = _sources.__getitem__(self._slice)
+        return _sources
 
+    def __iter__(self):
+        _sources = self._get_filtered_sources()
         for _order in self._order_by:
             if _order[0] == '-':
                 _rev = True
@@ -126,3 +164,69 @@ class Flourish(object):
 
     def __repr__(self):
         return '<flourish.Flourish object (source=%s)' % self.source_dir
+
+
+def _equal_to(value, test):
+    return value == test
+
+
+def _equal_or_inside(value, test):
+    if type(value) == list:
+        return test in value
+    else:
+        return value == test
+
+
+def _less_than(value, test):
+    return value < test
+
+
+def _less_than_or_equal_to(value, test):
+    return value <= test
+
+
+def _greater_than(value, test):
+    return value > test
+
+
+def _greater_than_or_equal_to(value, test):
+    return value >= test
+
+
+def _contains(value, test):
+    try:
+        if type(value) == list:
+            for _v in value:
+                if test in _v:
+                    return True
+            return False
+        else:
+            return test in value
+    except TypeError:
+        return False
+
+
+def _inside(value, test):
+    return value in test
+
+
+def _set(value, test):
+    return value is not None
+
+
+def _unset(value, test):
+    return value is None
+
+
+OPERATORS = {
+    'equal_or_inside': _equal_or_inside,
+    'equals': _equal_to,
+    'lt': _less_than,
+    'lte': _less_than_or_equal_to,
+    'gt': _greater_than,
+    'gte': _greater_than_or_equal_to,
+    'contains': _contains,
+    'in': _inside,
+    'set': _set,
+    'unset': _unset,
+}

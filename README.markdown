@@ -22,6 +22,7 @@ Usage
 Currently, flourish doesn't actually generate anything, it is still in
 development.
 
+    from datetime import datetime
     from flourish import Flourish
 
     source_dir = 'tests/source'
@@ -41,6 +42,13 @@ development.
 
     # get one thing by "slug" (its filename minus .toml)
     print fl.sources.get('series/part-one')
+
+    # get sources by attribute
+    posts = fl.sources.filter(type='post')
+    older = fl.sources.filter(published__lte=datetime(2016, 1, 1))
+    future = fl.sources.filter(published__gt=datetime.now())
+    twos = fl.sources.filter(tag__contains='two')
+    series = fl.sources.filter(series__set='')
 
 
 

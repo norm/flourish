@@ -1,2 +1,5 @@
+category = 'thing'
 published = 2016-06-04T12:30:00Z
+tag = ['basically', 'second', 'two']
 title = 'Second Thing'
+type = 'post'
