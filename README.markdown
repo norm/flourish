@@ -28,8 +28,12 @@ from flourish import Flourish
 source_dir = 'tests/source'
 fl = Flourish(source_dir)
 
-# get everything
+# get everything, in filesystem order
 for source in fl.sources.all():
+    print source
+
+# get everything in reverse order of 'publication'
+for source in fl.sources.all().order_by('-published')
     print source
 
 # get a slice

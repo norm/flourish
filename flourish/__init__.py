@@ -1,10 +1,13 @@
 import collections
+from operator import attrgetter
 import os
+import warnings
 
 from .source import TomlSourceFile
 
 
 class Flourish(object):
+    _order_by = []
     _slice = None
     _source_files = []
 
@@ -12,6 +15,7 @@ class Flourish(object):
         'source_dir',
     ]
     DATA = [
+        '_order_by',
         '_slice',
         '_source_files',
     ]
@@ -49,6 +53,9 @@ class Flourish(object):
                 return source
         raise TomlSourceFile.DoesNotExist
 
+    def order_by(self, *args):
+        return self.clone(_order_by=args)
+
     def clone(self, **kwargs):
         for _option in self.ARGS + self.DATA:
             _value = getattr(self, _option)
@@ -67,7 +74,7 @@ class Flourish(object):
                 if len(this_dir):
                     file = '%s/%s' % (this_dir, file)
                 if file.endswith('.toml'):
-                    self._source_files.append(TomlSourceFile(file))
+                    self._source_files.append(TomlSourceFile(self, file))
 
     def __len__(self):
         return self.count()
@@ -89,9 +96,26 @@ class Flourish(object):
         return None
 
     def __iter__(self):
-        _filtered = []
-        for page in self._source_files:
-            _filtered.append(page)
+        _sources = []
+        for _source in self._source_files:
+            _sources.append(_source)
         if self._slice is not None:
-            _filtered = _filtered.__getitem__(self._slice)
-        return iter(_filtered)
+            _sources = _sources.__getitem__(self._slice)
+
+        for _order in self._order_by:
+            if _order[0] == '-':
+                _rev = True
+                _attr = _order[1:]
+            else:
+                _rev = False
+                _attr = _order
+            try:
+                _sources = sorted(
+                    _sources, key=attrgetter(_attr), reverse=_rev)
+            except AttributeError:
+                warnings.warn(
+                    'sorting sources by "%s" failed: '
+                    'not all sources have that attribute' % _order
+                )
+
+        return iter(_sources)
