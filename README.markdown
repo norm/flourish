@@ -31,6 +31,10 @@ development.
     for source in fl.sources.all():
         print source
 
+    # get a slice
+    for source in fl.sources.all()[0:2]:
+        print source
+
     # get one thing by "slug" (its filename minus .toml)
     print fl.sources.get('series/part-one')
 

@@ -32,3 +32,28 @@ class TestFlourish:
     def test_get_missing_source_raises(self):
         with pytest.raises(TomlSourceFile.DoesNotExist):
             self.flourish.sources.get('nope')
+
+    def test_get_by_index(self):
+        source = self.flourish.sources.all()[0]
+        assert type(source) == TomlSourceFile
+
+    def test_get_by_negative_index_raises(self):
+        with pytest.raises(ValueError):
+            self.flourish.sources.all()[-1]
+
+    def test_get_by_bad_index_raises(self):
+        with pytest.raises(IndexError):
+            self.flourish.sources.all()[100]
+
+    def test_get_sources_by_slice(self):
+        sources = self.flourish.sources.all()[0:2]
+        assert type(sources) == Flourish
+        assert len(sources) == 2
+        assert [
+                'basic-page',
+                'series/part-one',
+            ] == [source.slug for source in sources]
+
+    def test_get_sources_by_negative_slice_raises(self):
+        with pytest.raises(ValueError):
+            self.flourish.sources.all()[-2:2]
