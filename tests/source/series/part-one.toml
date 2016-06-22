@@ -1,2 +1,6 @@
+category = 'article'
 published = 2016-06-04T11:00:00Z
+series = 'series-in-three-parts'
+tag = ['series', 'one']
 title = 'Part One'
+type = 'post'
