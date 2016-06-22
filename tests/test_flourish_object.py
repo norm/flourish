@@ -21,10 +21,11 @@ class TestFlourish:
     def test_get_all_sources(self):
         sources = self.flourish.sources.all()
         assert type(sources) == Flourish
-        assert len(sources) == 6
+        assert len(sources) == 7
         # os.walk order, root dir before subdirs, alphabetical order
         assert [
                 'basic-page',
+                'markdown-page',
                 'thing-one',
                 'thing-two',
                 'series/part-one',
@@ -45,6 +46,9 @@ class TestFlourish:
         with pytest.raises(TomlSourceFile.DoesNotExist):
             self.flourish.sources.get('nope')
 
+        with pytest.raises(TomlSourceFile.DoesNotExist):
+            self.flourish.sources.get('invalid-name.things')
+
     def test_get_by_index(self):
         source = self.flourish.sources.all()[0]
         assert type(source) == TomlSourceFile
@@ -63,7 +67,7 @@ class TestFlourish:
         assert len(sources) == 2
         assert [
                 'basic-page',
-                'thing-one',
+                'markdown-page',
             ] == [source.slug for source in sources]
 
     def test_get_sources_by_negative_slice_raises(self):
@@ -73,9 +77,10 @@ class TestFlourish:
     def test_get_sources_with_ordering(self):
         sources = self.flourish.sources.all().order_by('published')
         assert type(sources) == Flourish
-        assert len(sources) == 6
+        assert len(sources) == 7
         assert [
                 'basic-page',
+                'markdown-page',
                 'series/part-one',
                 'series/part-two',
                 'thing-one',
@@ -85,7 +90,7 @@ class TestFlourish:
 
         sources = self.flourish.sources.all().order_by('-published')
         assert type(sources) == Flourish
-        assert len(sources) == 6
+        assert len(sources) == 7
         # thing-one and thing-two swap places (aren't reversed) because they
         # share a published timestamp, so come out in alphabetical order
         assert [
@@ -94,17 +99,19 @@ class TestFlourish:
                 'thing-two',
                 'series/part-two',
                 'series/part-one',
+                'markdown-page',
                 'basic-page',
             ] == [source.slug for source in sources]
 
         sources = self.flourish.sources.all().order_by('title')
         assert type(sources) == Flourish
-        assert len(sources) == 6
+        assert len(sources) == 7
         assert [
                 'basic-page',
                 'series/part-one',
                 'series/part-three',
                 'series/part-two',
+                'markdown-page',
                 'thing-two',
                 'thing-one',
             ] == [source.slug for source in sources]
@@ -113,10 +120,11 @@ class TestFlourish:
         with pytest.warns(None) as warnings:
             sources = self.flourish.sources.all().order_by('-updated')
             assert type(sources) == Flourish
-            assert len(sources) == 6
+            assert len(sources) == 7
             # os.walk order, root dir first, alphabetical order
             assert [
                     'basic-page',
+                    'markdown-page',
                     'thing-one',
                     'thing-two',
                     'series/part-one',
@@ -134,7 +142,7 @@ class TestFlourish:
     def test_order_by_multiple_keys(self):
         sources = self.flourish.sources.all().order_by('title', '-published')
         assert type(sources) == Flourish
-        assert len(sources) == 6
+        assert len(sources) == 7
         # thing-one and thing-two come out in reverse order compared to
         # plain order_by('-published') because they share a published
         # timestamp, but the extra title argument sorted them differently
@@ -145,6 +153,7 @@ class TestFlourish:
                 'thing-one',
                 'series/part-two',
                 'series/part-one',
+                'markdown-page',
                 'basic-page',
             ] == [source.slug for source in sources]
 
@@ -173,9 +182,10 @@ class TestFlourish:
         on = datetime(2016, 06, 04, 12, 30, 0)
         sources = self.flourish.sources.filter(published__lt=on)
         assert type(sources) == Flourish
-        assert len(sources) == 3
+        assert len(sources) == 4
         assert [
                 'basic-page',
+                'markdown-page',
                 'series/part-one',
                 'series/part-two',
             ] == [source.slug for source in sources]
@@ -184,9 +194,10 @@ class TestFlourish:
         on = datetime(2016, 06, 04, 12, 30, 0)
         sources = self.flourish.sources.filter(published__lte=on)
         assert type(sources) == Flourish
-        assert len(sources) == 5
+        assert len(sources) == 6
         assert [
                 'basic-page',
+                'markdown-page',
                 'thing-one',
                 'thing-two',
                 'series/part-one',
@@ -266,9 +277,10 @@ class TestFlourish:
     def test_filter_unset(self):
         sources = self.flourish.sources.filter(type__unset='')
         assert type(sources) == Flourish
-        assert len(sources) == 1
+        assert len(sources) == 2
         assert [
                 'basic-page',
+                'markdown-page',
             ] == [source.slug for source in sources]
 
     def test_filter_inside_or_equal(self):
@@ -375,7 +387,7 @@ class TestFlourish:
     def test_order_after_filter_works(self):
         sources = self.flourish.sources.order_by('published')
         assert type(sources) == Flourish
-        assert len(sources) == 6
+        assert len(sources) == 7
 
         sources = sources.filter(tag__contains='one')
         assert [
@@ -387,7 +399,7 @@ class TestFlourish:
         with pytest.warns(None) as warnings:
             sources = self.flourish.sources.order_by('type')
             assert type(sources) == Flourish
-            assert len(sources) == 6
+            assert len(sources) == 7
             assert len(warnings) == 1
             assert (
                 str(warnings[0].message) ==

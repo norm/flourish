@@ -3,7 +3,7 @@ from operator import attrgetter
 import os
 import warnings
 
-from .source import TomlSourceFile
+from .source import MarkdownSourceFile, TomlSourceFile
 
 
 class Flourish(object):
@@ -87,6 +87,8 @@ class Flourish(object):
                     file = '%s/%s' % (this_dir, file)
                 if file.endswith('.toml'):
                     self._source_files.append(TomlSourceFile(self, file))
+                elif file.endswith('.markdown') and len(file.split('.')) == 2:
+                    self._source_files.append(MarkdownSourceFile(self, file))
 
     def __len__(self):
         return self.count()

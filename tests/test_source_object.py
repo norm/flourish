@@ -5,6 +5,11 @@ import pytest
 from flourish import Flourish
 
 
+class TestFlourishPageInvalidFrontmatter:
+    def test_page_markdown_with_invalid_frontmatter(self):
+        with pytest.raises(RuntimeError):
+            Flourish('tests/invalid_frontmatter')
+
 
 class TestFlourishPage:
     @classmethod
@@ -34,6 +39,19 @@ class TestFlourishPage:
                 'series': 'series-in-three-parts',
                 'tag': ['series', 'one'],
                 'title': 'Part One',
+                'type': 'post',
+            } == page._config
+
+        page = self.flourish.sources.get('thing-two')
+        assert {
+                'body_markdown': 'Body read from Markdown attachment.\n',
+                'body': '<p>Body read from Markdown attachment.</p>\n',
+                'category': 'thing',
+                'published': datetime(2016, 06, 04, 12, 30, 00),
+                'summary_markdown': 'Thing Two summary.\n',
+                'summary': '<p>Thing Two summary.</p>\n',
+                'tag': ['basically', 'second', 'two'],
+                'title': 'Second Thing',
                 'type': 'post',
             } == page._config
 
@@ -80,3 +98,16 @@ class TestFlourishPage:
             '"body" in series/part-two overriden by Markdown conversion.'
         )
 
+    def test_page_markdown_with_frontmatter(self):
+        page = self.flourish.sources.get('markdown-page')
+        assert {
+                'body_markdown': '\n# Markdown\n\n'
+                                 'I was generated from Markdown alone, '
+                                 'no TOML.\n',
+                'body': '<h1>Markdown</h1>\n\n'
+                        '<p>I was generated from Markdown alone, '
+                        'no TOML.</p>\n',
+                'category': 'post',
+                'published': datetime(2016, 02, 29, 10, 30, 00),
+                'title': 'Plain Markdown Page',
+            } == page._config

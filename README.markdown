@@ -12,8 +12,9 @@ Heavily inspired by django's [class based views][cbv] and James Aylett's
 
 How it works
 ------------
-Flourish first gathers all [TOML][toml] files found under a source directory
-and allows this to be iterated and queried for individual items.
+Flourish first gathers all [TOML][toml] or standalone Markdown files found
+under a source directory and allows this to be iterated and queried for
+individual items.
 
 Any source TOML file can have one or more Markdown blocks added to it
 if they share the same slug part of the filename. For example, a
@@ -25,7 +26,7 @@ will be converted to HTML, eg `body_markdown` is converted and the
 result stored in `body`.
 
 ```toml
-# example TOML file with 
+# example TOML file 
 body_markdown = """
 # Part One
 
@@ -39,6 +40,15 @@ tag = ['series', 'one']
 title = 'Part One'
 type = 'post'
 ```
+
+Standalone Markdown sources are a file named `<slug>.markdown`, where `<slug>`
+does not contain a dot (this is to differentiate it from a Markdown block
+intended to be added to an existing TOML source file).
+
+Markdown source files can include TOML front matter by starting the file with
+three hyphens (`---`) on a line, including the TOML, then finishing it with
+three hyphens on a line. All other content is expected to be Markdown and is
+stored in the key `body_markdown`.
 
 
 Usage
@@ -80,5 +90,6 @@ series = fl.sources.filter(series__set='')
 
 
 [toml]: https://github.com/toml-lang/toml
+[md]: http://daringfireball.net/projects/markdown/
 [cbv]: https://docs.djangoproject.com/en/stable/topics/class-based-views/
 [dfbo]: https://github.com/jaylett/django-filebacked-objects
