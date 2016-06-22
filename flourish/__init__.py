@@ -23,6 +23,10 @@ class Flourish(object):
     def __init__(self, source_dir='source', **kwargs):
         self.source_dir = source_dir
 
+        if not os.path.isdir(self.source_dir):
+            raise AttributeError(
+                'source_dir "%s" must exist' % self.source_dir)
+
         for _opt in self.DATA:
             if _opt in kwargs:
                 if kwargs[_opt] is not None:
