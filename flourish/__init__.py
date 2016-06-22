@@ -1,13 +1,31 @@
+import collections
 import os
 
 from .source import TomlSourceFile
 
 
 class Flourish(object):
-    def __init__(self, source_dir):
+    _slice = None
+    _source_files = []
+
+    ARGS = [
+        'source_dir',
+    ]
+    DATA = [
+        '_slice',
+        '_source_files',
+    ]
+
+    def __init__(self, source_dir='source', **kwargs):
         self.source_dir = source_dir
-        self._source_files = []
-        self._add_sources()
+
+        for _opt in self.DATA:
+            if _opt in kwargs:
+                if kwargs[_opt] is not None:
+                    setattr(self, _opt, kwargs[_opt])
+
+        if '_source_files' not in kwargs:
+            self._add_sources()
 
     @property
     def sources(self):
@@ -31,6 +49,15 @@ class Flourish(object):
                 return source
         raise TomlSourceFile.DoesNotExist
 
+    def clone(self, **kwargs):
+        for _option in self.ARGS + self.DATA:
+            _value = getattr(self, _option)
+            if isinstance(_value, collections.Iterable):
+                kwargs.setdefault(_option, _value[:])
+            else:
+                kwargs.setdefault(_option, _value)
+        return type(self)(**kwargs)
+
     def _add_sources(self):
         """ Find source documents and register them. """
         trim = len(self.source_dir) + 1
@@ -45,5 +72,26 @@ class Flourish(object):
     def __len__(self):
         return self.count()
 
+    def __getitem__(self, item):
+        if isinstance(item, slice):
+            if (item.start < 0) or (item.stop < 0):
+                raise ValueError('Cannot use negative indexes with Flourish')
+            return self.clone(_slice=item)
+        if item < 0:
+            raise ValueError('Cannot use negative indexes with Flourish')
+        _iterator = iter(self)
+        try:
+            for i in range(0, item+1):
+                obj = next(_iterator)
+        except StopIteration:
+            raise IndexError(item)
+        return obj
+        return None
+
     def __iter__(self):
-        return iter(self._source_files)
+        _filtered = []
+        for page in self._source_files:
+            _filtered.append(page)
+        if self._slice is not None:
+            _filtered = _filtered.__getitem__(self._slice)
+        return iter(_filtered)
