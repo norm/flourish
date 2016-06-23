@@ -17,6 +17,7 @@ class TestFlourish:
         with pytest.warns(None) as warnings:
             cls.flourish = Flourish('tests/source')
             assert len(warnings) == 2
+            assert cls.flourish.sources.count() == 7
 
     def test_get_all_sources(self):
         sources = self.flourish.sources.all()

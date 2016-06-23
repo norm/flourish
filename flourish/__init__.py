@@ -7,11 +7,6 @@ from .source import MarkdownSourceFile, TomlSourceFile
 
 
 class Flourish(object):
-    _filters = []
-    _order_by = []
-    _slice = None
-    _source_files = []
-
     ARGS = [
         'source_dir',
     ]
@@ -24,6 +19,10 @@ class Flourish(object):
 
     def __init__(self, source_dir='source', **kwargs):
         self.source_dir = source_dir
+        self._filters = []
+        self._order_by = []
+        self._slice = None
+        self._source_files = []
 
         if not os.path.isdir(self.source_dir):
             raise AttributeError(
