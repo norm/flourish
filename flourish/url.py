@@ -2,10 +2,11 @@ import re
 
 
 class URL(object):
-    def __init__(self, parent, path, name):
+    def __init__(self, parent, path, name, generator):
         self.parent = parent
         self.path = path
         self.name = name
+        self.generator = generator
 
     @property
     def arguments(self):

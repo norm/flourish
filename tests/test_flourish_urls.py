@@ -11,10 +11,26 @@ class TestFlourishUrls:
             assert len(warnings) == 2
             assert cls.flourish.sources.count() == 7
 
-            cls.flourish.add_url('/',                'homepage')
-            cls.flourish.add_url('/#slug',           'post-detail')
-            cls.flourish.add_url('/tags/#tag/',      'tag-index')
-            cls.flourish.add_url('/tags/#tag/#slug', 'tag-post-detail')
+            cls.flourish.add_url(
+                '/',
+                'homepage',
+                None
+            )
+            cls.flourish.add_url(
+                '/#slug',
+                'post-detail',
+                None
+            )
+            cls.flourish.add_url(
+                '/tags/#tag/',
+                'tag-index',
+                None
+            )
+            cls.flourish.add_url(
+                '/tags/#tag/#slug',
+                'tag-post-detail',
+                None
+            )
 
     def test_homepage_resolves(self):
         assert self.flourish.resolve_url('homepage') == '/'

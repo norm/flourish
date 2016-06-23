@@ -20,6 +20,10 @@ class BaseSourceFile(object):
     def slug(self):
         return self._slug
 
+    @property
+    def url(self):
+        return '/%s' % self._slug
+
     def _read_configuration(self, filename):
         toml_file = '%s/%s' % (self._parent.source_dir, filename)
         with open(toml_file) as configuration:

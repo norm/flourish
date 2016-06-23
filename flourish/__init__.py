@@ -2,6 +2,8 @@ from operator import attrgetter
 import os
 import warnings
 
+from jinja2 import Environment, FileSystemLoader
+
 from .source import MarkdownSourceFile, TomlSourceFile
 from .url import URL
 
@@ -9,6 +11,8 @@ from .url import URL
 class Flourish(object):
     ARGS = [
         'source_dir',
+        'templates_dir',
+        'jinja',
     ]
     DATA = [
         '_filters',
@@ -18,8 +22,21 @@ class Flourish(object):
         '_urls',
     ]
 
-    def __init__(self, source_dir='source', **kwargs):
+    def __init__(
+        self,
+        source_dir='source',
+        templates_dir='templates',
+        output_dir='output',
+        **kwargs
+    ):
         self.source_dir = source_dir
+        self.templates_dir = templates_dir
+        self.output_dir = output_dir
+        self.jinja = Environment(
+            loader=FileSystemLoader(self.templates_dir),
+            keep_trailing_newline=True,
+        )
+
         self._filters = []
         self._order_by = []
         self._slice = None
@@ -69,8 +86,8 @@ class Flourish(object):
     def order_by(self, *args):
         return self.clone(_order_by=args)
 
-    def add_url(self, url, name):
-        _url_dict = {name: URL(self, url, name)}
+    def add_url(self, url, name, generator):
+        _url_dict = {name: URL(self, url, name, generator)}
         self._urls.update(_url_dict)
 
     def resolve_url(self, name, **kwargs):
@@ -78,6 +95,11 @@ class Flourish(object):
 
     def all_valid_filters_for_url(self, name):
         return self._urls[name].all_valid_filters()
+
+    def generate_all_urls(self):
+        for _entry in self._urls:
+            url = self._urls[_entry]
+            url.generator(self, url)
 
     def clone(self, **kwargs):
         for _option in self.ARGS + self.DATA:
