@@ -49,9 +49,19 @@ class BaseSourceFile(object):
         self._config.update(add)
 
     def __getattr__(self, key):
+        if key == 'slug':
+            return self.slug
         if key in self._config:
             return self._config[key]
         raise AttributeError
+
+    def __getitem__(self, key):
+        return self.__getattr__(key)
+
+    def __iter__(self):
+        _keys = self._config.keys()
+        _keys.append('slug')
+        return iter(_keys)
 
     def __repr__(self):
         return '<flourish.TomlSourceFile object (%s)>' % self._source

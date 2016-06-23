@@ -1,9 +1,9 @@
-import collections
 from operator import attrgetter
 import os
 import warnings
 
 from .source import MarkdownSourceFile, TomlSourceFile
+from .url import URL
 
 
 class Flourish(object):
@@ -15,6 +15,7 @@ class Flourish(object):
         '_order_by',
         '_slice',
         '_source_files',
+        '_urls',
     ]
 
     def __init__(self, source_dir='source', **kwargs):
@@ -23,6 +24,7 @@ class Flourish(object):
         self._order_by = []
         self._slice = None
         self._source_files = []
+        self._urls = {}
 
         if not os.path.isdir(self.source_dir):
             raise AttributeError(
@@ -67,10 +69,20 @@ class Flourish(object):
     def order_by(self, *args):
         return self.clone(_order_by=args)
 
+    def add_url(self, url, name):
+        _url_dict = {name: URL(self, url, name)}
+        self._urls.update(_url_dict)
+
+    def resolve_url(self, name, **kwargs):
+        return self._urls[name].resolve(**kwargs)
+
+    def all_valid_filters_for_url(self, name):
+        return self._urls[name].all_valid_filters()
+
     def clone(self, **kwargs):
         for _option in self.ARGS + self.DATA:
             _value = getattr(self, _option)
-            if isinstance(_value, collections.Iterable):
+            if type(_value) == list:
                 kwargs.setdefault(_option, _value[:])
             else:
                 kwargs.setdefault(_option, _value)
