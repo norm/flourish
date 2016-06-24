@@ -1,6 +1,8 @@
 flourish
 ========
 
+[Travis build status: ![](https://travis-ci.org/norm/flourish.svg)](https://travis-ci.org/norm/flourish/)
+
 A static site generator built around the idea that combining Markdown files
 and templates is **not enough** for anything but the most basic needs, and
 that enabling plugins is mostly a panacea for being able to really develop
