@@ -17,8 +17,8 @@ URLS = (
         IndexGenerator.as_generator()
     ),
     (
-        '/tags/#tag',
-        'tags-tag',
+        '/#year/',
+        'year-index',
         IndexGenerator.as_generator()
     ),
     ...
@@ -39,13 +39,15 @@ A hash (`#`) in the path of a URL represents a replaceable token, that will be
 substituted as the output is generated. The alphanumerics that follow the hash
 represent the key to use (as found in source TOML). 
 
-### Automatic token
+### Automatic tokens
 
-The following token is automatically available without you having to add
-it explicitly to your sources:
+The following tokens are automatically available without you having to add
+them explicitly to your sources:
 
   * `slug` — always comes from the filename of the source TOML or
     Markdown file
+  * `year`, `month`, `day` — are created from the `published` key, if it
+    is a timestamp (explained further in [Adding sources](/adding-sources/))
 
 ### Multiple pages from single tokens
 

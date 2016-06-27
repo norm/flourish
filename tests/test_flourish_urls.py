@@ -31,6 +31,21 @@ class TestFlourishUrls:
                 'tag-post-detail',
                 None
             )
+            cls.flourish.add_url(
+                '/#year/',
+                'year-index',
+                None
+            )
+            cls.flourish.add_url(
+                '/#year/#month/',
+                'month-index',
+                None
+            )
+            cls.flourish.add_url(
+                '/#year/#month/#day',
+                'day-index',
+                None
+            )
 
     def test_homepage_resolves(self):
         assert self.flourish.resolve_url('homepage') == '/'
@@ -98,3 +113,40 @@ class TestFlourishUrls:
         # each should only match one source
         for _filter in _filters:
             assert self.flourish.sources.filter(**_filter).count() == 1
+
+    def test_year_index(self):
+        _filters = self.flourish.all_valid_filters_for_url('year-index')
+        assert _filters == [
+            {'year': '2015'},
+            {'year': '2016'},
+        ]
+
+        assert self.flourish.filter(**_filters[0]).count() == 1   # 2015
+        assert self.flourish.filter(**_filters[1]).count() == 6   # 2016
+
+    def test_month_index(self):
+        _filters = self.flourish.all_valid_filters_for_url('month-index')
+        assert _filters == [
+            {'month': '02', 'year': '2016'},
+            {'month': '06', 'year': '2016'},
+            {'month': '12', 'year': '2015'},
+        ]
+
+        assert self.flourish.filter(**_filters[0]).count() == 1   # 2016/02
+        assert self.flourish.filter(**_filters[1]).count() == 5   # 2016/06
+        assert self.flourish.filter(**_filters[2]).count() == 1   # 2015/12
+
+    def test_day_index(self):
+        _filters = self.flourish.all_valid_filters_for_url('day-index')
+        assert _filters == [
+            {'day': '04', 'month': '06', 'year': '2016'},
+            {'day': '06', 'month': '06', 'year': '2016'},
+            {'day': '25', 'month': '12', 'year': '2015'},
+            {'day': '29', 'month': '02', 'year': '2016'},
+        ]
+
+        assert self.flourish.filter(**_filters[0]).count() == 4   # 2016/06/04
+        assert self.flourish.filter(**_filters[1]).count() == 1   # 2016/06/06
+        assert self.flourish.filter(**_filters[1]).count() == 1   # 2015/12/25
+        assert self.flourish.filter(**_filters[2]).count() == 1   # 2016/02/29
+

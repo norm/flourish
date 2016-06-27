@@ -64,7 +64,7 @@ class TestFlourishPage:
                 'body': '<h1>Part Three</h1>\n\n'
                         '<p>The embedded Markdown gets overridden.</p>\n',
                 'category': 'article',
-                'published': datetime(2016, 06, 04, 13, 00, 00),
+                'published': datetime(2016, 06, 06, 10, 00, 00),
                 'series': 'series-in-three-parts',
                 'tag': ['series', 'three'],
                 'title': 'Part Three',

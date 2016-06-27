@@ -4,7 +4,7 @@ body_markdown = """
 Embedded Markdown.
 """
 category = 'article'
-published = 2016-06-04T13:00:00Z
+published = 2016-06-06T10:00:00Z
 series = 'series-in-three-parts'
 tag = ['series', 'three']
 title = 'Part Three'

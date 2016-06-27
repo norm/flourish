@@ -1,3 +1,4 @@
+from datetime import datetime
 import re
 
 
@@ -51,7 +52,16 @@ class URL(object):
 
         _values = set()
         for _source in objects:
-            if _first_key in _source:
+            _is_date_filter = (
+                _first_key in ['year', 'month', 'day']
+                and 'published' in _source
+                and type(_source['published'] == datetime)
+            )
+
+            if _is_date_filter:
+                _value = getattr(_source['published'], _first_key)
+                _values.add('%02d' % _value)
+            elif _first_key in _source:
                 if type(_source[_first_key]) == list:
                     for _value in _source[_first_key]:
                         _values.add(_value)

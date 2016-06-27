@@ -1,3 +1,4 @@
+from datetime import datetime
 from operator import attrgetter
 import os
 from shutil import copyfile
@@ -187,8 +188,18 @@ class Flourish(object):
                     if _operation is None:
                         # FIXME write test and raise more useful error
                         raise RuntimeError
+                    _is_date_filter = (
+                        _field in ['year', 'month', 'day'] and
+                        'published' in _source and
+                        type(_source['published'] == datetime)
+                    )
+
                     try:
-                        _test = getattr(_source, _field)
+                        if _is_date_filter:
+                            _test = '%02d' % getattr(
+                                _source['published'], _field)
+                        else:
+                            _test = getattr(_source, _field)
                     except AttributeError:
                         _test = None
 

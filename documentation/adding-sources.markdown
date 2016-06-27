@@ -109,6 +109,27 @@ immediately obvious when looking at a source file that it may have more
 keys that are currently shown.
 
 
+## Special keys in sources
+
+You are free to use any keys for any purpose in your Flourish source
+documents, but the following keys have special treatment you should
+be aware of:
+
+  * `author` — is used to mark the author of a source when
+    generating Atom feeds (this overrides the author set in
+    the [site configuration](/site-configuration/) for that source only).
+  * `body` — is used as the content of an individual source when generating
+    Atom feeds.
+  * `published` — is used as the publication timestamp of a source when
+    generating Atom feeds, and is used as the basis of the `#year`, `#month`
+    and `#day` special tokens in [URLs](/adding-urls/). It is expected to be a
+    timestamp (explained in [Adding sources](/adding-sources/)).
+  * `title` — is used as the title of an individual source when generating
+    Atom feeds.
+  * `updated` — is used as the "last updated" timestamp of a source when
+    generating Atom feeds. It is expected to be a timestamp (explained in
+    [Adding sources](/adding-sources/)).
+
 
 [iso]: https://en.wikipedia.org/wiki/ISO_8601
 [md]: http://daringfireball.net/projects/markdown/
