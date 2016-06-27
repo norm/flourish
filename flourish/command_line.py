@@ -2,6 +2,7 @@ import argparse
 from imp import load_source
 from multiprocessing import Process
 import os
+from shutil import rmtree
 import textwrap
 import time
 
@@ -32,6 +33,9 @@ def main():
         '-t', '--templates', default='templates',
         help='Directory containing templates (default: %(default)s)')
     parser.add_argument(
+        '-a', '--assets', default='assets',
+        help='Directory containing asset files (default: %(default)s)')
+    parser.add_argument(
         '-o', '--output', default='output',
         help='Directory to output to (default: %(default)s)')
     parser.add_argument(
@@ -59,10 +63,19 @@ def generate_once(args):
     generate = load_source('generate', '%s/generate.py' % args.source)
     from generate import URLS
 
-    flourish = Flourish(args.source, args.templates, args.output)
+    rmtree(args.output)
+
+    flourish = Flourish(
+        source_dir=args.source,
+        templates_dir=args.templates,
+        output_dir=args.output,
+        assets_dir=args.assets,
+    )
+
     for url in URLS:
         flourish.add_url(*url)
     flourish.generate_all_urls()
+    flourish.copy_assets()
 
 
 def generate_on_change(args):
@@ -71,10 +84,12 @@ def generate_on_change(args):
             print '**', event.src_path, event.event_type
             generate_once(args)
 
+    generate_once(args)
     observer = Observer()
     observer.daemon = True
     observer.schedule(Handler(), args.source, recursive=True)
     observer.schedule(Handler(), args.templates, recursive=True)
+    observer.schedule(Handler(), args.assets, recursive=True)
     observer.start()
     try:
         while True:

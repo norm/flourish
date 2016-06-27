@@ -1,10 +1,12 @@
 from operator import attrgetter
 import os
+from shutil import copyfile
 import warnings
 
 from jinja2 import Environment, FileSystemLoader
 import toml
 
+from .lib import relative_list_of_files_in_directory
 from .source import MarkdownSourceFile, TomlSourceFile
 from .url import URL
 
@@ -28,11 +30,13 @@ class Flourish(object):
         source_dir='source',
         templates_dir='templates',
         output_dir='output',
+        assets_dir='assets',
         **kwargs
     ):
         self.source_dir = source_dir
         self.templates_dir = templates_dir
         self.output_dir = output_dir
+        self.assets_dir = assets_dir
         self.jinja = Environment(
             loader=FileSystemLoader(self.templates_dir),
             keep_trailing_newline=True,
@@ -103,6 +107,18 @@ class Flourish(object):
         for _entry in self._urls:
             url = self._urls[_entry]
             url.generator(self, url)
+
+    def copy_assets(self):
+        if self.assets_dir:
+            # FIXME refactor this to be used elsewhere
+            _files = relative_list_of_files_in_directory(self.assets_dir)
+            for _file in _files:
+                _source = '%s/%s' % (self.assets_dir, _file)
+                _destination = '%s/%s' % (self.output_dir, _file)
+                _directory = os.path.dirname(_destination)
+                if not os.path.isdir(_directory):
+                    os.makedirs(_directory)
+                copyfile(_source, _destination)
 
     def clone(self, **kwargs):
         for _option in self.ARGS + self.DATA:

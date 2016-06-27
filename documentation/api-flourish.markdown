@@ -14,6 +14,7 @@ fl = Flourish()
 fl = Flourish(
     source_dir='words',
     templates_dir='html',
+    assets_dir='bits',
     output_dir='site',
 )
 ```
@@ -231,6 +232,9 @@ get a URL.
 
 ```python
 fl.generate_all_urls()
+fl.copy_assets()
 ```
 
 To generate all URLs that Flourish knows about, call `generate_all_urls()`.
+If the assets directory is defined and contains files for the website,
+call `copy_assets()`.

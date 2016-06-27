@@ -14,8 +14,10 @@ class TestFlourishGeneration(CompareDirectories):
     expected_directory = 'tests/output'
     expected_files = [
         'basic-page.html',
+        'css/screen.css',
         'index.atom',
         'index.html',
+        'logo.png',
         'markdown-page.html',
         'thing-one.html',
         'thing-two.html',
@@ -41,6 +43,8 @@ class TestFlourishGeneration(CompareDirectories):
     ]
 
     def test_generation(self):
+        # FIXME move this all into tests/source/generate.py,
+        # and call command_line generate
         class NewestFirstIndex(IndexGenerator):
             order_by = ('-published')
 
@@ -54,6 +58,7 @@ class TestFlourishGeneration(CompareDirectories):
             flourish = Flourish(
                 source_dir='tests/source',
                 templates_dir='tests/templates',
+                assets_dir='tests/assets',
                 output_dir=self.tempdir,
             )
             assert len(warnings) == 2
@@ -85,4 +90,5 @@ class TestFlourishGeneration(CompareDirectories):
         )
 
         flourish.generate_all_urls()
+        flourish.copy_assets()
         self.compare_directories()

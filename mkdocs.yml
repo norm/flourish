@@ -15,6 +15,7 @@ pages:
         - Adding URLs: adding-urls.markdown
         - Generating the HTML: generating-html.markdown
         - Site configuration: site-configuration.markdown
+        - Adding assets: adding-assets.markdown
     - Recipes:
         - Adding Atom (RSS) feeds: atom-feeds.markdown
     - Flourish API:
