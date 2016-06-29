@@ -151,6 +151,18 @@ To get sources where the value of a key is (isn't) one of a set of many
 possible values.
 
 
+### Excluding sources
+
+```python
+not_posts = fl.sources.exclude(type='post')
+current = fl.sources.exclude(published__gt=datetime.now())
+```
+
+Although each type of filter already has an opposite type (`eq` vs `neq`, `gt`
+vs `lte`), the `exclude()` method is also available. Sometimes using it may
+make illustrating the intention of some filters clearer.
+
+
 ## Ordering sources
 
 ```python

@@ -28,6 +28,7 @@ class PageIndexContextMixin(object):
 class BaseGenerator(object):
     order_by = None
     sources_filter = None
+    sources_exclude = None
     template_name = None
 
     @classmethod
@@ -71,6 +72,8 @@ class BaseGenerator(object):
         _sources = self.flourish.sources
         if self.sources_filter is not None:
             _sources = self.flourish.filter(**self.sources_filter)
+        if self.sources_exclude is not None:
+            _sources = self.flourish.exclude(**self.sources_exclude)
         return _sources
 
     def get_order_by(self):

@@ -91,6 +91,18 @@ class Flourish(object):
             _clone._filters.append((_key, _value))
         return _clone
 
+    def exclude(self, **kwargs):
+        _clone = self.clone()
+        for _key, _value in kwargs.iteritems():
+            if '__' in _key:
+                _field, _operator = _key.split('__', 2)
+            else:
+                _field, _operator = _key, 'eq'
+            _new_operator = INVERSE_OPERATORS.get(_operator)
+            _key = '%s__%s' % (_field, _new_operator)
+            _clone._filters.append((_key, _value))
+        return _clone
+
     def order_by(self, *args):
         return self.clone(_order_by=args)
 
@@ -309,4 +321,18 @@ OPERATORS = {
     'notin': _outside,
     'set': _set,
     'unset': _unset,
+}
+INVERSE_OPERATORS = {
+    'neq': 'eq',
+    'eq': 'neq',
+    'lt': 'gte',
+    'lte': 'gt',
+    'gt': 'lte',
+    'gte': 'lt',
+    'contains': 'excludes',
+    'excludes': 'contains',
+    'in': 'notin',
+    'notin': 'in',
+    'set': 'unset',
+    'unset': 'set',
 }
