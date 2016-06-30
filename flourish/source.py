@@ -1,5 +1,8 @@
+from datetime import datetime
 from glob import glob
+import json
 import os
+import re
 import warnings
 
 import markdown2
@@ -106,3 +109,17 @@ class MarkdownSourceFile(BaseSourceFile):
 
 class TomlSourceFile(BaseSourceFile):
     pass
+
+
+class JsonSourceFile(BaseSourceFile):
+    ISO8601 = re.compile(r'^\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}:\d{2}Z$')
+
+    def _read_configuration(self, filename):
+        _json_file = '%s/%s' % (self._parent.source_dir, filename)
+        with open(_json_file) as _configuration:
+            _config = json.loads(_configuration.read())
+
+        for _key, _value in _config.iteritems():
+            if type(_value) == unicode and self.ISO8601.match(_value):
+                _config[_key] = datetime.strptime(_value, "%Y-%m-%dT%H:%M:%SZ")
+        return _config

@@ -4,10 +4,11 @@
 
 Flourish uses source files to contain the content of site to be generated.
 
-Two types of source file are supported, and they can be mixed and matched
+Three types of source file are supported, and they can be mixed and matched
 at will:
 
 * [TOML][toml]
+* [JSON][json]
 * [Markdown][md]
 
 The filename and subdirectory/-ies of the source file determines the default
@@ -132,6 +133,7 @@ be aware of:
 
 
 [iso]: https://en.wikipedia.org/wiki/ISO_8601
+[json]: http://json.org
 [md]: http://daringfireball.net/projects/markdown/
 [toml]: https://github.com/toml-lang/toml
 [tomlspec]: https://github.com/toml-lang/toml#user-content-spec

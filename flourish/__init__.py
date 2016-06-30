@@ -8,7 +8,7 @@ from jinja2 import Environment, FileSystemLoader
 import toml
 
 from .lib import relative_list_of_files_in_directory
-from .source import MarkdownSourceFile, TomlSourceFile
+from .source import JsonSourceFile, MarkdownSourceFile, TomlSourceFile
 from .url import URL
 
 
@@ -166,6 +166,8 @@ class Flourish(object):
                     self._source_files.append(TomlSourceFile(self, file))
                 elif file.endswith('.markdown') and len(file.split('.')) == 2:
                     self._source_files.append(MarkdownSourceFile(self, file))
+                elif file.endswith('.json'):
+                    self._source_files.append(JsonSourceFile(self, file))
 
     def __len__(self):
         return self.count()

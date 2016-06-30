@@ -44,7 +44,7 @@ represent the key to use (as found in source TOML).
 The following tokens are automatically available without you having to add
 them explicitly to your sources:
 
-  * `slug` — always comes from the filename of the source TOML or
+  * `slug` — always comes from the filename of the source TOML, JSON, or
     Markdown file
   * `year`, `month`, `day` — are created from the `published` key, if it
     is a timestamp (explained further in [Adding sources](/adding-sources/))
