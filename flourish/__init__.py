@@ -23,6 +23,7 @@ class Flourish(object):
         '_order_by',
         '_slice',
         '_source_files',
+        '_source_url',
         '_urls',
     ]
 
@@ -47,6 +48,7 @@ class Flourish(object):
         self._order_by = []
         self._slice = None
         self._source_files = []
+        self._source_url = None
         self._urls = {}
 
         if not os.path.isdir(self.source_dir):
@@ -105,6 +107,11 @@ class Flourish(object):
 
     def order_by(self, *args):
         return self.clone(_order_by=args)
+
+    def canonical_source_url(self, url, generator):
+        # FIXME hmmmm
+        self._source_url = URL(self, url, 'source', generator)
+        self.add_url(url, 'source', generator)
 
     def add_url(self, url, name, generator):
         _url_dict = {name: URL(self, url, name, generator)}

@@ -16,9 +16,8 @@ class TestFlourishUrls:
                 'homepage',
                 None
             )
-            cls.flourish.add_url(
+            cls.flourish.canonical_source_url(
                 '/#slug',
-                'post-detail',
                 None
             )
             cls.flourish.add_url(
@@ -74,7 +73,7 @@ class TestFlourishUrls:
         ]
 
     def test_post_detail_has_many_valid_filters(self):
-        assert self.flourish.all_valid_filters_for_url('post-detail') == [
+        assert self.flourish.all_valid_filters_for_url('source') == [
             {'slug': 'basic-page'},
             {'slug': 'markdown-page'},
             {'slug': 'series/part-one'},
@@ -157,3 +156,81 @@ class TestFlourishUrls:
 
     def test_no_such_keyword_has_no_filters(self):
         assert self.flourish.all_valid_filters_for_url('no-such-keyword') == []
+
+    def test_urls_for_sources(self):
+        assert [
+            '/basic-page',
+            '/markdown-page',
+            '/thing-one',
+            '/thing-two',
+            '/series/part-one',
+            '/series/part-three',
+            '/series/part-two',
+        ] == [source.url for source in self.flourish.sources.all()]
+
+
+class TestFlourishSourcesUrl:
+    def test_category_prefixed_sources(self):
+        with pytest.warns(None) as _warnings:
+            _flourish = Flourish('tests/source')
+            assert len(_warnings) == 2
+            assert _flourish.sources.count() == 7
+
+            _flourish.canonical_source_url(
+                '/#category/#slug',
+                None
+            )
+
+            assert [
+                '/static/basic-page',
+                '/post/markdown-page',
+                '/thing/thing-one',
+                '/thing/thing-two',
+                '/article/series/part-one',
+                '/article/series/part-three',
+                '/article/series/part-two',
+            ] == [source.url for source in _flourish.sources.all()]
+
+    def test_invalid_prefixed_sources(self):
+        with pytest.warns(None) as _warnings:
+            _flourish = Flourish('tests/source')
+            assert len(_warnings) == 2
+            assert _flourish.sources.count() == 7
+
+            _flourish.canonical_source_url(
+                '/#type/#slug',
+                None
+            )
+
+            assert [
+                None,
+                None,
+                '/post/thing-one',
+                '/post/thing-two',
+                '/post/series/part-one',
+                '/post/series/part-three',
+                '/post/series/part-two',
+            ] == [source.url for source in _flourish.sources.all()]
+            # FIXME catch third warning
+
+    def test_multiple_option_prefixed_sources(self):
+        with pytest.warns(None) as _warnings:
+            _flourish = Flourish('tests/source')
+            assert len(_warnings) == 2
+            assert _flourish.sources.count() == 7
+
+            _flourish.canonical_source_url(
+                '/#tag/#slug',
+                None
+            )
+
+            assert [
+                '/basic-page/basic-page',
+                None,
+                '/basically/thing-one',
+                '/basically/thing-two',
+                '/series/series/part-one',
+                '/three/series/part-three',
+                '/series/series/part-two',
+            ] == [source.url for source in _flourish.sources.all()]
+            # FIXME catch third warning

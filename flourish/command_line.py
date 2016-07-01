@@ -61,7 +61,6 @@ def generate(args):
 
 def generate_once(args):
     generate = load_source('generate', '%s/generate.py' % args.source)
-    from generate import URLS
 
     rmtree(args.output)
 
@@ -72,7 +71,8 @@ def generate_once(args):
         assets_dir=args.assets,
     )
 
-    for url in URLS:
+    flourish.canonical_source_url(*generate.SOURCE_URL)
+    for url in generate.URLS:
         flourish.add_url(*url)
     flourish.generate_all_urls()
     flourish.copy_assets()

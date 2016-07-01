@@ -66,7 +66,7 @@ class TestFlourishPage:
                 'category': 'article',
                 'published': datetime(2016, 06, 06, 10, 00, 00),
                 'series': 'series-in-three-parts',
-                'tag': ['series', 'three'],
+                'tag': ['three', 'series'],
                 'title': 'Part Three',
                 'type': 'post',
             } == page._config

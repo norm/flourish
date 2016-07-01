@@ -200,6 +200,21 @@ the source object list.
 
 ## Adding URLs
 
+### Source URLs
+
+```python
+fl.canonical_source_url('/#slug', code_ref)
+```
+
+Adds the URL for all sources. The parameters are:
+
+ 1. the URL path, including the token
+    (see [URL paths](/adding-urls/#url-paths))
+ 2. the code that will generate these pages
+    (see [Generating the HTML](/generating-html/))
+
+### Other URLs
+
 ```python
 fl.add_url('/tags/#tag', 'tag-page', code_ref)
 ```

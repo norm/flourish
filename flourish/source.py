@@ -25,7 +25,23 @@ class BaseSourceFile(object):
 
     @property
     def url(self):
-        return '/%s' % self._slug
+        # FIXME when _source_url is not set
+        _url = self._parent._source_url
+        _filter = {}
+        for _arg in _url.arguments:
+            try:
+                _value = getattr(self, _arg)
+                if type(_value) == list:
+                    _filter[_arg] = _value[0]
+                else:
+                    _filter[_arg] = _value
+            except AttributeError:
+                warnings.warn(
+                    'cannot create URL for "%s": no value for "%s"' % (
+                        self._slug, _arg)
+                )
+                return None
+        return _url.resolve(**_filter)
 
     @property
     def absolute_url(self):

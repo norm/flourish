@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='flourish',
-    version='0.2.0',
+    version='0.3.0',
 
     description='Static website generator',
     url='https://github.com/norm/flourish',

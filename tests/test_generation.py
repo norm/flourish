@@ -71,9 +71,8 @@ class TestFlourishGeneration(CompareDirectories):
             )
             assert len(warnings) == 2
 
-        flourish.add_url(
+        flourish.canonical_source_url(
             '/#slug',
-            'page-detail',
             PageGenerator.as_generator(),
         )
         flourish.add_url(

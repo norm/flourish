@@ -5,9 +5,30 @@
 Once you have [added some sources](/adding-sources/) and [created the
 generate.py script](/generating-output/), you need to add URLs.
 
+There are two types of URL you can add to Flourish. The first defines how the
+sources you add are output as pages, the second is any other type of page.
+
+
+## Source URLs
 
 To generate webpages for the sources you add you will need code like this in
 your `generate.py`:
+
+```python
+SOURCE_URL = (
+    '/#slug',
+    PageGenerator.as_generator(),
+)
+```
+
+In between the brackets are two arguments. The first is the URL path, 
+explained below; the second is what code should be run to create each page,
+explained in [Generating the HTML](/generating-html/).
+
+## Other URLs
+
+To generate any other webpages (eg the homepage or other indexes),
+you will need code like this in your `generate.py`:
 
 ```python
 URLS = (
@@ -25,10 +46,10 @@ URLS = (
 )
 ```
 
-In between the brackets are three arguments. The first is the URL path,
-explained below; the second is a symbolic name to represent this type of page,
-the third is what code should be run to create each page, explained in
-[Generating the HTML](/generating-html/).
+In between the brackets are three arguments (one more than for sources as
+shown above). The first is the URL path, the second is a symbolic name to
+represent this type of page, the third is what code should be run to create
+each page.
 
 
 ## URL paths
@@ -49,9 +70,47 @@ them explicitly to your sources:
   * `year`, `month`, `day` — are created from the `published` key, if it
     is a timestamp (explained further in [Adding sources](/adding-sources/))
 
+### Source paths
+
+In the source example above, the path was `/#slug`. This means each source
+will be generated at a URL that matches the slug of the source. For example,
+a source file `photos/grand-canyon.toml` has the slug `photos/grand-canyon`,
+so the URL would be `/photos/grand-canyon`. Note the absence of `/` at the
+start of the slug, which is why the path adds it explicitly.
+
+Using just the slug is the most common pattern for creating output from
+sources, but you are not restricted to just this. Some blogs commonly have
+posts that indicate the date of publication, this can be done by using a
+path such as `/#year/#month/#slug`. The source doesn't have to be created
+within a year/month directory structure, instead that comes from the
+`published` timestamp.
+
+For example, if the `photos/grand-canyon.toml` contained this:
+
+```python
+published = 2016-02-14T13:56:22Z
+```
+
+then the URL would be `/2016/02/photos/grand-canyon`.
+
 ### Multiple pages from single tokens
 
 If a URL has a token with more than one possible subtitution, then multiple
-pages are generated. In the above sample, the 'tags-tag' page has the URL
-`/tags/#tag`. One page would be generated for each tag key listed across the
-sources of the site.
+pages are generated. For example, for a source URL path of
+`/#year/#month/#slug` all three tokens only have one value, so only one page
+would be generated. However, if you had a source file `example-page.toml`,
+containing these keys:
+
+```python
+title = 'Example page'
+tag = ['sample', 'introduction']
+```
+
+then the source URL path `/#tag/#slug` would generate two pages:
+
+  * `/sample/example-page`
+  * `/introduction/example-page`
+
+This is more commonly used for index pages (eg `/archives/#year`,
+`/tags/#tag`) than it is for sources, which usually only have the one,
+canonical, path.
