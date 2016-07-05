@@ -1,4 +1,8 @@
 language: python
 python:
     - '2.7'
-script: py.test -svv
+
+script: sh tests/run.sh
+
+notifications:
+  slack: flourishpy:qJLiHQqOLUUKZJBvUK8mMkAh
