@@ -1,4 +1,5 @@
-# flourish
+# What is Flourish?
+
 Flourish is a static website generator. It can be used to create a blog or
 journal, a photo gallery, a portfolio, documentation, and any other kind of
 website — as long as the pages should always be the same no matter when, who,
@@ -29,16 +30,3 @@ It is heavily inspired by django's [class based views][cbv] and James Aylett's
 [md]: http://daringfireball.net/projects/markdown/
 [cbv]: https://docs.djangoproject.com/en/stable/topics/class-based-views/
 [dfbo]: https://github.com/jaylett/django-filebacked-objects
-
-
-## Quick start
-
-```bash
-pip install flourish
-```
-
-## Documentation
-
-Full documentation is available on [Read the Docs][rtd].
-
-[rtd]: http://flourish.readthedocs.io/en/latest/

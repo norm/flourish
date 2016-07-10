@@ -1,0 +1,22 @@
+docs_dir: documentation
+repo_url: https://github.com/norm/flourish/
+site_author: Mark Norman Francis
+site_name: Flourish
+theme: readthedocs
+
+pages:
+    - Getting started:
+        - What is Flourish?: index.markdown
+        - How Flourish works: how-flourish-works.markdown
+        - Installing: installing.markdown
+    - Using flourish:
+        - Adding sources: adding-sources.markdown
+    - Flourish API:
+        - flourish: api-flourish.markdown
+        - flourish.generators: api-flourish-generators.markdown
+        - flourish.generators.BaseGenerator: api-flourish-generators-base.markdown
+        - flourish.generators.PageGenerator: api-flourish-generators-page.markdown
+        - flourish.generators.IndexGenerator: api-flourish-generators-index.markdown
+
+extra_css:
+    - overrides.css

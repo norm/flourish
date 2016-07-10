@@ -1,0 +1,26 @@
+/* don't do stupid wordwrapping! */
+p code {
+    word-wrap: normal;
+    overflow-wrap: normal;
+}
+
+/* why are these things so tiny?! */
+.wy-nav-content li {
+    font-size: 16px;
+}
+
+/* trim some margins */
+p + ul {
+    margin-top: -24px;
+}
+
+/* don't like these having colours, they look too much like links */
+h3, h4, h5, h6 {
+    color: #404040;
+}
+h3 {
+    font-weight: bold;
+}
+h5, h6 {
+    font-style: italic;
+}
