@@ -1,6 +1,7 @@
 from setuptools import find_packages, setup
 
-from flourish.version import __version__
+# read in __version__
+execfile('flourish/version.py')
 
 
 setup(
