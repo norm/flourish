@@ -13,6 +13,7 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
 from . import Flourish, __version__
+from .examples import example_files
 from .lib import relative_list_of_files_in_directory
 
 
@@ -28,6 +29,8 @@ def main():
                 generate        creates the output HTML
                 server          serves up output HTML on a local port, good for
                                 development previewing of work
+                example         creates a new flourish website in the
+                                current directory, with some example content
                 upload          upload the generated site to an AWS S3 bucket
         """ % __version__),
         formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -162,6 +165,24 @@ def rebuildserver(args):
     _goc.start()
 
 
+def create_example(args):
+    for _dir in ['source', 'templates', 'assets']:
+        if not os.path.isdir(_dir):
+            os.mkdir(_dir)
+    for _filename in example_files:
+        with open(_filename, 'w') as _example_file:
+            _example_file.write(example_files[_filename])
+    generate_once(argparse.Namespace(
+        source='source',
+        templates='templates',
+        assets='assets',
+        output='output',
+    ))
+    print 'Example site created: run "flourish --rebuild server"'
+    print 'and go to http://localhost:3567/ in your browser to see the site.'
+    print 'Then click on "Welcome to your new blog" to get started.'
+
+
 def upload(args):
     _bucket_name = args.bucket
     if _bucket_name is None:
@@ -210,6 +231,7 @@ def upload(args):
 ACTIONS = {
     'generate': generate,
     'server': server,
+    'example': create_example,
     'upload': upload,
 }
 

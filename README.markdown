@@ -35,6 +35,9 @@ It is heavily inspired by django's [class based views][cbv] and James Aylett's
 
 ```bash
 pip install flourish
+mkdir example
+cd example
+flourish example
 ```
 
 ## Documentation

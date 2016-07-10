@@ -16,6 +16,7 @@ In order to create a website with Flourish, you will need four directories:
 
 You can use the `flourish` command-line script to:
 
+  * setup a new example website
   * preview the website locally, as you work on it
   * generate the website, ready to upload to your hosting provider
   * upload the website to Amazon S3 (if you are using S3 to host the website,

@@ -9,6 +9,7 @@ pages:
         - What is Flourish?: index.markdown
         - How Flourish works: how-flourish-works.markdown
         - Installing: installing.markdown
+        - The example site: example-site.markdown
     - Using flourish:
         - Adding sources: adding-sources.markdown
         - Generating the site: generating-the-site.markdown
