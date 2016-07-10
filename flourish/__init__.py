@@ -10,6 +10,7 @@ import toml
 from .lib import relative_list_of_files_in_directory
 from .source import JsonSourceFile, MarkdownSourceFile, TomlSourceFile
 from .url import URL
+from .version import __version__    # noqa: F401
 
 
 class Flourish(object):

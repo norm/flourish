@@ -12,24 +12,27 @@ from flask import Flask, send_from_directory
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
-from . import Flourish
+from . import Flourish, __version__
 from .lib import relative_list_of_files_in_directory
 
 
 def main():
+    version = ('Flourish static site generator, version %s -- '
+               'http://withaflourish.net' % __version__)
     parser = argparse.ArgumentParser(
         description=textwrap.dedent("""\
-            Flourish generates websites from source and templates.
+            Flourish generates websites from source data and templates.
+            Version %s -- http://withaflourish.net
 
             Commands:
                 generate        creates the output HTML
                 server          serves up output HTML on a local port, good for
                                 development previewing of work
                 upload          upload the generated site to an AWS S3 bucket
-        """),
+        """ % __version__),
         formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument(
-        'action', choices=ACTIONS.keys()),
+        'action', nargs='?', choices=ACTIONS.keys()),
     parser.add_argument(
         '-s', '--source', default='source',
         help='Directory containing source files (default: %(default)s)')
@@ -46,6 +49,9 @@ def main():
         '-p', '--port', default='3567',
         help='Port on which to bind webserver (default: %(default)s)')
     parser.add_argument(
+        '-v', '--version', action='store_true',
+        help='Report the version of flourish')
+    parser.add_argument(
         '--rebuild', action='store_true',
         help='Watch the source and template directories for changes, '
              'regenerating the site automatically.')
@@ -54,8 +60,14 @@ def main():
         help='The name of the AWS S3 bucket to upload to (with upload)')
 
     args = parser.parse_args()
-    action = ACTIONS[args.action]
-    action(args)
+
+    if args.version:
+        print version
+    elif args.action is None:
+        parser.print_help()
+    else:
+        action = ACTIONS[args.action]
+        action(args)
 
 
 def generate(args):

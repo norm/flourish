@@ -1,8 +1,11 @@
 from setuptools import find_packages, setup
 
+from flourish.version import __version__
+
+
 setup(
     name='flourish',
-    version='0.3.0',
+    version=__version__,
 
     description='Static website generator',
     url='https://github.com/norm/flourish',
