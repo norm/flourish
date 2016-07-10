@@ -37,6 +37,9 @@ def main():
     parser.add_argument(
         'action', nargs='?', choices=ACTIONS.keys()),
     parser.add_argument(
+        '-b', '--base', default=None,
+        help='Base directory that contains all others')
+    parser.add_argument(
         '-s', '--source', default='source',
         help='Directory containing source files (default: %(default)s)')
     parser.add_argument(
@@ -69,6 +72,11 @@ def main():
     elif args.action is None:
         parser.print_help()
     else:
+        if args.base is not None:
+            args.source = os.path.join(args.base, args.source)
+            args.templates = os.path.join(args.base, args.templates)
+            args.assets = os.path.join(args.base, args.assets)
+            args.output = os.path.join(args.base, args.output)
         action = ACTIONS[args.action]
         action(args)
 
