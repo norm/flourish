@@ -1,4 +1,6 @@
-# flourish
+Flourish
+========
+
 Flourish is a static website generator. It can be used to create a blog or
 journal, a photo gallery, a portfolio, documentation, and any other kind of
 website — as long as the pages should always be the same no matter when, who,
@@ -33,6 +35,8 @@ It is heavily inspired by django's [class based views][cbv] and James Aylett's
 
 ## Quick start
 
+Flourish is installable from [pypi][pypi].
+
 ```bash
 pip install flourish
 mkdir example
@@ -40,8 +44,37 @@ cd example
 flourish example
 ```
 
+[pypi]: https://pypi.python.org/pypi/flourish
+
+
 ## Documentation
 
-Full documentation is available on [Read the Docs][rtd].
+The Flourish documentation is available on [Read the Docs][rtd].
+
+There is also a (very quiet and empty) [Slack][slack] for users of Flourish.
 
 [rtd]: http://flourish.readthedocs.io/en/latest/
+[slack]: http://slack.withaflourish.net
+
+
+## TODOs
+
+Outstanding work is mostly kept in GitHub Issues (or as `FIXME`s and `TODO`s
+in the code where I've been lazy, or they don't introduce new features). 
+
+Things that will be added in the near future are listed in Issues, tagged with
+[the 1.0 milestone][1].
+
+Things that will be added in the longer term are listed in Issues, tagged with
+[the 2.0 milestone][2].
+
+Things I'll probably never get around to are listed in Issues, tagged
+[Pie in the Sky][pie].
+
+Anything in Issues [without a milestone][bugs] is probably a bug reported by
+lovely people trying to improve Flourish.
+
+[1]: https://github.com/norm/flourish/milestone/1
+[2]: https://github.com/norm/flourish/milestone/2
+[pie]: https://github.com/norm/flourish/milestone/3
+[bugs]: https://github.com/norm/flourish/issues?q=is%3Aopen+is%3Aissue+no%3Amilestone
