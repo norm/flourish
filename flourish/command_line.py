@@ -84,7 +84,9 @@ def generate(args):
 def generate_once(args):
     generate = load_source('generate', '%s/generate.py' % args.source)
 
-    rmtree(args.output)
+    if os.path.exists(args.output):
+        rmtree(args.output)
+    os.makedirs(args.output)
 
     flourish = Flourish(
         source_dir=args.source,
