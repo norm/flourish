@@ -33,15 +33,16 @@ class BaseGenerator(object):
 
     @classmethod
     def as_generator(cls):
-        def generator(flourish, url):
-            self = cls(flourish, url)
+        def generator(flourish, url, global_context=None):
+            self = cls(flourish, url, global_context)
             return self.generate()
 
         return generator
 
-    def __init__(self, flourish, url):
+    def __init__(self, flourish, url, global_context):
         self.flourish = flourish
         self.url = url
+        self.global_context = global_context
         self.current_url = None
 
     def generate(self):
@@ -106,6 +107,8 @@ class BaseGenerator(object):
         _context['objects'] = self.source_objects
         _context['site'] = self.flourish.site_config
         _context['current_url'] = self.current_url
+        if self.global_context is not None:
+            _context['global'] = self.global_context(self)
         return _context
 
     def get_template(self):

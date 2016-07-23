@@ -7,6 +7,7 @@ from flourish.generators import (
     PageGenerator,
     PaginatedIndexGenerator,
 )
+from flourish.helpers import publication_range
 
 from .compare_directories import CompareDirectories
 
@@ -101,6 +102,12 @@ class TestFlourishGeneration(CompareDirectories):
             FourPagePaginatedIndex.as_generator(),
         )
 
+        def global_context(self):
+            return {
+                'copyright_year_range': publication_range(self.flourish),
+            }
+
+        flourish.set_global_context(global_context)
         flourish.generate_all_urls()
         flourish.copy_assets()
         self.compare_directories()

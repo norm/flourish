@@ -93,6 +93,9 @@ def generate_once(args):
     flourish.canonical_source_url(*generate.SOURCE_URL)
     for url in generate.URLS:
         flourish.add_url(*url)
+    if getattr(generate, 'GLOBAL_CONTEXT'):
+        flourish.set_global_context(generate.GLOBAL_CONTEXT)
+
     flourish.generate_all_urls()
     flourish.copy_assets()
 

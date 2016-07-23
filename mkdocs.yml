@@ -17,7 +17,9 @@ pages:
         - Site configuration: site-configuration.markdown
         - Adding assets: adding-assets.markdown
     - Recipes:
-        - Adding Atom (RSS) feeds: atom-feeds.markdown
+        - Adding Atom (RSS) feeds: cookbook/atom-feeds.markdown
+        - Date-based navigation: cookbook/date-based-navigation.markdown
+        - Copyright year range: cookbook/publication-year-range.markdown
     - Hosting your site:
         - Uploading to Amazon S3: uploading-to-s3.markdown
     - Flourish API:
@@ -28,6 +30,7 @@ pages:
         - flourish.generators.IndexGenerator: api-flourish-generators-index.markdown
         - flourish.generators.PaginatedIndexGenerator: api-flourish-generators-paginatedindex.markdown
         - flourish.generators.AtomGenerator: api-flourish-generators-atom.markdown
+        - flourish.helpers: api-flourish-helpers.markdown
         - flourish.paginator: api-flourish-paginator.markdown
 
 extra_css:

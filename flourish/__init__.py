@@ -1,3 +1,5 @@
+# encoding: utf8
+
 from datetime import datetime
 from operator import attrgetter
 import os
@@ -34,12 +36,14 @@ class Flourish(object):
         templates_dir='templates',
         output_dir='output',
         assets_dir='assets',
+        global_context=None,
         **kwargs
     ):
         self.source_dir = source_dir
         self.templates_dir = templates_dir
         self.output_dir = output_dir
         self.assets_dir = assets_dir
+        self.global_context = global_context
         self.jinja = Environment(
             loader=FileSystemLoader(self.templates_dir),
             keep_trailing_newline=True,
@@ -127,7 +131,10 @@ class Flourish(object):
     def generate_all_urls(self):
         for _entry in self._urls:
             url = self._urls[_entry]
-            url.generator(self, url)
+            url.generator(self, url, self.global_context)
+
+    def set_global_context(self, global_context):
+        self.global_context = global_context
 
     def copy_assets(self):
         if self.assets_dir:
