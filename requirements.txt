@@ -1,4 +1,2 @@
-Jinja2==2.8
-markdown2==2.3.1
+-e .
 pytest==2.9.2
-toml==0.9.1

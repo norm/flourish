@@ -12,3 +12,8 @@ In order to create a website with Flourish, you will need three directories:
   * `templates` — contains the wrapper HTML used to convert the sources into 
     webpages
   * `output` — contains the generated website
+
+You can use the `flourish` command-line script to:
+
+  * preview the website locally, as you work on it
+  * generate the website, ready to upload to your hosting provider

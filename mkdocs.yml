@@ -11,6 +11,9 @@ pages:
         - Installing: installing.markdown
     - Using flourish:
         - Adding sources: adding-sources.markdown
+        - Generating the site: generating-the-site.markdown
+        - Adding URLs: adding-urls.markdown
+        - Generating the HTML: generating-html.markdown
     - Flourish API:
         - flourish: api-flourish.markdown
         - flourish.generators: api-flourish-generators.markdown
