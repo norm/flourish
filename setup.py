@@ -6,7 +6,7 @@ execfile('flourish/version.py')
 
 setup(
     name='flourish',
-    version=__version__,
+    version=__version__,    # noqa: F821
 
     description='Static website generator',
     url='https://github.com/norm/flourish',
