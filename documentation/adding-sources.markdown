@@ -11,6 +11,9 @@ at will:
 * [JSON][json]
 * [Markdown][md]
 
+
+## The slug
+
 The filename and subdirectory/-ies of the source file determines the default
 URL that piece of content will have in the site, also known as the "slug". The
 filename (slug) can only contain letters, numbers, hyphens (`-`) and
