@@ -41,6 +41,9 @@ class TestFlourishGeneration(CompareDirectories):
     ]
 
     def test_generation(self):
+        class NewestFirstIndex(IndexGenerator):
+            order_by = ('-published')
+
         class OnePageIndex(IndexGenerator):
             def get_objects(self, tokens):
                 _objects = self.get_filtered_sources().filter(**tokens)[0:1]
@@ -63,7 +66,7 @@ class TestFlourishGeneration(CompareDirectories):
         flourish.add_url(
             '/',
             'homepage',
-            IndexGenerator.as_generator(),
+            NewestFirstIndex.as_generator(),
         )
         flourish.add_url(
             '/tags/#tag/',

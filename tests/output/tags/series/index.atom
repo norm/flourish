@@ -10,20 +10,6 @@
   </author>
   <generator>PyAtom</generator>
   <entry xml:base="http://withaflourish.net/tags/series/index.atom">
-    <title type="text">Part One</title>
-    <id>http://withaflourish.net/series/part-one</id>
-    <updated>2016-06-04T11:00:00Z</updated>
-    <published>2016-06-04T11:00:00Z</published>
-    <link href="http://withaflourish.net/series/part-one" />
-    <author>
-      <name>Wendy Testaburger</name>
-    </author>
-    <content type="html">&lt;h1&gt;Part One&lt;/h1&gt;
-
-&lt;p&gt;I come from Markdown.&lt;/p&gt;
-</content>
-  </entry>
-  <entry xml:base="http://withaflourish.net/tags/series/index.atom">
     <title type="text">Part Three</title>
     <id>http://withaflourish.net/series/part-three</id>
     <updated>2016-06-04T13:00:00Z</updated>
@@ -49,6 +35,20 @@
     <content type="html">&lt;h1&gt;Part Two&lt;/h1&gt;
 
 &lt;p&gt;I come from a Markdown file.&lt;/p&gt;
+</content>
+  </entry>
+  <entry xml:base="http://withaflourish.net/tags/series/index.atom">
+    <title type="text">Part One</title>
+    <id>http://withaflourish.net/series/part-one</id>
+    <updated>2016-06-04T11:00:00Z</updated>
+    <published>2016-06-04T11:00:00Z</published>
+    <link href="http://withaflourish.net/series/part-one" />
+    <author>
+      <name>Wendy Testaburger</name>
+    </author>
+    <content type="html">&lt;h1&gt;Part One&lt;/h1&gt;
+
+&lt;p&gt;I come from Markdown.&lt;/p&gt;
 </content>
   </entry>
 </feed>

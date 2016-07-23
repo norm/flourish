@@ -24,8 +24,9 @@ class PageIndexContextMixin(object):
 
 
 class BaseGenerator(object):
-    template_name = None
+    order_by = None
     sources_filter = None
+    template_name = None
 
     @classmethod
     def as_generator(cls):
@@ -56,7 +57,12 @@ class BaseGenerator(object):
         return self.current_url
 
     def get_objects(self, tokens):
-        self.source_objects = self.get_filtered_sources().filter(**tokens)
+        _filtered = self.get_filtered_sources().filter(**tokens)
+        _ordering = self.get_order_by()
+        if _ordering is not None:
+            _filtered = _filtered.order_by(self.order_by)
+
+        self.source_objects = _filtered
         return self.source_objects
 
     def get_filtered_sources(self):
@@ -64,6 +70,9 @@ class BaseGenerator(object):
         if self.sources_filter is not None:
             _sources = self.flourish.filter(**self.sources_filter)
         return _sources
+
+    def get_order_by(self):
+        return self.order_by
 
     def output_to_file(self):
         _filename = self.get_output_filename()
@@ -122,6 +131,8 @@ class IndexGenerator(PageIndexContextMixin, BaseGenerator):
 
 
 class AtomGenerator(BaseGenerator):
+    order_by = ('-published')
+
     def get_objects(self, tokens):
         """
         Only consider objects that have the key "published" with a
@@ -131,7 +142,8 @@ class AtomGenerator(BaseGenerator):
         _sources = self.get_filtered_sources()
         _already_published = _sources.filter(published__lt=_now)
         _filtered = _already_published.filter(**tokens)
-        self.source_objects = _filtered
+        _ordered = _filtered.order_by(self.order_by)
+        self.source_objects = _ordered
         return self.source_objects
 
     def render_output(self):

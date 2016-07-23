@@ -10,28 +10,17 @@
   </author>
   <generator>PyAtom</generator>
   <entry xml:base="http://withaflourish.net/index.atom">
-    <title type="text">Basic Page</title>
-    <id>http://withaflourish.net/basic-page</id>
-    <updated>2015-12-25T10:00:00Z</updated>
-    <published>2015-12-25T10:00:00Z</published>
-    <link href="http://withaflourish.net/basic-page" />
+    <title type="text">Part Three</title>
+    <id>http://withaflourish.net/series/part-three</id>
+    <updated>2016-06-04T13:00:00Z</updated>
+    <published>2016-06-04T13:00:00Z</published>
+    <link href="http://withaflourish.net/series/part-three" />
     <author>
       <name>Wendy Testaburger</name>
     </author>
-    <content type="html">&lt;p&gt;Hello world.&lt;/p&gt;</content>
-  </entry>
-  <entry xml:base="http://withaflourish.net/index.atom">
-    <title type="text">Plain Markdown Page</title>
-    <id>http://withaflourish.net/markdown-page</id>
-    <updated>2016-02-29T10:30:00Z</updated>
-    <published>2016-02-29T10:30:00Z</published>
-    <link href="http://withaflourish.net/markdown-page" />
-    <author>
-      <name>Wendy Testaburger</name>
-    </author>
-    <content type="html">&lt;h1&gt;Markdown&lt;/h1&gt;
+    <content type="html">&lt;h1&gt;Part Three&lt;/h1&gt;
 
-&lt;p&gt;I was generated from Markdown alone, no TOML.&lt;/p&gt;
+&lt;p&gt;The embedded Markdown gets overridden.&lt;/p&gt;
 </content>
   </entry>
   <entry xml:base="http://withaflourish.net/index.atom">
@@ -57,6 +46,20 @@
 </content>
   </entry>
   <entry xml:base="http://withaflourish.net/index.atom">
+    <title type="text">Part Two</title>
+    <id>http://withaflourish.net/series/part-two</id>
+    <updated>2016-06-04T12:00:00Z</updated>
+    <published>2016-06-04T12:00:00Z</published>
+    <link href="http://withaflourish.net/series/part-two" />
+    <author>
+      <name>Wendy Testaburger</name>
+    </author>
+    <content type="html">&lt;h1&gt;Part Two&lt;/h1&gt;
+
+&lt;p&gt;I come from a Markdown file.&lt;/p&gt;
+</content>
+  </entry>
+  <entry xml:base="http://withaflourish.net/index.atom">
     <title type="text">Part One</title>
     <id>http://withaflourish.net/series/part-one</id>
     <updated>2016-06-04T11:00:00Z</updated>
@@ -71,31 +74,28 @@
 </content>
   </entry>
   <entry xml:base="http://withaflourish.net/index.atom">
-    <title type="text">Part Three</title>
-    <id>http://withaflourish.net/series/part-three</id>
-    <updated>2016-06-04T13:00:00Z</updated>
-    <published>2016-06-04T13:00:00Z</published>
-    <link href="http://withaflourish.net/series/part-three" />
+    <title type="text">Plain Markdown Page</title>
+    <id>http://withaflourish.net/markdown-page</id>
+    <updated>2016-02-29T10:30:00Z</updated>
+    <published>2016-02-29T10:30:00Z</published>
+    <link href="http://withaflourish.net/markdown-page" />
     <author>
       <name>Wendy Testaburger</name>
     </author>
-    <content type="html">&lt;h1&gt;Part Three&lt;/h1&gt;
+    <content type="html">&lt;h1&gt;Markdown&lt;/h1&gt;
 
-&lt;p&gt;The embedded Markdown gets overridden.&lt;/p&gt;
+&lt;p&gt;I was generated from Markdown alone, no TOML.&lt;/p&gt;
 </content>
   </entry>
   <entry xml:base="http://withaflourish.net/index.atom">
-    <title type="text">Part Two</title>
-    <id>http://withaflourish.net/series/part-two</id>
-    <updated>2016-06-04T12:00:00Z</updated>
-    <published>2016-06-04T12:00:00Z</published>
-    <link href="http://withaflourish.net/series/part-two" />
+    <title type="text">Basic Page</title>
+    <id>http://withaflourish.net/basic-page</id>
+    <updated>2015-12-25T10:00:00Z</updated>
+    <published>2015-12-25T10:00:00Z</published>
+    <link href="http://withaflourish.net/basic-page" />
     <author>
       <name>Wendy Testaburger</name>
     </author>
-    <content type="html">&lt;h1&gt;Part Two&lt;/h1&gt;
-
-&lt;p&gt;I come from a Markdown file.&lt;/p&gt;
-</content>
+    <content type="html">&lt;p&gt;Hello world.&lt;/p&gt;</content>
   </entry>
 </feed>

@@ -12,6 +12,8 @@ of generating pages.
     this filter; see
     [Filtering down to specific sources](/api-flourish/#filtering-down-to-specific-sources)
 
+  * `order_by` — this generator should sort matching sources in this way
+
 ## Context variables
 
   * `objects` — a list of all matching source objects for the current URL
@@ -29,6 +31,7 @@ run in order:
           * [`get_current_url`](#get_current_urltokens)
           * [`get_objects`](#get_objectstokens), which calls:
               * [`get_filtered_sources`](#get_filtered_sources)
+              * [`get_order_by`](#get_order_by)
           * [`output_to_file`](#output_to_file), which calls:
               * [`get_output_filename`](#get_output_filename)
               * [`render_output`](#render_output), which calls:
@@ -86,6 +89,11 @@ matching this will be used as possible objects for the generator. See
 [Filtering down to specific sources](/api-flourish/#filtering-down-to-specific-sources).
 
 If `sources_filter` is not set, then all source objects will be used.
+
+### get_order_by()
+
+Returns the ordering for the source objects. See
+[Ordering sources](/api-flourish/#ordering-sources).
 
 ### output_to_file()
 

@@ -14,6 +14,8 @@ Returns only sources that have a `published` key set to datetime value that
 is before now (ie. anything declared to be published "in the future") will
 not be included in the Atom feed.
 
+The sources are sorted most-recent first.
+
 ### render_output()
 
 Bypasses `get_context_data`, `get_template`, `get_template_name` and 
