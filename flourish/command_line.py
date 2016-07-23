@@ -146,7 +146,9 @@ def generate_on_change(args):
     observer.daemon = True
     observer.schedule(Handler(), args.source, recursive=True)
     observer.schedule(Handler(), args.templates, recursive=True)
-    observer.schedule(Handler(), args.assets, recursive=True)
+    if os.path.exists(args.assets):
+        # having assets is optional
+        observer.schedule(Handler(), args.assets, recursive=True)
     observer.start()
     try:
         while True:
