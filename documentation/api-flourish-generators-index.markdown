@@ -10,7 +10,17 @@ Other than as noted below, it behaves the same as
 
 ## Class attributes
 
-  * `template_name` is set to `index.html`
+  * `sources_filter` — This generator should only use sources that match
+    this filter; see
+    [Filtering down to specific sources](/api-flourish/#filtering-down-to-specific-sources).
+    Default value is `None`.
+  * `sources_exclude` — This generator should exclude sources that match
+    this filter. Default value is `None`.
+  * `order_by` — This generator should sort matching sources in this way.
+    Default value is `None`.
+  * `template_name` — This generator should use this template when rendering
+    the content. Default value is `index.html`.
+
 
 ## Context variables
 

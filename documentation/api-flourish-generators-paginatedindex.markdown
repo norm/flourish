@@ -10,14 +10,18 @@ Other than as noted below, it behaves the same as
 
 ## Class attributes
 
-  * `per_page` — the number of source objects in each paginated page;
-     the default value is `10`
-  * `order_by` — this generator should sort matching sources in this way
-  * `sources_filter` — this generator should only use sources that match
+  * `per_page` — This generator should include this many source objects in
+    each paginated output page. The default value is `10`.
+  * `sources_filter` — This generator should only use sources that match
     this filter; see
-    [Filtering down to specific sources](/api-flourish/#filtering-down-to-specific-sources)
-  * `template_name` — the template to use to render this page; the default
-    value is `index.html`
+    [Filtering down to specific sources](/api-flourish/#filtering-down-to-specific-sources).
+    Default value is `None`.
+  * `sources_exclude` — This generator should exclude sources that match
+    this filter. Default value is `None`.
+  * `order_by` — This generator should sort matching sources in this way.
+    Default value is `None`.
+  * `template_name` — This generator should use this template when rendering
+    the content. Default value is `index.html`.
 
 ## Template context variables
 
