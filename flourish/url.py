@@ -39,51 +39,10 @@ class URL(object):
         if len(_args) == 0:
             _valid_filters.append({})
         else:
-            _filters = self.get_all_filters_for_arguments(_args)
+            _filters = self.parent.get_valid_filters_for_tokens(_args)
             for _dict in _filters:
                 _valid_filters.append(_dict)
         return _valid_filters
-
-    def get_all_filters_for_arguments(self, keys, objects=None):
-        if objects is None:
-            objects = self.parent
-
-        _first_key = keys[0]
-
-        _values = set()
-        for _source in objects:
-            _is_date_filter = (
-                _first_key in ['year', 'month', 'day']
-                and 'published' in _source
-                and type(_source['published'] == datetime)
-            )
-
-            if _is_date_filter:
-                _value = getattr(_source['published'], _first_key)
-                _values.add('%02d' % _value)
-            elif _first_key in _source:
-                if type(_source[_first_key]) == list:
-                    for _value in _source[_first_key]:
-                        _values.add(_value)
-                else:
-                    _values.add(_source[_first_key])
-
-        _filters = []
-        for _value in _values:
-            _dict = {_first_key: _value}
-            if len(keys) == 1:
-                _filters.append(_dict)
-            else:
-                _sub_objects = objects.filter(**_dict)
-                _sub_keys = self.get_all_filters_for_arguments(
-                    keys[1:], _sub_objects)
-                for _sub_key in _sub_keys:
-                    _update = _dict.copy()
-                    _update.update(_sub_key)
-                    _filters.append(_update)
-
-        # the sort is only so the tests can compare results easily
-        return sorted(_filters)
 
     def __repr__(self):
         return '<flourish.URL object (%s: %s)>' % (self.name, self.path)

@@ -190,6 +190,47 @@ class Flourish(object):
                     self._cache.append(JsonSourceFile(self, file))
         self._source_files = list(self._cache)
 
+    def get_valid_filters_for_tokens(self, tokens, objects=None):
+        if objects is None:
+            objects = self.sources
+
+        _first_token = tokens[0]
+
+        _values = set()
+        for _source in objects:
+            _is_date_filter = (
+                _first_token in ['year', 'month', 'day'] and
+                'published' in _source and
+                type(_source['published'] == datetime)
+            )
+
+            if _is_date_filter:
+                _value = getattr(_source['published'], _first_token)
+                _values.add('%02d' % _value)
+            elif _first_token in _source:
+                if type(_source[_first_token]) == list:
+                    for _value in _source[_first_token]:
+                        _values.add(_value)
+                else:
+                    _values.add(_source[_first_token])
+
+        _filters = []
+        for _value in _values:
+            _dict = {_first_token: _value}
+            if len(tokens) == 1:
+                _filters.append(_dict)
+            else:
+                _sub_objects = objects.filter(**_dict)
+                _sub_tokens = self.get_valid_filters_for_tokens(
+                    tokens[1:], _sub_objects)
+                for _sub_token in _sub_tokens:
+                    _update = _dict.copy()
+                    _update.update(_sub_token)
+                    _filters.append(_update)
+
+        # the sort is only so the tests can compare results easily
+        return sorted(_filters)
+
     def __len__(self):
         return self.count()
 
