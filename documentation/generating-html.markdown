@@ -133,29 +133,6 @@ loops over each source within that (each being set to the variable `page`),
 and uses keys from the source to link to the source page.
 
 
-## Variables available in templates
-
-### PageGenerator
-
-  * `page` — the current source
-  * `<key>` — any configuration of the current source
-
-Configuration such as the page title is available both as `page.title` and
-as `title` to make templates easier to read and write.
-
-### IndexGenerator
-
-  * `pages` — all sources that match the index being generated
-
-### Common variables
-
-Both generators also provide the following variables:
-
-  * `current_url` — the URL of this page
-  * `site` — the contents of the [site configuration](/site-configuration/)
-    (eg `site.title`, `site.author`)
-
-
 ## More about the template language
 
 Flourish uses Jinja2 to render templates. You can learn a lot more about the
