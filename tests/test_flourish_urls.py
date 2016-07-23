@@ -46,6 +46,11 @@ class TestFlourishUrls:
                 'day-index',
                 None
             )
+            cls.flourish.add_url(
+                '/#flooble',
+                'no-such-keyword',
+                None
+            )
 
     def test_homepage_resolves(self):
         assert self.flourish.resolve_url('homepage') == '/'
@@ -150,3 +155,5 @@ class TestFlourishUrls:
         assert self.flourish.filter(**_filters[1]).count() == 1   # 2015/12/25
         assert self.flourish.filter(**_filters[2]).count() == 1   # 2016/02/29
 
+    def test_no_such_keyword_has_no_filters(self):
+        assert self.flourish.all_valid_filters_for_url('no-such-keyword') == []

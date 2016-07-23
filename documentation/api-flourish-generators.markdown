@@ -19,6 +19,8 @@ only a small part of it.
     generating individual source pages
   * [`IndexGenerator`](/api-flourish-generators-index/) — the class for
     generating lists of source pages
+  * [`PaginatedIndexGenerator`](/api-flourish-generators-paginatedindex/) —
+    the class for generating paginated lists of source pages
   * [`AtomGenerator`](/api-flourish-generators-atom/) — the class for
     generating an Atom feed
 

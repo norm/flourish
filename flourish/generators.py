@@ -3,6 +3,8 @@ import os
 
 from pyatom import AtomFeed
 
+from .paginator import Paginator
+
 
 class MissingValue(Exception):
     pass
@@ -128,6 +130,35 @@ class PageGenerator(PageContextMixin, BaseGenerator):
 
 class IndexGenerator(PageIndexContextMixin, BaseGenerator):
     template_name = 'index.html'
+
+
+class PaginatedIndexGenerator(IndexGenerator):
+    per_page = 10
+
+    def generate(self):
+        for _tokens in self.get_url_tokens():
+            _base_url = self.get_current_url(_tokens)
+            _paginator = self.get_paginated_objects(_tokens, _base_url)
+            for _page in _paginator:
+                self.current_url = _page.url
+                self.source_objects = _page.object_list
+                self.current_page = _page
+                self.output_to_file()
+
+    def get_paginated_objects(self, tokens, base_url):
+        _objects = self.get_objects(tokens)
+        _per_page = self.get_per_page()
+        self.paginator = Paginator(_objects, _per_page, base_url)
+        return self.paginator
+
+    def get_per_page(self):
+        return self.per_page
+
+    def get_context_data(self):
+        _context = super(PaginatedIndexGenerator, self).get_context_data()
+        _context['current_page'] = self.current_page
+        _context['pagination'] = self.paginator
+        return _context
 
 
 class AtomGenerator(BaseGenerator):

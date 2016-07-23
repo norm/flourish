@@ -5,6 +5,7 @@ from flourish.generators import (
     AtomGenerator,
     IndexGenerator,
     PageGenerator,
+    PaginatedIndexGenerator,
 )
 
 from .compare_directories import CompareDirectories
@@ -13,6 +14,8 @@ from .compare_directories import CompareDirectories
 class TestFlourishGeneration(CompareDirectories):
     expected_directory = 'tests/output'
     expected_files = [
+        'all/index.html',
+        'all/page-2.html',
         'basic-page.html',
         'css/screen.css',
         'index.atom',
@@ -54,6 +57,11 @@ class TestFlourishGeneration(CompareDirectories):
                 self.source_objects = _objects
                 return _objects
 
+        class FourPagePaginatedIndex(PaginatedIndexGenerator):
+            order_by = ('published')
+            per_page = 4
+
+
         with pytest.warns(None) as warnings:
             flourish = Flourish(
                 source_dir='tests/source',
@@ -87,6 +95,11 @@ class TestFlourishGeneration(CompareDirectories):
             '/tags/#tag/index.atom',
             'tags-atom-feed',
             AtomGenerator.as_generator(),
+        )
+        flourish.add_url(
+            '/all/',
+            'all-paginated',
+            FourPagePaginatedIndex.as_generator(),
         )
 
         flourish.generate_all_urls()
