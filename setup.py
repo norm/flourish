@@ -17,6 +17,7 @@ setup(
     },
 
     install_requires=[
+        'boto3',
         'Flask',
         'Jinja2',
         'markdown2',

@@ -1,4 +1,5 @@
 import argparse
+from hashlib import md5
 from imp import load_source
 from multiprocessing import Process
 import os
@@ -6,11 +7,13 @@ from shutil import rmtree
 import textwrap
 import time
 
+import boto3
 from flask import Flask, send_from_directory
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
 from . import Flourish
+from .lib import relative_list_of_files_in_directory
 
 
 def main():
@@ -22,6 +25,7 @@ def main():
                 generate        creates the output HTML
                 server          serves up output HTML on a local port, good for
                                 development previewing of work
+                upload          upload the generated site to an AWS S3 bucket
         """),
         formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument(
@@ -45,6 +49,9 @@ def main():
         '--rebuild', action='store_true',
         help='Watch the source and template directories for changes, '
              'regenerating the site automatically.')
+    parser.add_argument(
+        '--bucket',
+        help='The name of the AWS S3 bucket to upload to (with upload)')
 
     args = parser.parse_args()
     action = ACTIONS[args.action]
@@ -140,9 +147,55 @@ def rebuildserver(args):
     _goc.start()
 
 
+def upload(args):
+    _bucket_name = args.bucket
+    if _bucket_name is None:
+        flourish = Flourish(args.source, args.templates, args.output)
+        _bucket_name = flourish.site_config['bucket']
+
+    # FIXME remove nonexistent files
+    _s3 = boto3.resource('s3')
+    _bucket = _s3.Bucket(_bucket_name)
+    _files = relative_list_of_files_in_directory(args.output)
+    _objects = dict()
+    for _object in _bucket.objects.all():
+        _objects.update({_object.key: _object})
+
+    for _path in _files:
+        _type = None
+        _file = os.path.basename(_path)
+        _s3path = _path
+        if _file.endswith('.html'):
+            _type = 'text/html'
+            if not _file == 'index.html':
+                _s3path = _path[:-5]
+
+        _upload = True
+        _md5 = '"%s"' % md5(
+                open('%s/%s' % (args.output, _path), 'rb').read()
+            ).hexdigest()
+        try:
+            if _md5 == _objects[_s3path].e_tag:
+                _upload = False
+        except KeyError:
+            pass
+
+        if _upload:
+            print '->', _s3path
+            _object_args = {
+                'Key': _s3path,
+                'ACL': 'public-read',
+                'Body': open('%s/%s' % (args.output, _path), 'rb'),
+            }
+            if _type:
+                _object_args['ContentType'] = _type
+            _bucket.put_object(**_object_args)
+
+
 ACTIONS = {
     'generate': generate,
     'server': server,
+    'upload': upload,
 }
 
 if __name__ == '__main__':

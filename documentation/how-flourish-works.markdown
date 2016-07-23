@@ -18,3 +18,5 @@ You can use the `flourish` command-line script to:
 
   * preview the website locally, as you work on it
   * generate the website, ready to upload to your hosting provider
+  * upload the website to Amazon S3 (if you are using S3 to host the website,
+    or just to keep a backup of your site)

@@ -18,6 +18,8 @@ pages:
         - Adding assets: adding-assets.markdown
     - Recipes:
         - Adding Atom (RSS) feeds: atom-feeds.markdown
+    - Hosting your site:
+        - Uploading to Amazon S3: uploading-to-s3.markdown
     - Flourish API:
         - flourish: api-flourish.markdown
         - flourish.generators: api-flourish-generators.markdown
