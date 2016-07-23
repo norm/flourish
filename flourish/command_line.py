@@ -4,6 +4,7 @@ from imp import load_source
 from multiprocessing import Process
 import os
 from shutil import rmtree
+import sys
 import textwrap
 import time
 
@@ -103,14 +104,35 @@ def generate_once(args):
         assets_dir=args.assets,
     )
 
-    flourish.canonical_source_url(*generate.SOURCE_URL)
-    for url in generate.URLS:
-        flourish.add_url(*url)
-    if getattr(generate, 'GLOBAL_CONTEXT'):
-        flourish.set_global_context(generate.GLOBAL_CONTEXT)
+    try:
+        flourish.set_global_context(getattr(generate, 'GLOBAL_CONTEXT'))
+    except AttributeError:
+        # global context is optional
+        pass
 
-    flourish.generate_all_urls()
-    flourish.copy_assets()
+    has_urls = False
+    try:
+        flourish.canonical_source_url(*generate.SOURCE_URL)
+        has_urls = True
+    except AttributeError:
+        # source URLs are optional
+        pass
+
+    try:
+        for url in generate.URLS:
+            has_urls = True
+            flourish.add_url(*url)
+    except:
+        # other URLs are optional
+        pass
+
+    if has_urls:
+        flourish.generate_all_urls()
+        flourish.copy_assets()
+    else:
+        # both types of URL are optional, but having one or the other is not
+        print "Nothing to generate!"
+        sys.exit(1)
 
 
 def generate_on_change(args):
