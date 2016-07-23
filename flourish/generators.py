@@ -105,6 +105,7 @@ class BaseGenerator(object):
         _context = {}
         _context['objects'] = self.source_objects
         _context['site'] = self.flourish.site_config
+        _context['current_url'] = self.current_url
         return _context
 
     def get_template(self):

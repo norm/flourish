@@ -12,6 +12,7 @@ Other than as noted below, it behaves the same as
 
 ## Context variables
 
+  * `current_url` — the URL of this page
   * `objects` — a list of all matching source objects for the current URL
   * `page` — the source object matching the current URL
   * `site` — a dictionary containing all of the keys in the `_site.toml`

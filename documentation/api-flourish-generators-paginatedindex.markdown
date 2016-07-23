@@ -23,6 +23,7 @@ Other than as noted below, it behaves the same as
 
   * `current_page` — the [`Page`](/api-flourish-paginator/#page) instance
     for this single page within the set of pages
+  * `current_url` — the URL of this page
   * `objects` — a list of all matching source objects for the current URL
   * `pages` — a list of all matching source objects for the current URL
   * `pagination` — the [`Paginator`](/api-flourish-paginator/) instance for

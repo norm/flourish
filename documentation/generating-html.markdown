@@ -151,6 +151,7 @@ as `title` to make templates easier to read and write.
 
 Both generators also provide the following variables:
 
+  * `current_url` — the URL of this page
   * `site` — the contents of the [site configuration](/site-configuration/)
     (eg `site.title`, `site.author`)
 
