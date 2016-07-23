@@ -22,6 +22,7 @@ example_files = {
 
 
         class Homepage(IndexGenerator):
+            order_by = ('published')
             template_name = 'homepage.html'
 
 
