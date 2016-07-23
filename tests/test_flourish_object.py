@@ -803,3 +803,18 @@ class TestFlourish:
                     'thing-one',
                     'thing-two',
                 ] == [source.slug for source in sources]
+
+    def test_get_one_source_by_slug_after_filter(self):
+        source = self.flourish.sources.get('basic-page')
+        assert type(source) == TomlSourceFile
+        assert source.slug == 'basic-page'
+
+        # although 'basic-page' is now excluded and won't be available in
+        # the sources.all() list, getting it directly should still work
+        not_static = self.flourish.sources.exclude(category='static')
+        for source in not_static.sources.all():
+            assert source.slug != 'basic-page'
+
+        source = not_static.get('basic-page')
+        assert type(source) == TomlSourceFile
+        assert source.slug == 'basic-page'

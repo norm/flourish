@@ -22,6 +22,7 @@ class Flourish(object):
         'jinja',
     ]
     DATA = [
+        '_cache',
         '_filters',
         '_order_by',
         '_slice',
@@ -49,6 +50,7 @@ class Flourish(object):
             keep_trailing_newline=True,
         )
 
+        self._cache = []
         self._filters = []
         self._order_by = []
         self._slice = None
@@ -87,7 +89,7 @@ class Flourish(object):
 
     def get(self, slug):
         """ Get a single source document by slug. """
-        for source in self.sources.all():
+        for source in self._cache:
             if source.slug == slug:
                 return source
         raise TomlSourceFile.DoesNotExist
@@ -173,16 +175,20 @@ class Flourish(object):
         for root, dirs, files in os.walk(self.source_dir):
             this_dir = root[trim:]
             for file in files:
+                # FIXME check for slug-ishness and otherwise ignore
+                # (this could simplify _site.toml by being just another
+                # ignored filename?)
                 if len(this_dir):
                     file = '%s/%s' % (this_dir, file)
                 if file == '_site.toml':
                     continue
                 if file.endswith('.toml'):
-                    self._source_files.append(TomlSourceFile(self, file))
+                    self._cache.append(TomlSourceFile(self, file))
                 elif file.endswith('.markdown') and len(file.split('.')) == 2:
-                    self._source_files.append(MarkdownSourceFile(self, file))
+                    self._cache.append(MarkdownSourceFile(self, file))
                 elif file.endswith('.json'):
-                    self._source_files.append(JsonSourceFile(self, file))
+                    self._cache.append(JsonSourceFile(self, file))
+        self._source_files = list(self._cache)
 
     def __len__(self):
         return self.count()
