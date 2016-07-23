@@ -14,12 +14,16 @@ pages:
         - Generating the site: generating-the-site.markdown
         - Adding URLs: adding-urls.markdown
         - Generating the HTML: generating-html.markdown
+        - Site configuration: site-configuration.markdown
+    - Recipes:
+        - Adding Atom (RSS) feeds: atom-feeds.markdown
     - Flourish API:
         - flourish: api-flourish.markdown
         - flourish.generators: api-flourish-generators.markdown
         - flourish.generators.BaseGenerator: api-flourish-generators-base.markdown
         - flourish.generators.PageGenerator: api-flourish-generators-page.markdown
         - flourish.generators.IndexGenerator: api-flourish-generators-index.markdown
+        - flourish.generators.AtomGenerator: api-flourish-generators-atom.markdown
 
 extra_css:
     - overrides.css

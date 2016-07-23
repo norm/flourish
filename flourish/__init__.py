@@ -3,6 +3,7 @@ import os
 import warnings
 
 from jinja2 import Environment, FileSystemLoader
+import toml
 
 from .source import MarkdownSourceFile, TomlSourceFile
 from .url import URL
@@ -51,6 +52,8 @@ class Flourish(object):
             if _opt in kwargs:
                 if kwargs[_opt] is not None:
                     setattr(self, _opt, kwargs[_opt])
+
+        self.site_config = self._read_site_config()
 
         if '_source_files' not in kwargs:
             self._add_sources()
@@ -110,6 +113,16 @@ class Flourish(object):
                 kwargs.setdefault(_option, _value)
         return type(self)(**kwargs)
 
+    def _read_site_config(self):
+        _config_file = '%s/_site.toml' % self.source_dir
+        with open(_config_file) as _file:
+            _config = toml.loads(_file.read())
+        for key in ('author', 'title', 'base_url'):
+            if key not in _config:
+                raise RuntimeError(
+                    '"%s" is a required entry in _site.toml' % key)
+        return _config
+
     def _add_sources(self):
         """ Find source documents and register them. """
         trim = len(self.source_dir) + 1
@@ -118,6 +131,8 @@ class Flourish(object):
             for file in files:
                 if len(this_dir):
                     file = '%s/%s' % (this_dir, file)
+                if file == '_site.toml':
+                    continue
                 if file.endswith('.toml'):
                     self._source_files.append(TomlSourceFile(self, file))
                 elif file.endswith('.markdown') and len(file.split('.')) == 2:

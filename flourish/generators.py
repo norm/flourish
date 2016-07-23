@@ -1,4 +1,7 @@
+from datetime import datetime
 import os
+
+from pyatom import AtomFeed
 
 
 class MissingValue(Exception):
@@ -75,7 +78,7 @@ class BaseGenerator(object):
         _destination = '%s%s' % (self.flourish.output_dir, self.current_url)
         if _destination.endswith('/'):
             _destination = _destination + 'index.html'
-        if not _destination.endswith('.html'):
+        if not _destination.endswith(('.html', '.atom')):
             _destination = _destination + '.html'
         return _destination
 
@@ -87,6 +90,7 @@ class BaseGenerator(object):
     def get_context_data(self):
         _context = {}
         _context['objects'] = self.source_objects
+        _context['site'] = self.flourish.site_config
         return _context
 
     def get_template(self):
@@ -115,3 +119,47 @@ class PageGenerator(PageContextMixin, BaseGenerator):
 
 class IndexGenerator(PageIndexContextMixin, BaseGenerator):
     template_name = 'index.html'
+
+
+class AtomGenerator(BaseGenerator):
+    def get_objects(self, tokens):
+        """
+        Only consider objects that have the key "published" with a
+        datetime value that is in the past.
+        """
+        _now = datetime.now()
+        _sources = self.get_filtered_sources()
+        _already_published = _sources.filter(published__lt=_now)
+        _filtered = _already_published.filter(**tokens)
+        self.source_objects = _filtered
+        return self.source_objects
+
+    def render_output(self):
+        _feed_global = {
+            'author': self.flourish.site_config['author'],
+            'title': self.flourish.site_config['title'],
+            'url': self.flourish.site_config['base_url'],
+            'feed_url': '%s%s' % (
+                self.flourish.site_config['base_url'],
+                self.current_url,
+            ),
+        }
+        _feed = AtomFeed(**_feed_global)
+
+        for _object in self.source_objects:
+            entry = {
+                'title': _object.title,
+                'content': _object.body,
+                'content_type': 'html',
+                'url': _object.absolute_url,
+                'published': _object.published,
+                'updated': _object.published,
+                'author': self.flourish.site_config['author'],
+            }
+            if 'author' in _object:
+                entry['author'] = _object.author
+            if 'updated' in _object:
+                entry['updated'] = _object.updated
+            _feed.add(**entry)
+
+        return _feed.to_string()

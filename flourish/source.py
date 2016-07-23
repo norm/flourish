@@ -24,6 +24,10 @@ class BaseSourceFile(object):
     def url(self):
         return '/%s' % self._slug
 
+    @property
+    def absolute_url(self):
+        return '%s%s' % (self._parent.site_config['base_url'], self.url)
+
     def _read_configuration(self, filename):
         toml_file = '%s/%s' % (self._parent.source_dir, filename)
         with open(toml_file) as configuration:
@@ -57,6 +61,10 @@ class BaseSourceFile(object):
             return self.slug
         if key in self._config:
             return self._config[key]
+        if key in ['body', 'title']:
+            # these are required for atom feeds, so if they've not been
+            # set in the page's configuration, return them as empty
+            return ''
         raise AttributeError
 
     def __getitem__(self, key):

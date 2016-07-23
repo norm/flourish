@@ -15,6 +15,8 @@ of generating pages.
 ## Context variables
 
   * `objects` — a list of all matching source objects for the current URL
+  * `site` — a dictionary containing all of the keys in the `_site.toml`
+    configuration file
 
 ## Generator method flow
 

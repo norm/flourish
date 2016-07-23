@@ -16,6 +16,8 @@ Other than as noted below, it behaves the same as
 
   * `objects` — a list of all matching source objects for the current URL
   * `pages` — a list of all matching source objects for the current URL
+  * `site` — a dictionary containing all of the keys in the `_site.toml`
+    configuration file
 
 ## Mixins
 

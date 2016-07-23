@@ -11,6 +11,12 @@ class TestFlourishNoArgs:
             Flourish()
 
 
+class TestFlourishSiteConfigRequirements:
+    def test_empty_site_config_is_error(self):
+        with pytest.raises(RuntimeError):
+            Flourish('tests/invalid_siteconfig')
+
+
 class TestFlourish:
     @classmethod
     def setup_class(cls):
