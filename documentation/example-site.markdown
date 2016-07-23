@@ -11,7 +11,7 @@ flourish example
 ```
 
 This will create some source files and templates, then instruct you to
-run `flourish --rebuild server` and open [http://localhost:3567/][lh]
+run `flourish --rebuild preview` and open [http://localhost:3567/][lh]
 in your browser to continue.
 
 The example site briefly walks you through editing content and creating

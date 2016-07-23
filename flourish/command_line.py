@@ -27,8 +27,8 @@ def main():
 
             Commands:
                 generate        creates the output HTML
-                server          serves up output HTML on a local port, good for
-                                development previewing of work
+                preview         preview the generated content from your local
+                                computer before uploading
                 example         creates a new flourish website in the
                                 current directory, with some example content
                 upload          upload the generated site to an AWS S3 bucket
@@ -53,7 +53,7 @@ def main():
         help='Directory to output to (default: %(default)s)')
     parser.add_argument(
         '-p', '--port', default='3567',
-        help='Port on which to bind webserver (default: %(default)s)')
+        help='Port on which to bind preview webserver (default: %(default)s)')
     parser.add_argument(
         '-v', '--version', action='store_true',
         help='Report the version of flourish')
@@ -134,14 +134,14 @@ def generate_on_change(args):
     observer.join()
 
 
-def server(args):
+def preview_server(args):
     if args.rebuild:
-        rebuildserver(args)
+        preview_rebuildserver(args)
     else:
-        runserver(args)
+        preview_runserver(args)
 
 
-def runserver(args):
+def preview_runserver(args):
     output_dir = os.path.abspath(args.output)
     app = Flask(__name__)
 
@@ -168,8 +168,8 @@ def runserver(args):
     app.run(port=3567)
 
 
-def rebuildserver(args):
-    _server = Process(target=runserver, args=(args,))
+def preview_rebuildserver(args):
+    _server = Process(target=preview_runserver, args=(args,))
     _server.start()
     _goc = Process(target=generate_on_change, args=(args,))
     _goc.start()
@@ -188,7 +188,7 @@ def create_example(args):
         assets='assets',
         output='output',
     ))
-    print 'Example site created: run "flourish --rebuild server"'
+    print 'Example site created: run "flourish --rebuild preview"'
     print 'and go to http://localhost:3567/ in your browser to see the site.'
     print 'Then click on "Welcome to your new blog" to get started.'
 
@@ -240,7 +240,7 @@ def upload(args):
 
 ACTIONS = {
     'generate': generate,
-    'server': server,
+    'preview': preview_server,
     'example': create_example,
     'upload': upload,
 }
