@@ -17,6 +17,7 @@ class BaseSourceFile(object):
         self._parent = parent
         self._config = self._read_configuration(filename)
         self._add_markdown_attachments()
+        self._add_html_attachments()
         self._convert_markdown()
 
     @property
@@ -52,6 +53,17 @@ class BaseSourceFile(object):
         with open(toml_file) as configuration:
             return toml.loads(configuration.read())
 
+    def _add_html_attachments(self):
+        pattern = '%s/%s.*.html' % (self._parent.source_dir, self.slug)
+        for attachment in glob(pattern):
+            key = attachment.split('.')[-2]
+            with open(attachment) as content:
+                if key in self._config:
+                    warnings.warn(
+                        '"%s" in %s overriden by HTML attachment.' % (
+                            key, self.slug))
+                self._config[key] = content.read()
+
     def _add_markdown_attachments(self):
         pattern = '%s/%s.*.markdown' % (self._parent.source_dir, self.slug)
         for attachment in glob(pattern):
@@ -59,7 +71,7 @@ class BaseSourceFile(object):
             with open(attachment) as content:
                 if key in self._config:
                     warnings.warn(
-                        '"%s" in %s overriden by attachment file.' % (
+                        '"%s" in %s overriden by Markdown attachment.' % (
                             key, self.slug))
                 self._config[key] = content.read()
 

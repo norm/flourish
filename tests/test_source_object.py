@@ -75,7 +75,7 @@ class TestFlourishPage:
         assert (
             str(self.warnings[0].message) ==
             '"body_markdown" in series/part-three '
-            'overriden by attachment file.'
+            'overriden by Markdown attachment.'
         )
 
     def test_toml_with_adherent_markdown(self):
@@ -111,4 +111,17 @@ class TestFlourishPage:
                 'category': 'post',
                 'published': datetime(2016, 02, 29, 10, 30, 00),
                 'title': 'Plain Markdown Page',
+            } == page._config
+
+    def test_json_with_adherent_html(self):
+        page = self.flourish.sources.get('thing-one')
+        assert {
+                'body': '<h1>Thing the First</h1>\n'
+                        '<p>This is raw HTML.</p>\n',
+                'category': 'thing',
+                'published': datetime(2016, 06, 04, 12, 30, 00),
+                'tag': ['basically', 'one', 'first'],
+                'title': 'Thing the First',
+                'type': 'post',
+                'updated': datetime(2016, 06, 04, 14, 00, 00),
             } == page._config

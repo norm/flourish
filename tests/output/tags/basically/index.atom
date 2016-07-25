@@ -18,6 +18,9 @@
     <author>
       <name>Wendy Testaburger</name>
     </author>
+    <content type="html">&lt;h1&gt;Thing the First&lt;/h1&gt;
+&lt;p&gt;This is raw HTML.&lt;/p&gt;
+</content>
   </entry>
   <entry xml:base="http://withaflourish.net/tags/basically/index.atom">
     <title type="text">Second Thing</title>

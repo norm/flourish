@@ -101,7 +101,7 @@ filenames.
 Any source can have other Markdown content added from separate files,
 providing that they share the slug part of the filename. For example, a
 source with the filename `blog-post.toml`, will automatically contain the
-content of the file `blog-post.body.markdown` as though it has been in
+content of the file `blog-post.body.markdown` as though it had been in
 the key `body_markdown` in the TOML.
 
 The advantage of having separate files for the Markdown is readability — both
@@ -111,6 +111,14 @@ looking at them as separate entities.
 The disadvantage is having to deal with more files, and it not being
 immediately obvious when looking at a source file that it may have more
 keys that are currently shown.
+
+
+## Adding HTML to sources
+
+In the same manner as adding Markdown shown above, raw HTML can be added.
+For example, a source with the filename `blog-post.toml` will automatically
+contain the content of the file `blog-post.body.html` as though it had been
+in the key `body` in the TOML.
 
 
 ## Special keys in sources
