@@ -53,10 +53,7 @@ class TestFlourishGeneration(CompareDirectories):
             order_by = ('-published')
 
         class OnePageIndex(IndexGenerator):
-            def get_objects(self, tokens):
-                _objects = self.get_filtered_sources().filter(**tokens)[0:1]
-                self.source_objects = _objects
-                return _objects
+            limit = 1
 
         class FourPagePaginatedIndex(PaginatedIndexGenerator):
             order_by = ('published')

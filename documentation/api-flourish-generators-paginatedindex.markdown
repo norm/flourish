@@ -10,6 +10,7 @@ Other than as noted below, it behaves the same as
 
 ## Class attributes
 
+  * `limit` — This generator should return no more than `limit` sources.
   * `per_page` — This generator should include this many source objects in
     each paginated output page. The default value is `10`.
   * `sources_filter` — This generator should only use sources that match

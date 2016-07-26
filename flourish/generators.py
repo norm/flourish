@@ -30,6 +30,7 @@ class BaseGenerator(object):
     sources_filter = None
     sources_exclude = None
     template_name = None
+    limit = None
 
     @classmethod
     def as_generator(cls):
@@ -66,7 +67,10 @@ class BaseGenerator(object):
         if _ordering is not None:
             _filtered = _filtered.order_by(self.order_by)
 
-        self.source_objects = _filtered
+        if self.limit is not None:
+            self.source_objects = _filtered[0:self.limit]
+        else:
+            self.source_objects = _filtered
         return self.source_objects
 
     def get_filtered_sources(self):
@@ -181,7 +185,12 @@ class AtomGenerator(BaseGenerator):
         _already_published = _sources.filter(published__lt=_now)
         _filtered = _already_published.filter(**tokens)
         _ordered = _filtered.order_by(self.order_by)
-        self.source_objects = _ordered
+
+        if self.limit is not None:
+            self.source_objects = _ordered[0:self.limit]
+        else:
+            self.source_objects = _ordered
+
         return self.source_objects
 
     def render_output(self):

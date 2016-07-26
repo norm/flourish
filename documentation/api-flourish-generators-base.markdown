@@ -11,6 +11,7 @@ of generating pages.
   * `sources_filter` — This generator should only use sources that match
     this filter; see
     [Filtering down to specific sources](/api-flourish/#filtering-down-to-specific-sources).
+  * `limit` — This generator should return no more than `limit` sources.
     Default value is `None`.
   * `sources_exclude` — This generator should exclude sources that match
     this filter. Default value is `None`.

@@ -8,6 +8,7 @@ Other than as noted below, it behaves the same as
 
 ## Class attributes
 
+  * `limit` — This generator should return no more than `limit` sources.
   * `sources_filter` — This generator should only use sources that match
     this filter; see
     [Filtering down to specific sources](/api-flourish/#filtering-down-to-specific-sources).

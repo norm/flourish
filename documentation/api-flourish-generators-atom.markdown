@@ -6,6 +6,11 @@ Other than as noted below, it behaves the same as
 [`BaseGenerator`](/api-flourish-generators-base/).
 
 
+## Class attributes
+
+  * `limit` — This generator should return no more than `limit` sources.
+
+
 ## Methods
 
 ### get_objects(tokens)
