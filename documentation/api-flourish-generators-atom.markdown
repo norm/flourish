@@ -9,6 +9,14 @@ Other than as noted below, it behaves the same as
 ## Class attributes
 
   * `limit` — This generator should return no more than `limit` sources.
+  * `order_by` — This generator should sort matching sources in this way.
+    Default value is `-published` (most-recent first).
+  * `sources_exclude` — This generator should exclude sources that match
+    this filter. Default value is `None`.
+  * `sources_filter` — This generator should only use sources that match
+    this filter; see
+    [Filtering down to specific sources](/api-flourish/#filtering-down-to-specific-sources).
+    Default value is `None`.
 
 
 ## Methods
@@ -18,8 +26,6 @@ Other than as noted below, it behaves the same as
 Returns only sources that have a `published` key set to datetime value that
 is before now (ie. anything declared to be published "in the future") will
 not be included in the Atom feed.
-
-The sources are sorted most-recent first.
 
 ### render_output()
 

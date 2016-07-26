@@ -27,8 +27,8 @@ class PageIndexContextMixin(object):
 
 class BaseGenerator(object):
     order_by = None
-    sources_filter = None
     sources_exclude = None
+    sources_filter = None
     template_name = None
     limit = None
 
