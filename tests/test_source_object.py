@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 from datetime import datetime
 
 import pytest
@@ -23,7 +25,7 @@ class TestFlourishPage:
     def test_toml_configuration(self):
         page = self.flourish.sources.get('basic-page')
         assert {
-                'body': '<p>Hello world.</p>',
+                'body': u'<p>Hello “world”.</p>',
                 'category': 'static',
                 'published': datetime(2015, 12, 25, 10, 00, 00),
                 'tag': 'basic-page',
@@ -45,8 +47,8 @@ class TestFlourishPage:
 
         page = self.flourish.sources.get('thing-two')
         assert {
-                'body_markdown': 'Body read from Markdown attachment.\n',
-                'body': '<p>Body read from Markdown attachment.</p>\n',
+                'body_markdown': u'Body read from Markdown attachment‽\n',
+                'body': u'<p>Body read from Markdown attachment‽</p>\n',
                 'category': 'thing',
                 'published': datetime(2016, 06, 04, 12, 30, 00),
                 'summary_markdown': 'Thing Two summary.\n',
@@ -102,10 +104,10 @@ class TestFlourishPage:
     def test_page_markdown_with_frontmatter(self):
         page = self.flourish.sources.get('markdown-page')
         assert {
-                'body_markdown': '\n# Markdown\n\n'
+                'body_markdown': u'\n# ¡Markdown!\n\n'
                                  'I was generated from Markdown alone, '
                                  'no TOML.\n',
-                'body': '<h1>Markdown</h1>\n\n'
+                'body': u'<h1>¡Markdown!</h1>\n\n'
                         '<p>I was generated from Markdown alone, '
                         'no TOML.</p>\n',
                 'category': 'post',
@@ -121,7 +123,7 @@ class TestFlourishPage:
                 'category': 'thing',
                 'published': datetime(2016, 06, 04, 12, 30, 00),
                 'tag': ['basically', 'one', 'first'],
-                'title': 'Thing the First',
+                'title': u'Thing—the First',
                 'type': 'post',
                 'updated': datetime(2016, 06, 04, 14, 00, 00),
             } == page._config

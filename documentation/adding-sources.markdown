@@ -11,6 +11,10 @@ at will:
 * [JSON][json]
 * [Markdown][md]
 
+All sources are treated as though they contain UTF-8 content. If they contain
+characters of a different character set, you will have problems. Modern text
+editors save files in UTF-8 by default.
+
 
 ## The slug
 

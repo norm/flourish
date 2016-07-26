@@ -1,3 +1,4 @@
+import codecs
 from datetime import datetime
 from glob import glob
 import json
@@ -50,14 +51,14 @@ class BaseSourceFile(object):
 
     def _read_configuration(self, filename):
         toml_file = '%s/%s' % (self._parent.source_dir, filename)
-        with open(toml_file) as configuration:
+        with codecs.open(toml_file, encoding='utf-8') as configuration:
             return toml.loads(configuration.read())
 
     def _add_html_attachments(self):
         pattern = '%s/%s.*.html' % (self._parent.source_dir, self.slug)
         for attachment in glob(pattern):
             key = attachment.split('.')[-2]
-            with open(attachment) as content:
+            with codecs.open(attachment, encoding='utf-8') as content:
                 if key in self._config:
                     warnings.warn(
                         '"%s" in %s overriden by HTML attachment.' % (
@@ -68,7 +69,7 @@ class BaseSourceFile(object):
         pattern = '%s/%s.*.markdown' % (self._parent.source_dir, self.slug)
         for attachment in glob(pattern):
             key = attachment.split('.')[-2] + '_markdown'
-            with open(attachment) as content:
+            with codecs.open(attachment, encoding='utf-8') as content:
                 if key in self._config:
                     warnings.warn(
                         '"%s" in %s overriden by Markdown attachment.' % (
@@ -116,7 +117,7 @@ class BaseSourceFile(object):
 class MarkdownSourceFile(BaseSourceFile):
     def _read_configuration(self, filename):
         markdown_file = '%s/%s' % (self._parent.source_dir, filename)
-        with open(markdown_file) as configuration:
+        with codecs.open(markdown_file, encoding='utf-8') as configuration:
             content = configuration.read()
         if content.startswith('---\n'):
             # 4 skips the starting `---\n`; 8 skips both
@@ -144,7 +145,7 @@ class JsonSourceFile(BaseSourceFile):
 
     def _read_configuration(self, filename):
         _json_file = '%s/%s' % (self._parent.source_dir, filename)
-        with open(_json_file) as _configuration:
+        with codecs.open(_json_file, encoding='utf-8') as _configuration:
             _config = json.loads(_configuration.read())
 
         for _key, _value in _config.iteritems():

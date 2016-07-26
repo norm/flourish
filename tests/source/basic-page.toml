@@ -1,4 +1,4 @@
-body = '<p>Hello world.</p>'
+body = '<p>Hello “world”.</p>'
 category = 'static'
 published = 2015-12-25T10:00:00Z
 tag = 'basic-page'

@@ -24,7 +24,7 @@
 </content>
   </entry>
   <entry xml:base="http://withaflourish.net/index.atom">
-    <title type="text">Thing the First</title>
+    <title type="text">Thing—the First</title>
     <id>http://withaflourish.net/thing-one</id>
     <updated>2016-06-04T14:00:00Z</updated>
     <published>2016-06-04T12:30:00Z</published>
@@ -45,7 +45,7 @@
     <author>
       <name>Wendy Testaburger</name>
     </author>
-    <content type="html">&lt;p&gt;Body read from Markdown attachment.&lt;/p&gt;
+    <content type="html">&lt;p&gt;Body read from Markdown attachment‽&lt;/p&gt;
 </content>
   </entry>
   <entry xml:base="http://withaflourish.net/index.atom">
@@ -85,7 +85,7 @@
     <author>
       <name>Wendy Testaburger</name>
     </author>
-    <content type="html">&lt;h1&gt;Markdown&lt;/h1&gt;
+    <content type="html">&lt;h1&gt;¡Markdown!&lt;/h1&gt;
 
 &lt;p&gt;I was generated from Markdown alone, no TOML.&lt;/p&gt;
 </content>
@@ -99,6 +99,6 @@
     <author>
       <name>Wendy Testaburger</name>
     </author>
-    <content type="html">&lt;p&gt;Hello world.&lt;/p&gt;</content>
+    <content type="html">&lt;p&gt;Hello “world”.&lt;/p&gt;</content>
   </entry>
 </feed>

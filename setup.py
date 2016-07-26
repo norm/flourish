@@ -26,7 +26,7 @@ setup(
         'Jinja2',
         'markdown2',
         'pyatom',
-        'toml',
+        'toml.py',
         'watchdog',
     ],
 

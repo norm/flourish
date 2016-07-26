@@ -87,7 +87,7 @@ class BaseGenerator(object):
         if not os.path.isdir(_directory):
             os.makedirs(_directory)
         with open(_filename, 'w') as _output:
-            _output.write(_rendered)
+            _output.write(_rendered.encode('utf-8'))
 
     def get_output_filename(self):
         _destination = '%s%s' % (self.flourish.output_dir, self.current_url)
@@ -121,7 +121,7 @@ class BaseGenerator(object):
         return self.template_name
 
     def render_template(self, template, context_data):
-        return template.render(context_data).encode('UTF-8')
+        return template.render(context_data)
 
 
 class PageGenerator(PageContextMixin, BaseGenerator):
