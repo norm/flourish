@@ -34,17 +34,18 @@ class BaseGenerator(object):
 
     @classmethod
     def as_generator(cls):
-        def generator(flourish, url, global_context=None):
-            self = cls(flourish, url, global_context)
+        def generator(flourish, url, global_context=None, report=False):
+            self = cls(flourish, url, global_context, report)
             return self.generate()
 
         return generator
 
-    def __init__(self, flourish, url, global_context):
+    def __init__(self, flourish, url, global_context, report):
         self.flourish = flourish
         self.url = url
         self.global_context = global_context
         self.current_url = None
+        self.report = report
 
     def generate(self):
         for _tokens in self.get_url_tokens():
@@ -86,6 +87,9 @@ class BaseGenerator(object):
 
     def output_to_file(self):
         _filename = self.get_output_filename()
+        if self.report:
+            print '->', _filename
+
         _rendered = self.render_output()
         _directory = os.path.dirname(_filename)
         if not os.path.isdir(_directory):

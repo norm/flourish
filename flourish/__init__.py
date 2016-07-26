@@ -130,10 +130,10 @@ class Flourish(object):
     def all_valid_filters_for_url(self, name):
         return self._urls[name].all_valid_filters()
 
-    def generate_all_urls(self):
+    def generate_all_urls(self, report=False):
         for _entry in self._urls:
             url = self._urls[_entry]
-            url.generator(self, url, self.global_context)
+            url.generator(self, url, self.global_context, report=report)
 
     def set_global_context(self, global_context):
         self.global_context = global_context

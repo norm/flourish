@@ -56,7 +56,10 @@ def main():
         '-p', '--port', default='3567',
         help='Port on which to bind preview webserver (default: %(default)s)')
     parser.add_argument(
-        '-v', '--version', action='store_true',
+        '-v', '--verbose', action='store_true',
+        help='Report each URL as it is generated')
+    parser.add_argument(
+        '--version', action='store_true',
         help='Report the version of flourish')
     parser.add_argument(
         '--rebuild', action='store_true',
@@ -127,7 +130,7 @@ def generate_once(args):
         pass
 
     if has_urls:
-        flourish.generate_all_urls()
+        flourish.generate_all_urls(report=args.verbose)
         flourish.copy_assets()
     else:
         # both types of URL are optional, but having one or the other is not
