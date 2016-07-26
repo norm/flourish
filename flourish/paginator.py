@@ -5,7 +5,7 @@ from math import ceil
 # FIXME add in concertina nav
 class Paginator(object):
     def __init__(self, object_list=[], per_page=10, base_url='/'):
-        self.object_list = object_list
+        self.object_list = list(object_list)
         self.per_page = per_page
         self.base_url = base_url
 
