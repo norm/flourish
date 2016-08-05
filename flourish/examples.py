@@ -146,7 +146,7 @@ example_files = {
         [editing it!](/editing-the-site)
     """),   # noqa: E501
 
-    'assets/site.css': dedent("""\
+    'source/site.css': dedent("""\
         body {
             max-width: 600px;
             margin: 2em auto;

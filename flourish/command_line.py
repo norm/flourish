@@ -1,10 +1,7 @@
 import argparse
 from hashlib import md5
-from imp import load_source
 from multiprocessing import Process
 import os
-from shutil import rmtree
-import sys
 import textwrap
 import time
 
@@ -47,9 +44,6 @@ def main():
         '-t', '--templates', default='templates',
         help='Directory containing templates (default: %(default)s)')
     parser.add_argument(
-        '-a', '--assets', default='assets',
-        help='Directory containing asset files (default: %(default)s)')
-    parser.add_argument(
         '-o', '--output', default='output',
         help='Directory to output to (default: %(default)s)')
     parser.add_argument(
@@ -79,7 +73,6 @@ def main():
         if args.base is not None:
             args.source = os.path.join(args.base, args.source)
             args.templates = os.path.join(args.base, args.templates)
-            args.assets = os.path.join(args.base, args.assets)
             args.output = os.path.join(args.base, args.output)
         action = ACTIONS[args.action]
         action(args)
@@ -94,48 +87,12 @@ def generate(args):
 
 
 def generate_once(args):
-    generate = load_source('generate', '%s/generate.py' % args.source)
-
-    if os.path.exists(args.output):
-        rmtree(args.output)
-    os.makedirs(args.output)
-
     flourish = Flourish(
         source_dir=args.source,
         templates_dir=args.templates,
         output_dir=args.output,
-        assets_dir=args.assets,
     )
-
-    try:
-        flourish.set_global_context(getattr(generate, 'GLOBAL_CONTEXT'))
-    except AttributeError:
-        # global context is optional
-        pass
-
-    has_urls = False
-    try:
-        flourish.canonical_source_url(*generate.SOURCE_URL)
-        has_urls = True
-    except AttributeError:
-        # source URLs are optional
-        pass
-
-    try:
-        for url in generate.URLS:
-            has_urls = True
-            flourish.add_url(*url)
-    except:
-        # other URLs are optional
-        pass
-
-    if has_urls:
-        flourish.generate_all_urls(report=args.verbose)
-        flourish.copy_assets()
-    else:
-        # both types of URL are optional, but having one or the other is not
-        print "Nothing to generate!"
-        sys.exit(1)
+    flourish.generate_site(report=args.verbose)
 
 
 def generate_on_change(args):
@@ -149,9 +106,6 @@ def generate_on_change(args):
     observer.daemon = True
     observer.schedule(Handler(), args.source, recursive=True)
     observer.schedule(Handler(), args.templates, recursive=True)
-    if os.path.exists(args.assets):
-        # having assets is optional
-        observer.schedule(Handler(), args.assets, recursive=True)
     observer.start()
     try:
         while True:
@@ -203,7 +157,7 @@ def preview_rebuildserver(args):
 
 
 def create_example(args):
-    for _dir in ['source', 'templates', 'assets']:
+    for _dir in ['source', 'templates']:
         if not os.path.isdir(_dir):
             os.mkdir(_dir)
     for _filename in example_files:
@@ -212,7 +166,6 @@ def create_example(args):
     generate_once(argparse.Namespace(
         source='source',
         templates='templates',
-        assets='assets',
         output='output',
     ))
     print 'Example site created: run "flourish --rebuild preview"'

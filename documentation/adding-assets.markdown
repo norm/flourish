@@ -9,10 +9,11 @@ that do not change dependent on the users viewing the site. All files are
 "static" in Flourish generated sites, so they are referred to as assets.)
 
 When generating the site (eg running `flourish generate`), any files in
-the assets directory are copied to the output directory without changing
-the name or the contents.
+the source directory that aren't seen as [source files](/adding-sources/)
+(ie. files that aren't TOML, JSON or Markdown sources or attachments)
+are copied to the output directory without changing the filename, directory
+the file is in, or the contents.
 
-For example, a file `logo.png` in the assets directory, would be output
-to `logo.png` when the site is generated. If you want your assets to live
-in a specific directory on the generated site, create that in your assets
-directory and place your files inside that.
+For example, a file `logo.png` in the source directory, would be output
+to `logo.png` when the site is generated. Similarly, a file `css/screen.png`
+would be output to `css/screen.png` when the site is generated.

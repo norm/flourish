@@ -1,13 +1,6 @@
 import pytest
 
 from flourish import Flourish
-from flourish.generators import (
-    AtomGenerator,
-    IndexGenerator,
-    PageGenerator,
-    PaginatedIndexGenerator,
-)
-from flourish.helpers import publication_range
 
 from .compare_directories import CompareDirectories
 
@@ -19,10 +12,12 @@ class TestFlourishGeneration(CompareDirectories):
         'all/page-2.html',
         'basic-page.html',
         'css/screen.css',
+        'images/an-image.jpg',
         'index.atom',
         'index.html',
         'logo.png',
         'markdown-page.html',
+        'nope.txt',
         'thing-one.html',
         'thing-two.html',
         'series/part-one.html',
@@ -47,64 +42,13 @@ class TestFlourishGeneration(CompareDirectories):
     ]
 
     def test_generation(self):
-        # FIXME move this all into tests/source/generate.py,
-        # and call command_line generate
-        class NewestFirstIndex(IndexGenerator):
-            order_by = ('-published')
-
-        class OnePageIndex(IndexGenerator):
-            limit = 1
-
-        class FourPagePaginatedIndex(PaginatedIndexGenerator):
-            order_by = ('published')
-            per_page = 4
-
-
         with pytest.warns(None) as warnings:
             flourish = Flourish(
                 source_dir='tests/source',
                 templates_dir='tests/templates',
-                assets_dir='tests/assets',
                 output_dir=self.tempdir,
             )
             assert len(warnings) == 2
 
-        flourish.canonical_source_url(
-            '/#slug',
-            PageGenerator.as_generator(),
-        )
-        flourish.add_url(
-            '/',
-            'homepage',
-            NewestFirstIndex.as_generator(),
-        )
-        flourish.add_url(
-            '/tags/#tag/',
-            'tags-tag-page',
-            OnePageIndex.as_generator(),
-        )
-        flourish.add_url(
-            '/index.atom',
-            'atom-feed',
-            AtomGenerator.as_generator(),
-        )
-        flourish.add_url(
-            '/tags/#tag/index.atom',
-            'tags-atom-feed',
-            AtomGenerator.as_generator(),
-        )
-        flourish.add_url(
-            '/all/',
-            'all-paginated',
-            FourPagePaginatedIndex.as_generator(),
-        )
-
-        def global_context(self):
-            return {
-                'copyright_year_range': publication_range(self.flourish),
-            }
-
-        flourish.set_global_context(global_context)
-        flourish.generate_all_urls()
-        flourish.copy_assets()
+        flourish.generate_site()
         self.compare_directories()

@@ -1,15 +1,15 @@
 # encoding: utf8
 
 from datetime import datetime
+from imp import load_source
 from operator import attrgetter
 import os
-from shutil import copyfile
+from shutil import copyfile, rmtree
 import warnings
 
 from jinja2 import Environment, FileSystemLoader
 import toml
 
-from .lib import relative_list_of_files_in_directory
 from .source import JsonSourceFile, MarkdownSourceFile, TomlSourceFile
 from .url import URL
 from .version import __version__    # noqa: F401
@@ -22,6 +22,7 @@ class Flourish(object):
         'jinja',
     ]
     DATA = [
+        '_assets',
         '_cache',
         '_filters',
         '_order_by',
@@ -36,20 +37,19 @@ class Flourish(object):
         source_dir='source',
         templates_dir='templates',
         output_dir='output',
-        assets_dir='assets',
         global_context=None,
         **kwargs
     ):
         self.source_dir = source_dir
         self.templates_dir = templates_dir
         self.output_dir = output_dir
-        self.assets_dir = assets_dir
         self.global_context = global_context
         self.jinja = Environment(
             loader=FileSystemLoader(self.templates_dir),
             keep_trailing_newline=True,
         )
 
+        self._assets = []
         self._cache = []
         self._filters = []
         self._order_by = []
@@ -71,6 +71,32 @@ class Flourish(object):
 
         if '_source_files' not in kwargs:
             self._add_sources()
+
+        generate = load_source('generate', '%s/generate.py' % self.source_dir)
+        try:
+            self.set_global_context(getattr(generate, 'GLOBAL_CONTEXT'))
+        except AttributeError:
+            # global context is optional
+            pass
+
+        has_urls = False
+        try:
+            self.canonical_source_url(*generate.SOURCE_URL)
+            has_urls = True
+        except AttributeError:
+            # source URLs are optional
+            pass
+
+        try:
+            for url in generate.URLS:
+                has_urls = True
+                self.add_url(*url)
+        except:
+            # other URLs are optional
+            pass
+
+        if not has_urls:
+            warnings.warn('There are no URLs configured in generate.py')
 
     @property
     def sources(self):
@@ -130,25 +156,34 @@ class Flourish(object):
     def all_valid_filters_for_url(self, name):
         return self._urls[name].all_valid_filters()
 
+    def generate_site(self, report=False):
+        if os.path.exists(self.output_dir):
+            rmtree(self.output_dir)
+        os.makedirs(self.output_dir)
+        self.generate_all_urls(report=report)
+        self.copy_assets(report=report)
+
     def generate_all_urls(self, report=False):
         for _entry in self._urls:
-            url = self._urls[_entry]
-            url.generator(self, url, self.global_context, report=report)
+            self.generate_url(_entry, report=report)
+
+    def generate_url(self, name, report=False):
+        url = self._urls[name]
+        url.generator(self, url, self.global_context, report=report)
 
     def set_global_context(self, global_context):
         self.global_context = global_context
 
-    def copy_assets(self):
-        if self.assets_dir:
-            # FIXME refactor this to be used elsewhere
-            _files = relative_list_of_files_in_directory(self.assets_dir)
-            for _file in _files:
-                _source = '%s/%s' % (self.assets_dir, _file)
-                _destination = '%s/%s' % (self.output_dir, _file)
-                _directory = os.path.dirname(_destination)
-                if not os.path.isdir(_directory):
-                    os.makedirs(_directory)
-                copyfile(_source, _destination)
+    def copy_assets(self, report=False):
+        for _file in self._assets:
+            _source = '%s/%s' % (self.source_dir, _file)
+            _destination = '%s/%s' % (self.output_dir, _file)
+            _directory = os.path.dirname(_destination)
+            if not os.path.isdir(_directory):
+                os.makedirs(_directory)
+            copyfile(_source, _destination)
+            if report:
+                print '->', _destination
 
     def clone(self, **kwargs):
         for _option in self.ARGS + self.DATA:
@@ -178,16 +213,27 @@ class Flourish(object):
                 # FIXME check for slug-ishness and otherwise ignore
                 # (this could simplify _site.toml by being just another
                 # ignored filename?)
+                is_attachment_file = (
+                    file.endswith(('.markdown', '.html')) and
+                    len(file.split('.')) == 3
+                )
+
                 if len(this_dir):
                     file = '%s/%s' % (this_dir, file)
+
                 if file == '_site.toml':
                     continue
+                if file.startswith('generate.py'):
+                    continue
+
                 if file.endswith('.toml'):
                     self._cache.append(TomlSourceFile(self, file))
                 elif file.endswith('.markdown') and len(file.split('.')) == 2:
                     self._cache.append(MarkdownSourceFile(self, file))
                 elif file.endswith('.json'):
                     self._cache.append(JsonSourceFile(self, file))
+                elif not is_attachment_file:
+                    self._assets.append(file)
         self._source_files = list(self._cache)
 
     def get_valid_filters_for_tokens(self, tokens, objects=None):
