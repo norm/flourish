@@ -48,6 +48,7 @@ class Flourish(object):
             loader=FileSystemLoader(self.templates_dir),
             keep_trailing_newline=True,
         )
+        self.jinja.globals['url'] = self.template_resolve_url
 
         self._assets = []
         self._cache = []
@@ -152,6 +153,15 @@ class Flourish(object):
 
     def resolve_url(self, name, **kwargs):
         return self._urls[name].resolve(**kwargs)
+
+    def template_resolve_url(self, name, **kwargs):
+        try:
+            return self.resolve_url(name, **kwargs)
+        except KeyError:
+            warnings.warn(
+                'Cannot resolve URL "%s", it has missing arguments' % name
+            )
+            return ''
 
     def all_valid_filters_for_url(self, name):
         return self._urls[name].all_valid_filters()

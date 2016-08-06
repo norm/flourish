@@ -11,6 +11,10 @@ class NewestFirstIndex(IndexGenerator):
     order_by = ('-published')
 
 
+class BadTemplate(NewestFirstIndex):
+    template_name = 'bad.html'
+
+
 class OnePageIndex(IndexGenerator):
     limit = 1
 
@@ -38,6 +42,11 @@ URLS = (
         '/',
         'homepage',
         NewestFirstIndex.as_generator(),
+    ),
+    (
+        '/error',
+        'erroring-page',
+        BadTemplate.as_generator(),
     ),
     (
         '/tags/#tag/',

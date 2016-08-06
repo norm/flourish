@@ -5,6 +5,16 @@
 </head>
 <body class='{% block body_class %}{% endblock %}'>
 
+<header>
+  <nav>
+    <ul>
+      <li><a href='{{ url("homepage") }}'>Homepage</a></li>
+      <li><a href='{{ url("atom-feed") }}'>Atom Feed</a></li>
+      <li><a href='{{ url("tags-tag-page", tag="css") }}'>Posts tagged CSS</a></li>
+    </ul>
+  </nav>
+</header>
+
 {% block body %}{{body}}{% endblock %}
 
 <footer>

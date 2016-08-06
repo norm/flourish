@@ -12,6 +12,7 @@ class TestFlourishGeneration(CompareDirectories):
         'all/page-2.html',
         'basic-page.html',
         'css/screen.css',
+        'error.html',
         'images/an-image.jpg',
         'index.atom',
         'index.html',
@@ -50,5 +51,10 @@ class TestFlourishGeneration(CompareDirectories):
             )
             assert len(warnings) == 2
 
-        flourish.generate_site()
+        with pytest.warns(None) as warnings:
+            # one template has an invalid url() use
+            flourish.generate_site()
+            assert len(warnings) == 1
+            assert 'tags-tag-page' in str(warnings[0].message)
+
         self.compare_directories()

@@ -16,6 +16,7 @@ pages:
         - Adding URLs: adding-urls.markdown
         - Generating the HTML: generating-html.markdown
         - Template variables: template-variables.markdown
+        - Template functions: template-functions.markdown
         - Site configuration: site-configuration.markdown
         - Adding assets: adding-assets.markdown
     - Recipes:
