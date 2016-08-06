@@ -1,5 +1,6 @@
 from flourish.generators import (
     AtomGenerator,
+    BaseGenerator,
     IndexGenerator,
     PageGenerator,
     PaginatedIndexGenerator,
@@ -22,6 +23,10 @@ class OnePageIndex(IndexGenerator):
 class FourPagePaginatedIndex(PaginatedIndexGenerator):
     order_by = ('published')
     per_page = 4
+
+
+class NotFound(BaseGenerator):
+    template_name = '404.html'
 
 
 def global_context(self):
@@ -47,6 +52,11 @@ URLS = (
         '/error',
         'erroring-page',
         BadTemplate.as_generator(),
+    ),
+    (
+        '/404',
+        'not-found-page',
+        NotFound.as_generator(),
     ),
     (
         '/tags/#tag/',

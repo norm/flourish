@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block body %}
+  <h1>Page not found</h1>
+
+  {% with post=lookup("thing-one") %}
+    <p>
+      Why not try our most popular post
+      <a href='{{ post.url }}'>{{ post.title }}</a>?
+    </p>
+  {% endwith %}
+
+{% endblock %}

@@ -24,3 +24,19 @@ in your `URLS` list. If the URL requires any
 
 For a [canonical source](/adding-urls/#source-urls) page, the symbolic name
 is always `'source'`.
+
+
+## Using other data sources
+
+Sometimes you might want to refer to another data source within a template.
+You can use the `lookup()` function to return the data for any named source,
+like so:
+
+```html
+{% with post=lookup("something-amazing") %}
+<p>
+  If you're bored, why not read our most popular post
+  <a href='{{post.url}}'>{{post.title}}</a>?
+</p>
+{% endwith %}
+```

@@ -47,8 +47,10 @@ class Flourish(object):
         self.jinja = Environment(
             loader=FileSystemLoader(self.templates_dir),
             keep_trailing_newline=True,
+            extensions=['jinja2.ext.with_'],
         )
         self.jinja.globals['url'] = self.template_resolve_url
+        self.jinja.globals['lookup'] = self.get
 
         self._assets = []
         self._cache = []

@@ -8,6 +8,7 @@ from .compare_directories import CompareDirectories
 class TestFlourishGeneration(CompareDirectories):
     expected_directory = 'tests/output'
     expected_files = [
+        '404.html',
         'all/index.html',
         'all/page-2.html',
         'basic-page.html',
