@@ -35,6 +35,7 @@ pages:
         - flourish.generators.AtomGenerator: api-flourish-generators-atom.markdown
         - flourish.helpers: api-flourish-helpers.markdown
         - flourish.paginator: api-flourish-paginator.markdown
+    - Release notes: release-notes.markdown
 
 extra_css:
     - overrides.css
