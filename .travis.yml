@@ -2,7 +2,7 @@ language: python
 python:
     - '2.7'
 
-script: sh tests/run.sh
+script: sh tests/run.sh -v
 
 notifications:
   slack: flourishpy:qJLiHQqOLUUKZJBvUK8mMkAh
