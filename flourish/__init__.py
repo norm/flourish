@@ -379,7 +379,7 @@ class Flourish(object):
         return iter(_sources)
 
     def __repr__(self):
-        return '<flourish.Flourish object (source=%s)' % self.source_dir
+        return '<flourish.Flourish object (source=%s)>' % self.source_dir
 
 
 def _equal_or_inside(value, test):
