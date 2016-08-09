@@ -10,7 +10,7 @@ import markdown2
 import toml
 
 
-class BaseSourceFile(object):
+class SourceFile(object):
     def __init__(self, parent, filename):
         slug, _ = os.path.splitext(filename)
         self._source = filename
@@ -114,7 +114,7 @@ class BaseSourceFile(object):
         pass
 
 
-class MarkdownSourceFile(BaseSourceFile):
+class MarkdownSourceFile(SourceFile):
     def _read_configuration(self, filename):
         markdown_file = '%s/%s' % (self._parent.source_dir, filename)
         with codecs.open(markdown_file, encoding='utf-8') as configuration:
@@ -136,11 +136,11 @@ class MarkdownSourceFile(BaseSourceFile):
         return config
 
 
-class TomlSourceFile(BaseSourceFile):
+class TomlSourceFile(SourceFile):
     pass
 
 
-class JsonSourceFile(BaseSourceFile):
+class JsonSourceFile(SourceFile):
     ISO8601 = re.compile(r'^\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}:\d{2}Z$')
 
     def _read_configuration(self, filename):

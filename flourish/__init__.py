@@ -10,7 +10,12 @@ import warnings
 from jinja2 import Environment, FileSystemLoader
 import toml
 
-from .source import JsonSourceFile, MarkdownSourceFile, TomlSourceFile
+from .source import (
+    JsonSourceFile,
+    MarkdownSourceFile,
+    SourceFile,
+    TomlSourceFile,
+)
 from .url import URL
 from .version import __version__    # noqa: F401
 
@@ -50,7 +55,7 @@ class Flourish(object):
             extensions=['jinja2.ext.with_'],
         )
         self.jinja.globals['url'] = self.template_resolve_url
-        self.jinja.globals['lookup'] = self.get
+        self.jinja.globals['lookup'] = self.template_get
 
         self._assets = []
         self._cache = []
@@ -121,7 +126,14 @@ class Flourish(object):
         for source in self._cache:
             if source.slug == slug:
                 return source
-        raise TomlSourceFile.DoesNotExist
+        raise SourceFile.DoesNotExist
+
+    def template_get(self, slug):
+        try:
+            return self.get(slug)
+        except SourceFile.DoesNotExist:
+            warnings.warn('Cannot get "%s" as it does not exist' % slug)
+            return None
 
     def filter(self, **kwargs):
         _clone = self.clone()
