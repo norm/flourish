@@ -94,11 +94,15 @@ I am a blog post, also written in Markdown.
 
 Note that this example demonstrates that you can embed TOML in the Markdown
 file by putting it at the very top of the file and surrounding it with triple
-hyphens. This is entirely optional.
+hyphens on a line by themselves. The TOML can also be surrounded by triple
+backticks (\`\`\`).
 
 The content of the file (without the embedded TOML) is put into the key
 `body_markdown` (identical to the Markdown in the TOML in the first example).
 
+This technique of including metadata in a Markdown file is called
+"front matter". Note that it is entirely optional, and a source can contain
+just Markdown without any front matter.
 
 ## Adding Markdown to sources
 

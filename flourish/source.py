@@ -146,14 +146,14 @@ class MarkdownSourceFile(SourceFile):
         markdown_file = '%s/%s' % (self._parent.source_dir, filename)
         with codecs.open(markdown_file, encoding='utf-8') as configuration:
             content = configuration.read()
-        if content.startswith('---\n'):
-            # 4 skips the starting `---\n`; 8 skips both
-            end = content[4:].find('---\n')
-            if end != -1:
-                # we have a TOML block
-                config = toml.loads(content[4:end+4])
-                config['body_markdown'] = content[end+8:]
-            else:
+        if content.startswith('-') or content.startswith('`'):
+            _delim_char = content[0:1]
+            FM_SPLIT = re.compile('^%s{3}$' % _delim_char, re.MULTILINE)
+            try:
+                _, _frontmatter, _body = FM_SPLIT.split(content, 2)
+                config = toml.loads(_frontmatter)
+                config['body_markdown'] = _body
+            except:
                 raise RuntimeError(
                     '"%s" has no end marker for the frontmatter' % filename
                 )

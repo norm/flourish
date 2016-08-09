@@ -108,7 +108,7 @@ class TestFlourishPage:
     def test_page_markdown_with_frontmatter(self):
         page = self.flourish.sources.get('markdown-page')
         assert {
-                'body_markdown': u'\n# ¡Markdown!\n\n'
+                'body_markdown': u'\n\n# ¡Markdown!\n\n'
                                  'I was generated from Markdown alone, '
                                  'no TOML.\n',
                 'body': u'<h1>¡Markdown!</h1>\n\n'
