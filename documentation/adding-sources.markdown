@@ -31,6 +31,10 @@ periods (`.`) or quotation marks (`'"`).
     * `about.me.toml`
     * `2016/06/02/valentine's-day.markdown`
 
+**Note**: a slug that ends `/index`  will be trimmed to ending `/` when
+treated as a URL. For example, a source file `more/about/index.toml` will have
+the slug `more/about/index` and the URL `more/about/` when rendered.
+
 ## Source data
 
 A source is a set of keys and values. These specify aspects of a web page,

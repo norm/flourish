@@ -43,7 +43,10 @@ class SourceFile(object):
                         self._slug, _arg)
                 )
                 return None
-        return _url.resolve(**_filter)
+        _resolved = _url.resolve(**_filter)
+        if _resolved.endswith('/index'):
+            _resolved = _resolved[:-5]
+        return _resolved
 
     @property
     def absolute_url(self):

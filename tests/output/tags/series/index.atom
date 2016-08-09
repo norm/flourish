@@ -53,10 +53,10 @@
   </entry>
   <entry xml:base="http://withaflourish.net/tags/series/index.atom">
     <title type="text">A Series in Three Parts</title>
-    <id>http://withaflourish.net/series/index</id>
+    <id>http://withaflourish.net/series/</id>
     <updated>2016-06-04T10:00:00Z</updated>
     <published>2016-06-04T10:00:00Z</published>
-    <link href="http://withaflourish.net/series/index" />
+    <link href="http://withaflourish.net/series/" />
     <author>
       <name>Wendy Testaburger</name>
     </author>
