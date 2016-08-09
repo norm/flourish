@@ -98,6 +98,12 @@ def generate_once(args):
 def generate_on_change(args):
     class Handler(FileSystemEventHandler):
         def on_any_event(self, event):
+            # ignore some duplicate events
+            if event.src_path.endswith('.pyc'):
+                return
+            if os.path.isdir(event.src_path):
+                return
+
             print '**', event.src_path, event.event_type
             generate_once(args)
 
