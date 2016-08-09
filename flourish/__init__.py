@@ -10,6 +10,7 @@ import warnings
 from jinja2 import Environment, FileSystemLoader
 import toml
 
+from .lib import relative_list_of_files_in_directory
 from .source import (
     JsonSourceFile,
     MarkdownSourceFile,
@@ -232,34 +233,28 @@ class Flourish(object):
 
     def _add_sources(self):
         """ Find source documents and register them. """
-        trim = len(self.source_dir) + 1
-        for root, dirs, files in os.walk(self.source_dir):
-            this_dir = root[trim:]
-            for file in files:
-                # FIXME check for slug-ishness and otherwise ignore
-                # (this could simplify _site.toml by being just another
-                # ignored filename?)
-                is_attachment_file = (
-                    file.endswith(('.markdown', '.html')) and
-                    len(file.split('.')) == 3
-                )
+        for _file in relative_list_of_files_in_directory(self.source_dir):
+            # FIXME check for slug-ishness and otherwise ignore
+            # (this could simplify _site.toml by being just another
+            # ignored filename?)
+            is_attachment_file = (
+                _file.endswith(('.markdown', '.html')) and
+                len(_file.split('.')) == 3
+            )
 
-                if len(this_dir):
-                    file = '%s/%s' % (this_dir, file)
+            if _file == '_site.toml':
+                continue
+            if _file.startswith('generate.py'):
+                continue
 
-                if file == '_site.toml':
-                    continue
-                if file.startswith('generate.py'):
-                    continue
-
-                if file.endswith('.toml'):
-                    self._cache.append(TomlSourceFile(self, file))
-                elif file.endswith('.markdown') and len(file.split('.')) == 2:
-                    self._cache.append(MarkdownSourceFile(self, file))
-                elif file.endswith('.json'):
-                    self._cache.append(JsonSourceFile(self, file))
-                elif not is_attachment_file:
-                    self._assets.append(file)
+            if _file.endswith('.toml'):
+                self._cache.append(TomlSourceFile(self, _file))
+            elif _file.endswith('.markdown') and len(_file.split('.')) == 2:
+                self._cache.append(MarkdownSourceFile(self, _file))
+            elif _file.endswith('.json'):
+                self._cache.append(JsonSourceFile(self, _file))
+            elif not is_attachment_file:
+                self._assets.append(_file)
         self._source_files = list(self._cache)
 
     def get_valid_filters_for_tokens(self, tokens, objects=None):
