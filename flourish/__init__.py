@@ -186,6 +186,8 @@ class Flourish(object):
         os.makedirs(self.output_dir)
         self.generate_all_urls(report=report)
         self.copy_assets(report=report)
+        if report:
+            print ''
 
     def generate_all_urls(self, report=False):
         for _entry in self._urls:
