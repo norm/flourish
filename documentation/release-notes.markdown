@@ -6,8 +6,10 @@
 
   * Make two [functions available in templates][fn] — `url` to get URLs,
     `lookup` to fetch source data.
+  * Provide ways of [linking sources together][ln].
 
 [fn]: http://flourish.readthedocs.io/en/latest/template-functions/
+[ln]: http://flourish.readthedocs.io/en/latest/linking-sources/
 
 
 ## 0.6 — 6 August 2016

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block body %}
+  <ul>
+    {% for source in page.index_set.order_by('published') %}
+      <li>
+        <a href='{{source.url}}'>{{source.title}}</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

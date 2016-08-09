@@ -77,6 +77,18 @@
 </content>
   </entry>
   <entry xml:base="http://withaflourish.net/index.atom">
+    <title type="text">A Series in Three Parts</title>
+    <id>http://withaflourish.net/series/index</id>
+    <updated>2016-06-04T10:00:00Z</updated>
+    <published>2016-06-04T10:00:00Z</published>
+    <link href="http://withaflourish.net/series/index" />
+    <author>
+      <name>Wendy Testaburger</name>
+    </author>
+    <content type="html">&lt;h1&gt;A Series in Three Parts&lt;/h1&gt;
+</content>
+  </entry>
+  <entry xml:base="http://withaflourish.net/index.atom">
     <title type="text">Plain Markdown Page</title>
     <id>http://withaflourish.net/markdown-page</id>
     <updated>2016-02-29T10:30:00Z</updated>

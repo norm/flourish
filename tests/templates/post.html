@@ -1,3 +1,14 @@
 {% extends "base.html" %}
 
 {% block body_class %}post{% endblock %}
+
+{% block related %}
+  {% if page.related('line') %}
+    <section>
+      Related pages:
+      {% for related in page.related('line') %}
+        <a href='{{related.url}}'>{{related.title}}</a>
+      {% endfor %}
+    </section>
+  {% endif %}
+{% endblock %}

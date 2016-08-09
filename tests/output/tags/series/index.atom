@@ -51,4 +51,16 @@
 &lt;p&gt;I come from Markdown.&lt;/p&gt;
 </content>
   </entry>
+  <entry xml:base="http://withaflourish.net/tags/series/index.atom">
+    <title type="text">A Series in Three Parts</title>
+    <id>http://withaflourish.net/series/index</id>
+    <updated>2016-06-04T10:00:00Z</updated>
+    <published>2016-06-04T10:00:00Z</published>
+    <link href="http://withaflourish.net/series/index" />
+    <author>
+      <name>Wendy Testaburger</name>
+    </author>
+    <content type="html">&lt;h1&gt;A Series in Three Parts&lt;/h1&gt;
+</content>
+  </entry>
 </feed>

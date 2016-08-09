@@ -145,6 +145,12 @@ be aware of:
   * `updated` — is used as the "last updated" timestamp of a source when
     generating Atom feeds. It is expected to be a timestamp (explained in
     [Adding sources](/adding-sources/)).
+  * `..._fkey` — anything ending `_fkey` is assumed to be part of a foreign
+    key lookup. See the advanced topic
+    [Linking sources together](/linking-sources/).
+  * `..._set` — anything ending `_set` is assumed to be part of a reverse
+    foreign key lookup. See the advanced topic
+    [Linking sources together](/linking-sources/).
 
 
 [iso]: https://en.wikipedia.org/wiki/ISO_8601

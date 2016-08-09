@@ -19,6 +19,8 @@ pages:
         - Template functions: template-functions.markdown
         - Site configuration: site-configuration.markdown
         - Adding assets: adding-assets.markdown
+    - Advanced usage:
+        - Linking sources together: linking-sources.markdown
     - Recipes:
         - Adding Atom (RSS) feeds: cookbook/atom-feeds.markdown
         - Date-based navigation: cookbook/date-based-navigation.markdown

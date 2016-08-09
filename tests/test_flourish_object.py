@@ -23,18 +23,19 @@ class TestFlourish:
         with pytest.warns(None) as warnings:
             cls.flourish = Flourish('tests/source')
             assert len(warnings) == 2
-            assert cls.flourish.sources.count() == 7
+            assert cls.flourish.sources.count() == 8
 
     def test_get_all_sources(self):
         sources = self.flourish.sources.all()
         assert type(sources) == Flourish
-        assert len(sources) == 7
+        assert len(sources) == 8
         # os.walk order, root dir before subdirs, alphabetical order
         assert [
                 'basic-page',
                 'markdown-page',
                 'thing-one',
                 'thing-two',
+                'series/index',
                 'series/part-one',
                 'series/part-three',
                 'series/part-two',
@@ -84,10 +85,11 @@ class TestFlourish:
     def test_get_sources_with_ordering(self):
         sources = self.flourish.sources.all().order_by('published')
         assert type(sources) == Flourish
-        assert len(sources) == 7
+        assert len(sources) == 8
         assert [
                 'basic-page',
                 'markdown-page',
+                'series/index',
                 'series/part-one',
                 'series/part-two',
                 'thing-one',
@@ -97,7 +99,7 @@ class TestFlourish:
 
         sources = self.flourish.sources.all().order_by('-published')
         assert type(sources) == Flourish
-        assert len(sources) == 7
+        assert len(sources) == 8
         # thing-one and thing-two swap places (aren't reversed) because they
         # share a published timestamp, so come out in alphabetical order
         assert [
@@ -106,14 +108,16 @@ class TestFlourish:
                 'thing-two',
                 'series/part-two',
                 'series/part-one',
+                'series/index',
                 'markdown-page',
                 'basic-page',
             ] == [source.slug for source in sources]
 
         sources = self.flourish.sources.all().order_by('title')
         assert type(sources) == Flourish
-        assert len(sources) == 7
+        assert len(sources) == 8
         assert [
+                'series/index',
                 'basic-page',
                 'series/part-one',
                 'series/part-three',
@@ -127,13 +131,14 @@ class TestFlourish:
         with pytest.warns(None) as warnings:
             sources = self.flourish.sources.all().order_by('-updated')
             assert type(sources) == Flourish
-            assert len(sources) == 7
+            assert len(sources) == 8
             # os.walk order, root dir first, alphabetical order
             assert [
                     'basic-page',
                     'markdown-page',
                     'thing-one',
                     'thing-two',
+                    'series/index',
                     'series/part-one',
                     'series/part-three',
                     'series/part-two',
@@ -149,7 +154,7 @@ class TestFlourish:
     def test_order_by_multiple_keys(self):
         sources = self.flourish.sources.all().order_by('title', '-published')
         assert type(sources) == Flourish
-        assert len(sources) == 7
+        assert len(sources) == 8
         # thing-one and thing-two come out in reverse order compared to
         # plain order_by('-published') because they share a published
         # timestamp, but the extra title argument sorted them differently
@@ -160,6 +165,7 @@ class TestFlourish:
                 'thing-one',
                 'series/part-two',
                 'series/part-one',
+                'series/index',
                 'markdown-page',
                 'basic-page',
             ] == [source.slug for source in sources]
@@ -178,10 +184,11 @@ class TestFlourish:
         on = datetime(2016, 06, 04, 12, 30, 0)
         sources = self.flourish.sources.exclude(published=on)
         assert type(sources) == Flourish
-        assert len(sources) == 5
+        assert len(sources) == 6
         assert [
                 'basic-page',
                 'markdown-page',
+                'series/index',
                 'series/part-one',
                 'series/part-three',
                 'series/part-two',
@@ -191,8 +198,9 @@ class TestFlourish:
         # not all sources have `series` declared, this should not raise
         sources = self.flourish.sources.filter(series='series-in-three-parts')
         assert type(sources) == Flourish
-        assert len(sources) == 3
+        assert len(sources) == 4
         assert [
+                'series/index',
                 'series/part-one',
                 'series/part-three',
                 'series/part-two',
@@ -202,10 +210,11 @@ class TestFlourish:
         on = datetime(2016, 06, 04, 12, 30, 0)
         sources = self.flourish.sources.filter(published__lt=on)
         assert type(sources) == Flourish
-        assert len(sources) == 4
+        assert len(sources) == 5
         assert [
                 'basic-page',
                 'markdown-page',
+                'series/index',
                 'series/part-one',
                 'series/part-two',
             ] == [source.slug for source in sources]
@@ -225,12 +234,13 @@ class TestFlourish:
         on = datetime(2016, 06, 04, 12, 30, 0)
         sources = self.flourish.sources.filter(published__lte=on)
         assert type(sources) == Flourish
-        assert len(sources) == 6
+        assert len(sources) == 7
         assert [
                 'basic-page',
                 'markdown-page',
                 'thing-one',
                 'thing-two',
+                'series/index',
                 'series/part-one',
                 'series/part-two',
             ] == [source.slug for source in sources]
@@ -257,12 +267,13 @@ class TestFlourish:
         on = datetime(2016, 06, 04, 12, 30, 0)
         sources = self.flourish.sources.exclude(published__gt=on)
         assert type(sources) == Flourish
-        assert len(sources) == 6
+        assert len(sources) == 7
         assert [
                 'basic-page',
                 'markdown-page',
                 'thing-one',
                 'thing-two',
+                'series/index',
                 'series/part-one',
                 'series/part-two',
             ] == [source.slug for source in sources]
@@ -282,10 +293,11 @@ class TestFlourish:
         on = datetime(2016, 06, 04, 12, 30, 0)
         sources = self.flourish.sources.exclude(published__gte=on)
         assert type(sources) == Flourish
-        assert len(sources) == 4
+        assert len(sources) == 5
         assert [
                 'basic-page',
                 'markdown-page',
+                'series/index',
                 'series/part-one',
                 'series/part-two',
             ] == [source.slug for source in sources]
@@ -301,11 +313,12 @@ class TestFlourish:
     def test_exclude_contains_on_string(self):
         sources = self.flourish.sources.exclude(title__contains='the')
         assert type(sources) == Flourish
-        assert len(sources) == 6
+        assert len(sources) == 7
         assert [
                 'basic-page',
                 'markdown-page',
                 'thing-two',
+                'series/index',
                 'series/part-one',
                 'series/part-three',
                 'series/part-two',
@@ -314,11 +327,12 @@ class TestFlourish:
     def test_filter_excludes_on_string(self):
         sources = self.flourish.sources.filter(title__excludes='the')
         assert type(sources) == Flourish
-        assert len(sources) == 6
+        assert len(sources) == 7
         assert [
                 'basic-page',
                 'markdown-page',
                 'thing-two',
+                'series/index',
                 'series/part-one',
                 'series/part-three',
                 'series/part-two',
@@ -349,9 +363,10 @@ class TestFlourish:
         # (thing-one, thing-two) should both be excluded
         sources = self.flourish.sources.exclude(tag__contains='basic')
         assert type(sources) == Flourish
-        assert len(sources) == 4
+        assert len(sources) == 5
         assert [
                 'markdown-page',
+                'series/index',
                 'series/part-one',
                 'series/part-three',
                 'series/part-two',
@@ -362,9 +377,10 @@ class TestFlourish:
         # (thing-one, thing-two) should both be excluded
         sources = self.flourish.sources.filter(tag__excludes='basic')
         assert type(sources) == Flourish
-        assert len(sources) == 4
+        assert len(sources) == 5
         assert [
                 'markdown-page',
+                'series/index',
                 'series/part-one',
                 'series/part-three',
                 'series/part-two',
@@ -391,12 +407,13 @@ class TestFlourish:
         # trying to exclude something invalid means no exclusion takes place
         sources = self.flourish.sources.exclude(published__contains='two')
         assert type(sources) == Flourish
-        assert len(sources) == 7
+        assert len(sources) == 8
         assert [
                 'basic-page',
                 'markdown-page',
                 'thing-one',
                 'thing-two',
+                'series/index',
                 'series/part-one',
                 'series/part-three',
                 'series/part-two',
@@ -406,12 +423,13 @@ class TestFlourish:
         # trying to exclude something invalid means no exclusion takes place
         sources = self.flourish.sources.filter(published__excludes='two')
         assert type(sources) == Flourish
-        assert len(sources) == 7
+        assert len(sources) == 8
         assert [
                 'basic-page',
                 'markdown-page',
                 'thing-one',
                 'thing-two',
+                'series/index',
                 'series/part-one',
                 'series/part-three',
                 'series/part-two',
@@ -428,10 +446,11 @@ class TestFlourish:
         categories = ['article', 'thing']
         sources = self.flourish.sources.filter(category__in=categories)
         assert type(sources) == Flourish
-        assert len(sources) == 5
+        assert len(sources) == 6
         assert [
                 'thing-one',
                 'thing-two',
+                'series/index',
                 'series/part-one',
                 'series/part-three',
                 'series/part-two',
@@ -461,10 +480,11 @@ class TestFlourish:
         categories = ['article', 'thing']
         sources = self.flourish.sources.exclude(category__notin=categories)
         assert type(sources) == Flourish
-        assert len(sources) == 5
+        assert len(sources) == 6
         assert [
                 'thing-one',
                 'thing-two',
+                'series/index',
                 'series/part-one',
                 'series/part-three',
                 'series/part-two',
@@ -473,10 +493,11 @@ class TestFlourish:
     def test_filter_set(self):
         sources = self.flourish.sources.filter(type__set='')
         assert type(sources) == Flourish
-        assert len(sources) == 5
+        assert len(sources) == 6
         assert [
                 'thing-one',
                 'thing-two',
+                'series/index',
                 'series/part-one',
                 'series/part-three',
                 'series/part-two',
@@ -503,10 +524,11 @@ class TestFlourish:
     def test_exclude_unset(self):
         sources = self.flourish.sources.exclude(type__unset='')
         assert type(sources) == Flourish
-        assert len(sources) == 5
+        assert len(sources) == 6
         assert [
                 'thing-one',
                 'thing-two',
+                'series/index',
                 'series/part-one',
                 'series/part-three',
                 'series/part-two',
@@ -543,12 +565,13 @@ class TestFlourish:
         # (thing-one, thing-two) should not be matched
         sources = self.flourish.sources.exclude(tag='basic')
         assert type(sources) == Flourish
-        assert len(sources) == 7
+        assert len(sources) == 8
         assert [
                 'basic-page',
                 'markdown-page',
                 'thing-one',
                 'thing-two',
+                'series/index',
                 'series/part-one',
                 'series/part-three',
                 'series/part-two',
@@ -557,10 +580,11 @@ class TestFlourish:
         # ... but 'basically' should
         sources = self.flourish.sources.exclude(tag='basically')
         assert type(sources) == Flourish
-        assert len(sources) == 5
+        assert len(sources) == 6
         assert [
                 'basic-page',
                 'markdown-page',
+                'series/index',
                 'series/part-one',
                 'series/part-three',
                 'series/part-two',
@@ -569,11 +593,12 @@ class TestFlourish:
         # ... as should 'basic-page'
         sources = self.flourish.sources.exclude(tag='basic-page')
         assert type(sources) == Flourish
-        assert len(sources) == 6
+        assert len(sources) == 7
         assert [
                 'markdown-page',
                 'thing-one',
                 'thing-two',
+                'series/index',
                 'series/part-one',
                 'series/part-three',
                 'series/part-two',
@@ -629,9 +654,10 @@ class TestFlourish:
 
         sources = self.flourish.sources.exclude(type='post', published__lte=on)
         assert type(sources) == Flourish
-        assert len(sources) == 1
+        assert len(sources) == 2
         assert [
                 'markdown-page',
+                'series/index',
             ] == [source.slug for source in sources]
 
         # can "stack" .filter() as well as use multiple arguments to it
@@ -645,9 +671,10 @@ class TestFlourish:
 
         sources = two_sources.exclude(published__lte=on)
         assert type(sources) == Flourish
-        assert len(sources) == 1
+        assert len(sources) == 2
         assert [
                 'markdown-page',
+                'series/index',
             ] == [source.slug for source in sources]
 
     def test_filter_then_exclude(self):
@@ -681,21 +708,23 @@ class TestFlourish:
 
         filtered_away = self.flourish.sources.exclude(type='post')
         assert type(filtered_away) == Flourish
-        assert len(filtered_away) == 2
+        assert len(filtered_away) == 3
         assert [
                 'basic-page',
                 'markdown-page',
+                'series/index',
             ] == [source.slug for source in filtered_away]
 
         unfiltered = self.flourish.sources.all()
         assert type(unfiltered) == Flourish
-        assert len(unfiltered) == 7
+        assert len(unfiltered) == 8
         # os.walk order, root dir before subdirs, alphabetical order
         assert [
                 'basic-page',
                 'markdown-page',
                 'thing-one',
                 'thing-two',
+                'series/index',
                 'series/part-one',
                 'series/part-three',
                 'series/part-two',
@@ -721,16 +750,18 @@ class TestFlourish:
     def test_order_after_exclude_works(self):
         sources = self.flourish.sources.exclude(type='post')
         assert type(sources) == Flourish
-        assert len(sources) == 2
+        assert len(sources) == 3
         assert [
                 'basic-page',
                 'markdown-page',
+                'series/index',
             ] == [source.slug for source in sources]
 
         sources = sources.order_by('-published')
         assert type(sources) == Flourish
-        assert len(sources) == 2
+        assert len(sources) == 3
         assert [
+                'series/index',
                 'markdown-page',
                 'basic-page',
             ] == [source.slug for source in sources]
@@ -738,7 +769,7 @@ class TestFlourish:
     def test_filter_after_order_works(self):
         sources = self.flourish.sources.order_by('published')
         assert type(sources) == Flourish
-        assert len(sources) == 7
+        assert len(sources) == 8
 
         sources = sources.filter(tag__contains='one')
         assert type(sources) == Flourish
@@ -751,7 +782,7 @@ class TestFlourish:
     def test_exclude_after_order_works(self):
         sources = self.flourish.sources.order_by('-published')
         assert type(sources) == Flourish
-        assert len(sources) == 7
+        assert len(sources) == 8
 
         sources = sources.exclude(series__set='')
         assert type(sources) == Flourish
@@ -767,7 +798,7 @@ class TestFlourish:
         with pytest.warns(None) as warnings:
             sources = self.flourish.sources.order_by('type')
             assert type(sources) == Flourish
-            assert len(sources) == 7
+            assert len(sources) == 8
             assert len(warnings) == 1
             assert (
                 str(warnings[0].message) ==
@@ -818,3 +849,49 @@ class TestFlourish:
         source = not_static.get('basic-page')
         assert type(source) == TomlSourceFile
         assert source.slug == 'basic-page'
+
+    def test_related_key_lookup(self):
+        source = self.flourish.sources.get('thing-one')
+        related = source.related('line')
+        assert [
+            'thing-two',
+        ] == [_s.slug for _s in related]
+
+    def test_no_related_key_lookup(self):
+        source = self.flourish.sources.get('basic-page')
+        related = source.related('line')
+        # basic-page has no line key, so no related sources
+        assert [] == [_s.slug for _s in related]
+
+    def test_foreignkey_lookup(self):
+        source = self.flourish.sources.get('series/part-one')
+        assert source.index_fkey == 'series/index'
+        assert source.index.title == 'A Series in Three Parts'
+
+    def test_foreignkey_reverse_lookup(self):
+        source = self.flourish.sources.get('series/index')
+        assert [
+            'series/part-one',
+            'series/part-three',
+            'series/part-two',
+        ] == [_s.slug for _s in source.index_set]
+
+    def test_foreignkey_reverse_lookup_after_filtering(self):
+        not_twos = self.flourish.exclude(tag='two')
+        assert [
+            'basic-page',
+            'markdown-page',
+            'thing-one',
+            'series/index',
+            'series/part-one',
+            'series/part-three',
+        ] == [_s.slug for _s in not_twos]
+
+        # set of sources linking to `markdown-page` should still contain
+        # `series/part-two` even though it is previously filtered
+        source = not_twos.get('series/index')
+        assert [
+            'series/part-one',
+            'series/part-three',
+            'series/part-two',
+        ] == [_s.slug for _s in source.index_set]

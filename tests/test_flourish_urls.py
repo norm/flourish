@@ -9,7 +9,7 @@ class TestFlourishUrls:
         with pytest.warns(None) as warnings:
             cls.flourish = Flourish('tests/source')
             assert len(warnings) == 2
-            assert cls.flourish.sources.count() == 7
+            assert cls.flourish.sources.count() == 8
 
             cls.flourish.add_url(
                 '/',
@@ -76,6 +76,7 @@ class TestFlourishUrls:
         assert self.flourish.all_valid_filters_for_url('source') == [
             {'slug': 'basic-page'},
             {'slug': 'markdown-page'},
+            {'slug': 'series/index'},
             {'slug': 'series/part-one'},
             {'slug': 'series/part-three'},
             {'slug': 'series/part-two'},
@@ -88,6 +89,7 @@ class TestFlourishUrls:
             {'tag': 'basic-page'},
             {'tag': 'basically'},
             {'tag': 'first'},
+            {'tag': 'index'},
             {'tag': 'one'},
             {'tag': 'second'},
             {'tag': 'series'},
@@ -99,6 +101,8 @@ class TestFlourishUrls:
         _filters = self.flourish.all_valid_filters_for_url('tag-post-detail')
         assert _filters == [
             {'tag': 'basic-page', 'slug': 'basic-page'},
+            {'tag': 'index', 'slug': 'series/index'},
+            {'tag': 'series', 'slug': 'series/index'},
             {'tag': 'one', 'slug': 'series/part-one'},
             {'tag': 'series', 'slug': 'series/part-one'},
             {'tag': 'series', 'slug': 'series/part-three'},
@@ -126,7 +130,7 @@ class TestFlourishUrls:
         ]
 
         assert self.flourish.filter(**_filters[0]).count() == 1   # 2015
-        assert self.flourish.filter(**_filters[1]).count() == 6   # 2016
+        assert self.flourish.filter(**_filters[1]).count() == 7   # 2016
 
     def test_month_index(self):
         _filters = self.flourish.all_valid_filters_for_url('month-index')
@@ -137,7 +141,7 @@ class TestFlourishUrls:
         ]
 
         assert self.flourish.filter(**_filters[0]).count() == 1   # 2016/02
-        assert self.flourish.filter(**_filters[1]).count() == 5   # 2016/06
+        assert self.flourish.filter(**_filters[1]).count() == 6   # 2016/06
         assert self.flourish.filter(**_filters[2]).count() == 1   # 2015/12
 
     def test_day_index(self):
@@ -149,7 +153,7 @@ class TestFlourishUrls:
             {'day': '29', 'month': '02', 'year': '2016'},
         ]
 
-        assert self.flourish.filter(**_filters[0]).count() == 4   # 2016/06/04
+        assert self.flourish.filter(**_filters[0]).count() == 5   # 2016/06/04
         assert self.flourish.filter(**_filters[1]).count() == 1   # 2016/06/06
         assert self.flourish.filter(**_filters[1]).count() == 1   # 2015/12/25
         assert self.flourish.filter(**_filters[2]).count() == 1   # 2016/02/29
@@ -163,6 +167,7 @@ class TestFlourishUrls:
             '/markdown-page',
             '/thing-one',
             '/thing-two',
+            '/series/index',
             '/series/part-one',
             '/series/part-three',
             '/series/part-two',
@@ -174,7 +179,7 @@ class TestFlourishSourcesUrl:
         with pytest.warns(None) as _warnings:
             _flourish = Flourish('tests/source')
             assert len(_warnings) == 2
-            assert _flourish.sources.count() == 7
+            assert _flourish.sources.count() == 8
 
             _flourish.canonical_source_url(
                 '/#category/#slug',
@@ -186,6 +191,7 @@ class TestFlourishSourcesUrl:
                 '/post/markdown-page',
                 '/thing/thing-one',
                 '/thing/thing-two',
+                '/article/series/index',
                 '/article/series/part-one',
                 '/article/series/part-three',
                 '/article/series/part-two',
@@ -195,7 +201,7 @@ class TestFlourishSourcesUrl:
         with pytest.warns(None) as _warnings:
             _flourish = Flourish('tests/source')
             assert len(_warnings) == 2
-            assert _flourish.sources.count() == 7
+            assert _flourish.sources.count() == 8
 
             _flourish.canonical_source_url(
                 '/#type/#slug',
@@ -207,6 +213,7 @@ class TestFlourishSourcesUrl:
                 None,
                 '/post/thing-one',
                 '/post/thing-two',
+                '/series_index/series/index',
                 '/post/series/part-one',
                 '/post/series/part-three',
                 '/post/series/part-two',
@@ -217,7 +224,7 @@ class TestFlourishSourcesUrl:
         with pytest.warns(None) as _warnings:
             _flourish = Flourish('tests/source')
             assert len(_warnings) == 2
-            assert _flourish.sources.count() == 7
+            assert _flourish.sources.count() == 8
 
             _flourish.canonical_source_url(
                 '/#tag/#slug',
@@ -229,6 +236,7 @@ class TestFlourishSourcesUrl:
                 None,
                 '/basically/thing-one',
                 '/basically/thing-two',
+                '/series/series/index',
                 '/series/series/part-one',
                 '/three/series/part-three',
                 '/series/series/part-two',

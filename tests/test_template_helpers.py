@@ -12,7 +12,7 @@ class TestFlourish:
         with pytest.warns(None) as warnings:
             cls.flourish = Flourish('tests/source')
             assert len(warnings) == 2
-            assert cls.flourish.sources.count() == 7
+            assert cls.flourish.sources.count() == 8
 
     def test_all_valid_dates(self):
         assert [

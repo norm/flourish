@@ -19,7 +19,7 @@ class TestFlourishPage:
         with pytest.warns(None) as warnings:
             cls.flourish = Flourish('tests/source')
             assert len(warnings) == 2
-            assert cls.flourish.sources.count() == 7
+            assert cls.flourish.sources.count() == 8
             cls.warnings = warnings
 
     def test_toml_configuration(self):
@@ -38,6 +38,7 @@ class TestFlourishPage:
                 'body_markdown': '# Part One\n\nI come from Markdown.\n',
                 'body': '<h1>Part One</h1>\n\n<p>I come from Markdown.</p>\n',
                 'category': 'article',
+                'index_fkey': 'series/index',
                 'published': datetime(2016, 06, 04, 11, 00, 00),
                 'series': 'series-in-three-parts',
                 'tag': ['series', 'one'],
@@ -50,6 +51,7 @@ class TestFlourishPage:
                 'body_markdown': u'Body read from Markdown attachment‽\n',
                 'body': u'<p>Body read from Markdown attachment‽</p>\n',
                 'category': 'thing',
+                'line': 'two-things',
                 'published': datetime(2016, 06, 04, 12, 30, 00),
                 'summary_markdown': 'Thing Two summary.\n',
                 'summary': '<p>Thing Two summary.</p>\n',
@@ -66,6 +68,7 @@ class TestFlourishPage:
                 'body': '<h1>Part Three</h1>\n\n'
                         '<p>The embedded Markdown gets overridden.</p>\n',
                 'category': 'article',
+                'index_fkey': 'series/index',
                 'published': datetime(2016, 06, 06, 10, 00, 00),
                 'series': 'series-in-three-parts',
                 'tag': ['three', 'series'],
@@ -88,6 +91,7 @@ class TestFlourishPage:
                 'body': '<h1>Part Two</h1>\n\n'
                         '<p>I come from a Markdown file.</p>\n',
                 'category': 'article',
+                'index_fkey': 'series/index',
                 'published': datetime(2016, 06, 04, 12, 00, 00),
                 'series': 'series-in-three-parts',
                 'tag': ['series', 'two'],
@@ -121,6 +125,7 @@ class TestFlourishPage:
                 'body': '<h1>Thing the First</h1>\n'
                         '<p>This is raw HTML.</p>\n',
                 'category': 'thing',
+                'line': 'two-things',
                 'published': datetime(2016, 06, 04, 12, 30, 00),
                 'tag': ['basically', 'one', 'first'],
                 'title': u'Thing—the First',

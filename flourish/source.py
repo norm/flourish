@@ -49,6 +49,18 @@ class SourceFile(object):
     def absolute_url(self):
         return '%s%s' % (self._parent.site_config['base_url'], self.url)
 
+    def related(self, key):
+        try:
+            _filter = {}
+            _filter[key] = self._config[key]
+            return self._parent.sources.filter(
+                    **_filter
+                ).exclude(
+                    slug=self.slug
+                )
+        except KeyError:
+            return []
+
     def _read_configuration(self, filename):
         toml_file = '%s/%s' % (self._parent.source_dir, filename)
         with codecs.open(toml_file, encoding='utf-8') as configuration:
@@ -93,6 +105,18 @@ class SourceFile(object):
             return self.slug
         if key in self._config:
             return self._config[key]
+
+        # foreign key lookup
+        _fkey = '%s_fkey' % key
+        if _fkey in self._config:
+            return self._parent.get(self._config[_fkey])
+
+        # foreign key reverse lookup
+        if key.endswith('_set'):
+            _fkey = '%s_fkey' % key[:-4]
+            _filter = {_fkey: self.slug}
+            return self._parent.filter(**_filter)
+
         if key in ['body', 'title']:
             # these are required for atom feeds, so if they've not been
             # set in the page's configuration, return them as empty
