@@ -66,7 +66,7 @@ def main():
     args = parser.parse_args()
 
     if args.version:
-        print version
+        print(version)
     elif args.action is None:
         parser.print_help()
     else:
@@ -104,7 +104,7 @@ def generate_on_change(args):
             if os.path.isdir(event.src_path):
                 return
 
-            print '**', event.src_path, event.event_type
+            print('**', event.src_path, event.event_type)
             generate_once(args)
 
     generate_once(args)
@@ -144,7 +144,7 @@ def preview_runserver(args):
         root, ext = os.path.splitext(path)
         if ext == '':
             path = '%s.html' % path
-        print '->', path
+        print('->', path)
         return send_from_directory(output_dir, path)
 
     @app.after_request
@@ -174,9 +174,9 @@ def create_example(args):
         templates='templates',
         output='output',
     ))
-    print 'Example site created: run "flourish --rebuild preview"'
-    print 'and go to http://localhost:3567/ in your browser to see the site.'
-    print 'Then click on "Welcome to your new blog" to get started.'
+    print('Example site created: run "flourish --rebuild preview"')
+    print('and go to http://localhost:3567/ in your browser to see the site.')
+    print('Then click on "Welcome to your new blog" to get started.')
 
 
 def upload(args):
@@ -213,7 +213,7 @@ def upload(args):
             pass
 
         if _upload:
-            print '->', _s3path
+            print('->', _s3path)
             _object_args = {
                 'Key': _s3path,
                 'ACL': 'public-read',

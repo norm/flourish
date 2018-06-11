@@ -2,7 +2,7 @@
 
 # Release notes for Flourish
 
-## as yet unreleased
+## 0.7 — UNRELEASED
 
   * Make two [functions available in templates][fn] — `url` to get URLs,
     `lookup` to fetch source data.
@@ -10,6 +10,7 @@
   * Markdown [front matter][as] can now also be surrounded by backticks
     (`` ``` ``) in addition to the default hyphens (`---`), in order for them
     to render better in some Markdown previews (eg GitHub).
+  * Alters the code to work under python 3.6, dropping support for python 2.
 
 [fn]: http://flourish.readthedocs.io/en/latest/template-functions/
 [ln]: http://flourish.readthedocs.io/en/latest/linking-sources/

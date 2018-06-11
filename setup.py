@@ -1,8 +1,8 @@
 from setuptools import find_packages, setup
 
 # read in __version__
-execfile('flourish/version.py')
-
+with open('flourish/version.py') as version_file:
+    exec(version_file.read())
 
 setup(
     name='flourish',
@@ -36,7 +36,7 @@ setup(
 
         'License :: OSI Approved :: MIT License',
 
-        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 3',
 
         'Topic :: Software Development :: Build Tools',
         'Topic :: Software Development :: Code Generators',

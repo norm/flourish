@@ -171,7 +171,7 @@ class TestFlourish:
             ] == [source.slug for source in sources]
 
     def test_filter_equal_to(self):
-        on = datetime(2016, 06, 04, 12, 30, 0)
+        on = datetime(2016, 6, 4, 12, 30, 0)
         sources = self.flourish.sources.filter(published=on)
         assert type(sources) == Flourish
         assert len(sources) == 2
@@ -181,7 +181,7 @@ class TestFlourish:
             ] == [source.slug for source in sources]
 
     def test_exclude_equal_to(self):
-        on = datetime(2016, 06, 04, 12, 30, 0)
+        on = datetime(2016, 6, 4, 12, 30, 0)
         sources = self.flourish.sources.exclude(published=on)
         assert type(sources) == Flourish
         assert len(sources) == 6
@@ -207,7 +207,7 @@ class TestFlourish:
             ] == [source.slug for source in sources]
 
     def test_filter_less_than(self):
-        on = datetime(2016, 06, 04, 12, 30, 0)
+        on = datetime(2016, 6, 4, 12, 30, 0)
         sources = self.flourish.sources.filter(published__lt=on)
         assert type(sources) == Flourish
         assert len(sources) == 5
@@ -220,7 +220,7 @@ class TestFlourish:
             ] == [source.slug for source in sources]
 
     def test_exclude_less_than(self):
-        on = datetime(2016, 06, 04, 12, 30, 0)
+        on = datetime(2016, 6, 4, 12, 30, 0)
         sources = self.flourish.sources.exclude(published__lt=on)
         assert type(sources) == Flourish
         assert len(sources) == 3
@@ -231,7 +231,7 @@ class TestFlourish:
             ] == [source.slug for source in sources]
 
     def test_filter_less_than_or_equal_to(self):
-        on = datetime(2016, 06, 04, 12, 30, 0)
+        on = datetime(2016, 6, 4, 12, 30, 0)
         sources = self.flourish.sources.filter(published__lte=on)
         assert type(sources) == Flourish
         assert len(sources) == 7
@@ -246,7 +246,7 @@ class TestFlourish:
             ] == [source.slug for source in sources]
 
     def test_exclude_less_than_or_equal_to(self):
-        on = datetime(2016, 06, 04, 12, 30, 0)
+        on = datetime(2016, 6, 4, 12, 30, 0)
         sources = self.flourish.sources.exclude(published__lte=on)
         assert type(sources) == Flourish
         assert len(sources) == 1
@@ -255,7 +255,7 @@ class TestFlourish:
             ] == [source.slug for source in sources]
 
     def test_filter_greater_than(self):
-        on = datetime(2016, 06, 04, 12, 30, 0)
+        on = datetime(2016, 6, 4, 12, 30, 0)
         sources = self.flourish.sources.filter(published__gt=on)
         assert type(sources) == Flourish
         assert len(sources) == 1
@@ -264,7 +264,7 @@ class TestFlourish:
             ] == [source.slug for source in sources]
 
     def test_exclude_greater_than(self):
-        on = datetime(2016, 06, 04, 12, 30, 0)
+        on = datetime(2016, 6, 4, 12, 30, 0)
         sources = self.flourish.sources.exclude(published__gt=on)
         assert type(sources) == Flourish
         assert len(sources) == 7
@@ -279,7 +279,7 @@ class TestFlourish:
             ] == [source.slug for source in sources]
 
     def test_filter_greater_than_or_equal_to(self):
-        on = datetime(2016, 06, 04, 12, 30, 0)
+        on = datetime(2016, 6, 4, 12, 30, 0)
         sources = self.flourish.sources.filter(published__gte=on)
         assert type(sources) == Flourish
         assert len(sources) == 3
@@ -290,7 +290,7 @@ class TestFlourish:
             ] == [source.slug for source in sources]
 
     def test_exclude_greater_than_or_equal_to(self):
-        on = datetime(2016, 06, 04, 12, 30, 0)
+        on = datetime(2016, 6, 4, 12, 30, 0)
         sources = self.flourish.sources.exclude(published__gte=on)
         assert type(sources) == Flourish
         assert len(sources) == 5
@@ -608,7 +608,7 @@ class TestFlourish:
         # only two sources have the tag 'two'; three of the six sources were
         # published before 12:15, three published after 12:15; filtering
         # against both of these should only find one post in each subgroup
-        on = datetime(2016, 06, 04, 12, 15, 0)
+        on = datetime(2016, 6, 4, 12, 15, 0)
         sources = self.flourish.sources.filter(
             tag__contains='two', published__gt=on)
         assert type(sources) == Flourish
@@ -644,7 +644,7 @@ class TestFlourish:
     def test_exclude_multiple_arguments(self):
         # only two sources are not of the type 'post'; one was published
         # in 2015, one in 2016
-        on = datetime(2016, 01, 01, 0, 0, 0)
+        on = datetime(2016, 1, 1, 0, 0, 0)
         sources = self.flourish.sources.exclude(type='post', published__gte=on)
         assert type(sources) == Flourish
         assert len(sources) == 1
@@ -678,7 +678,7 @@ class TestFlourish:
             ] == [source.slug for source in sources]
 
     def test_filter_then_exclude(self):
-        on = datetime(2016, 06, 04, 12, 00, 00)
+        on = datetime(2016, 6, 4, 12, 00, 00)
         posts = self.flourish.sources.filter(type='post')
         sources = posts.exclude(published__gte=on)
         assert type(sources) == Flourish
@@ -697,7 +697,7 @@ class TestFlourish:
             ] == [source.slug for source in posts]
 
     def test_filter_and_exclude_doesnt_affect_parent(self):
-        on = datetime(2016, 06, 04, 12, 15, 0)
+        on = datetime(2016, 6, 4, 12, 15, 0)
         filtered = self.flourish.sources.filter(
             tag__contains='two', published__gt=on)
         assert type(filtered) == Flourish
@@ -822,7 +822,7 @@ class TestFlourish:
                 ] == [source.slug for source in sources]
 
         with pytest.warns(None) as warnings:
-            on = datetime(2016, 06, 04, 12, 15, 0)
+            on = datetime(2016, 6, 4, 12, 15, 0)
             sources = self.flourish.sources.exclude(published__lt=on)
             assert len(sources) == 3
             sources = sources.order_by('type', '-published')

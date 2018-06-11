@@ -88,14 +88,14 @@ class BaseGenerator(object):
     def output_to_file(self):
         _filename = self.get_output_filename()
         if self.report:
-            print '->', _filename
+            print('->', _filename)
 
         _rendered = self.render_output()
         _directory = os.path.dirname(_filename)
         if not os.path.isdir(_directory):
             os.makedirs(_directory)
-        with open(_filename, 'w') as _output:
-            _output.write(_rendered.encode('utf-8'))
+        with open(_filename, 'w', encoding='utf8') as _output:
+            _output.write(_rendered)
 
     def get_output_filename(self):
         _destination = '%s%s' % (self.flourish.output_dir, self.current_url)

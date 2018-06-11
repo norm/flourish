@@ -2,7 +2,7 @@
 
 from datetime import datetime
 from imp import load_source
-from operator import attrgetter
+from operator import attrgetter, itemgetter
 import os
 from shutil import copyfile, rmtree
 import warnings
@@ -138,13 +138,13 @@ class Flourish(object):
 
     def filter(self, **kwargs):
         _clone = self.clone()
-        for _key, _value in kwargs.iteritems():
+        for _key, _value in kwargs.items():
             _clone._filters.append((_key, _value))
         return _clone
 
     def exclude(self, **kwargs):
         _clone = self.clone()
-        for _key, _value in kwargs.iteritems():
+        for _key, _value in kwargs.items():
             if '__' in _key:
                 _field, _operator = _key.split('__', 2)
             else:
@@ -188,7 +188,7 @@ class Flourish(object):
         self.generate_all_urls(report=report)
         self.copy_assets(report=report)
         if report:
-            print ''
+            print('')
 
     def generate_all_urls(self, report=False):
         for _entry in self._urls:
@@ -210,7 +210,7 @@ class Flourish(object):
                 os.makedirs(_directory)
             copyfile(_source, _destination)
             if report:
-                print '->', _destination
+                print('->', _destination)
 
     def clone(self, **kwargs):
         for _option in self.ARGS + self.DATA:
@@ -296,7 +296,7 @@ class Flourish(object):
                     _filters.append(_update)
 
         # the sort is only so the tests can compare results easily
-        return sorted(_filters)
+        return sorted(_filters, key=itemgetter(_first_token))
 
     def __len__(self):
         return self.count()
