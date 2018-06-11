@@ -27,7 +27,7 @@ class TestFlourishPage:
         assert {
                 'body': u'<p>Hello “world”.</p>',
                 'category': 'static',
-                'published': datetime(2015, 12, 25, 10, 00, 00),
+                'published': datetime(2015, 12, 25, 10, 0, 0),
                 'tag': 'basic-page',
                 'title': 'Basic Page',
             } == page._config
@@ -39,7 +39,7 @@ class TestFlourishPage:
                 'body': '<h1>Part One</h1>\n\n<p>I come from Markdown.</p>\n',
                 'category': 'article',
                 'index_fkey': 'series/index',
-                'published': datetime(2016, 06, 04, 11, 00, 00),
+                'published': datetime(2016, 6, 4, 11, 0, 0),
                 'series': 'series-in-three-parts',
                 'tag': ['series', 'one'],
                 'title': 'Part One',
@@ -52,7 +52,7 @@ class TestFlourishPage:
                 'body': u'<p>Body read from Markdown attachment‽</p>\n',
                 'category': 'thing',
                 'line': 'two-things',
-                'published': datetime(2016, 06, 04, 12, 30, 00),
+                'published': datetime(2016, 6, 4, 12, 30, 0),
                 'summary_markdown': 'Thing Two summary.\n',
                 'summary': '<p>Thing Two summary.</p>\n',
                 'tag': ['basically', 'second', 'two'],
@@ -69,7 +69,7 @@ class TestFlourishPage:
                         '<p>The embedded Markdown gets overridden.</p>\n',
                 'category': 'article',
                 'index_fkey': 'series/index',
-                'published': datetime(2016, 06, 06, 10, 00, 00),
+                'published': datetime(2016, 6, 6, 10, 0, 0),
                 'series': 'series-in-three-parts',
                 'tag': ['three', 'series'],
                 'title': 'Part Three',
@@ -92,7 +92,7 @@ class TestFlourishPage:
                         '<p>I come from a Markdown file.</p>\n',
                 'category': 'article',
                 'index_fkey': 'series/index',
-                'published': datetime(2016, 06, 04, 12, 00, 00),
+                'published': datetime(2016, 6, 4, 12, 0, 0),
                 'series': 'series-in-three-parts',
                 'tag': ['series', 'two'],
                 'title': 'Part Two',
@@ -115,7 +115,7 @@ class TestFlourishPage:
                         '<p>I was generated from Markdown alone, '
                         'no TOML.</p>\n',
                 'category': 'post',
-                'published': datetime(2016, 02, 29, 10, 30, 00),
+                'published': datetime(2016, 2, 29, 10, 30, 0),
                 'title': 'Plain Markdown Page',
             } == page._config
 
@@ -126,9 +126,9 @@ class TestFlourishPage:
                         '<p>This is raw HTML.</p>\n',
                 'category': 'thing',
                 'line': 'two-things',
-                'published': datetime(2016, 06, 04, 12, 30, 00),
+                'published': datetime(2016, 6, 4, 12, 30, 0),
                 'tag': ['basically', 'one', 'first'],
                 'title': u'Thing—the First',
                 'type': 'post',
-                'updated': datetime(2016, 06, 04, 14, 00, 00),
+                'updated': datetime(2016, 6, 4, 14, 0, 0),
             } == page._config
