@@ -1,6 +1,7 @@
 *.pyc
 __pycache__
 .cache
+.pytest_cache
 build
 dist
 flourish.egg-info
