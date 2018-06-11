@@ -176,6 +176,6 @@ class JsonSourceFile(SourceFile):
             _config = json.loads(_configuration.read())
 
         for _key, _value in _config.items():
-            if type(_value) == unicode and self.ISO8601.match(_value):
+            if type(_value) == str and self.ISO8601.match(_value):
                 _config[_key] = datetime.strptime(_value, "%Y-%m-%dT%H:%M:%SZ")
         return _config
