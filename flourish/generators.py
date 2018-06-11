@@ -88,7 +88,7 @@ class BaseGenerator(object):
     def output_to_file(self):
         _filename = self.get_output_filename()
         if self.report:
-            print '->', _filename
+            print('->', _filename)
 
         _rendered = self.render_output()
         _directory = os.path.dirname(_filename)

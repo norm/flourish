@@ -188,7 +188,7 @@ class Flourish(object):
         self.generate_all_urls(report=report)
         self.copy_assets(report=report)
         if report:
-            print ''
+            print('')
 
     def generate_all_urls(self, report=False):
         for _entry in self._urls:
@@ -210,7 +210,7 @@ class Flourish(object):
                 os.makedirs(_directory)
             copyfile(_source, _destination)
             if report:
-                print '->', _destination
+                print('->', _destination)
 
     def clone(self, **kwargs):
         for _option in self.ARGS + self.DATA:
