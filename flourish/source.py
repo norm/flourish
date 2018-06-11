@@ -130,7 +130,7 @@ class SourceFile(object):
         return self.__getattr__(key)
 
     def __iter__(self):
-        _keys = self._config.keys()
+        _keys = list(self._config)
         _keys.append('slug')
         return iter(_keys)
 
@@ -175,7 +175,7 @@ class JsonSourceFile(SourceFile):
         with codecs.open(_json_file, encoding='utf-8') as _configuration:
             _config = json.loads(_configuration.read())
 
-        for _key, _value in _config.iteritems():
+        for _key, _value in _config.items():
             if type(_value) == unicode and self.ISO8601.match(_value):
                 _config[_key] = datetime.strptime(_value, "%Y-%m-%dT%H:%M:%SZ")
         return _config

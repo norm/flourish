@@ -22,7 +22,7 @@ class Paginator(object):
 
     @property
     def page_range(self):
-        return range(1, self.num_pages + 1)
+        return list(range(1, self.num_pages + 1))
 
     def page(self, number):
         # FIXME check this is a valid page

@@ -138,13 +138,13 @@ class Flourish(object):
 
     def filter(self, **kwargs):
         _clone = self.clone()
-        for _key, _value in kwargs.iteritems():
+        for _key, _value in kwargs.items():
             _clone._filters.append((_key, _value))
         return _clone
 
     def exclude(self, **kwargs):
         _clone = self.clone()
-        for _key, _value in kwargs.iteritems():
+        for _key, _value in kwargs.items():
             if '__' in _key:
                 _field, _operator = _key.split('__', 2)
             else:

@@ -1,8 +1,8 @@
 from setuptools import find_packages, setup
 
 # read in __version__
-execfile('flourish/version.py')
-
+with open('flourish/version.py') as version_file:
+    exec(version_file.read())
 
 setup(
     name='flourish',
