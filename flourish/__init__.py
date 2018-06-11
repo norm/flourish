@@ -2,7 +2,7 @@
 
 from datetime import datetime
 from imp import load_source
-from operator import attrgetter
+from operator import attrgetter, itemgetter
 import os
 from shutil import copyfile, rmtree
 import warnings
@@ -296,7 +296,7 @@ class Flourish(object):
                     _filters.append(_update)
 
         # the sort is only so the tests can compare results easily
-        return sorted(_filters)
+        return sorted(_filters, key=itemgetter(_first_token))
 
     def __len__(self):
         return self.count()

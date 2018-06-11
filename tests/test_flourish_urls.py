@@ -101,19 +101,19 @@ class TestFlourishUrls:
         _filters = self.flourish.all_valid_filters_for_url('tag-post-detail')
         assert _filters == [
             {'tag': 'basic-page', 'slug': 'basic-page'},
+            {'tag': 'basically', 'slug': 'thing-one'},
+            {'tag': 'basically', 'slug': 'thing-two'},
+            {'tag': 'first', 'slug': 'thing-one'},
             {'tag': 'index', 'slug': 'series/index'},
-            {'tag': 'series', 'slug': 'series/index'},
             {'tag': 'one', 'slug': 'series/part-one'},
+            {'tag': 'one', 'slug': 'thing-one'},
+            {'tag': 'second', 'slug': 'thing-two'},
+            {'tag': 'series', 'slug': 'series/index'},
             {'tag': 'series', 'slug': 'series/part-one'},
             {'tag': 'series', 'slug': 'series/part-three'},
-            {'tag': 'three', 'slug': 'series/part-three'},
             {'tag': 'series', 'slug': 'series/part-two'},
+            {'tag': 'three', 'slug': 'series/part-three'},
             {'tag': 'two', 'slug': 'series/part-two'},
-            {'tag': 'basically', 'slug': 'thing-one'},
-            {'tag': 'first', 'slug': 'thing-one'},
-            {'tag': 'one', 'slug': 'thing-one'},
-            {'tag': 'basically', 'slug': 'thing-two'},
-            {'tag': 'second', 'slug': 'thing-two'},
             {'tag': 'two', 'slug': 'thing-two'},
         ]
 
@@ -135,28 +135,28 @@ class TestFlourishUrls:
     def test_month_index(self):
         _filters = self.flourish.all_valid_filters_for_url('month-index')
         assert _filters == [
+            {'month': '12', 'year': '2015'},
             {'month': '02', 'year': '2016'},
             {'month': '06', 'year': '2016'},
-            {'month': '12', 'year': '2015'},
         ]
 
-        assert self.flourish.filter(**_filters[0]).count() == 1   # 2016/02
-        assert self.flourish.filter(**_filters[1]).count() == 6   # 2016/06
-        assert self.flourish.filter(**_filters[2]).count() == 1   # 2015/12
+        assert self.flourish.filter(**_filters[0]).count() == 1   # 2015/12
+        assert self.flourish.filter(**_filters[1]).count() == 1   # 2016/02
+        assert self.flourish.filter(**_filters[2]).count() == 6   # 2016/06
 
     def test_day_index(self):
         _filters = self.flourish.all_valid_filters_for_url('day-index')
         assert _filters == [
-            {'day': '04', 'month': '06', 'year': '2016'},
-            {'day': '06', 'month': '06', 'year': '2016'},
             {'day': '25', 'month': '12', 'year': '2015'},
             {'day': '29', 'month': '02', 'year': '2016'},
+            {'day': '04', 'month': '06', 'year': '2016'},
+            {'day': '06', 'month': '06', 'year': '2016'},
         ]
 
-        assert self.flourish.filter(**_filters[0]).count() == 5   # 2016/06/04
-        assert self.flourish.filter(**_filters[1]).count() == 1   # 2016/06/06
-        assert self.flourish.filter(**_filters[1]).count() == 1   # 2015/12/25
-        assert self.flourish.filter(**_filters[2]).count() == 1   # 2016/02/29
+        assert self.flourish.filter(**_filters[0]).count() == 1   # 2015/12/25
+        assert self.flourish.filter(**_filters[1]).count() == 1   # 2016/02/29
+        assert self.flourish.filter(**_filters[2]).count() == 5   # 2016/06/04
+        assert self.flourish.filter(**_filters[3]).count() == 1   # 2016/06/06
 
     def test_no_such_keyword_has_no_filters(self):
         assert self.flourish.all_valid_filters_for_url('no-such-keyword') == []
