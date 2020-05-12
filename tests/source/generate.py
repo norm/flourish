@@ -34,6 +34,7 @@ def global_context(self):
         'copyright_year_range': publication_range(self.flourish),
     }
 
+
 GLOBAL_CONTEXT = global_context
 
 SOURCE_URL = (

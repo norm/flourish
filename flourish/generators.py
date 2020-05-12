@@ -199,7 +199,7 @@ class AtomGenerator(BaseGenerator):
 
     def render_output(self):
         feed = FeedGenerator()
-        feed.author({'name':self.flourish.site_config['author']})
+        feed.author({'name': self.flourish.site_config['author']})
         feed.title(self.flourish.site_config['title'])
         # feed.link(self.flourish.site_config['base_url'])
         feed.id('%s%s' % (
@@ -223,9 +223,9 @@ class AtomGenerator(BaseGenerator):
             entry.content(content=_object.body, type='html')
 
             if 'author' in _object:
-                entry.author({'name':_object.author})
+                entry.author({'name': _object.author})
             else:
-                entry.author({'name':self.flourish.site_config['author']})
+                entry.author({'name': self.flourish.site_config['author']})
 
             if 'updated' in _object:
                 entry.updated(_object.updated)

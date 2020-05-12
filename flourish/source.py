@@ -153,7 +153,7 @@ class MarkdownSourceFile(SourceFile):
                 _, _frontmatter, _body = FM_SPLIT.split(content, 2)
                 config = toml.loads(_frontmatter)
                 config['body_markdown'] = _body
-            except:
+            except ValueError:
                 raise RuntimeError(
                     '"%s" has no end marker for the frontmatter' % filename
                 )

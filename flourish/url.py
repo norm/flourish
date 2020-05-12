@@ -11,14 +11,14 @@ class URL(object):
     @property
     def arguments(self):
         _arguments = []
-        for _segment in re.split('(#\w+)', self.path):
+        for _segment in re.split(r'(#\w+)', self.path):
             if _segment.startswith('#'):
                 _arguments.append(_segment[1:])
         return _arguments
 
     def resolve(self, **kwargs):
         _resolved = ''
-        for _segment in re.split('(#\w+)', self.path):
+        for _segment in re.split(r'(#\w+)', self.path):
             if _segment.startswith('#'):
                 key = _segment[1:]
                 if key in kwargs:

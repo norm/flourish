@@ -105,7 +105,7 @@ class Flourish(object):
             for url in generate.URLS:
                 has_urls = True
                 self.add_url(*url)
-        except:
+        except NameError:
             # other URLs are optional
             pass
 
