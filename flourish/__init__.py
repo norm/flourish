@@ -5,6 +5,7 @@ from importlib.machinery import SourceFileLoader
 from operator import attrgetter, itemgetter
 import os
 from shutil import copyfile, rmtree
+import sys
 import warnings
 
 from jinja2 import Environment, FileSystemLoader
@@ -19,6 +20,8 @@ from .source import (
 )
 from .url import URL
 from .version import __version__    # noqa: F401
+
+sys.dont_write_bytecode = True
 
 
 class Flourish(object):
