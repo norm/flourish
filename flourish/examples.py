@@ -113,7 +113,7 @@ example_files = {
         ## Changing the site-wide configuration
 
         There is a file `_site.toml` in the `source` directory. It is not the source
-        for any specific page, but rather it is site-wide configuration. 
+        for any specific page, but rather it is site-wide configuration.
 
         Open it in your text editor and change the text "Your Name Goes Here" to
         contain your name, save the file, reload this webpage and scroll to the
@@ -129,20 +129,20 @@ example_files = {
         published = 2016-06-29T10:00:00Z
         ---
 
-        Welcome to your new blog, powered by Flourish. This example content will 
+        Welcome to your new blog, powered by Flourish. This example content will
         walk you through the basics of getting started using Flourish.
 
         Try clicking around the site. See how the title at the top of the page always
         takes you to the homepage and that there are three posts linked from there;
         that "2016" takes you to a similar list of pages, but the "06" and "07" links
-        show less links? These links are all programmatically generated from the 
+        show less links? These links are all programmatically generated from the
         site's source.
 
         The homepage links to all pages, the "2016" page links to all pages published
         in the year 2016, and "06" and "07" link to pages published in June and July
         of that year.
 
-        Having familiarised yourself with the site as it is now, let's start 
+        Having familiarised yourself with the site as it is now, let's start
         [editing it!](/editing-the-site)
     """),   # noqa: E501
 

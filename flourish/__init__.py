@@ -1,10 +1,11 @@
 # encoding: utf8
 
 from datetime import datetime
-from imp import load_source
+from importlib.machinery import SourceFileLoader
 from operator import attrgetter, itemgetter
 import os
 from shutil import copyfile, rmtree
+import sys
 import warnings
 
 from jinja2 import Environment, FileSystemLoader
@@ -19,6 +20,8 @@ from .source import (
 )
 from .url import URL
 from .version import __version__    # noqa: F401
+
+sys.dont_write_bytecode = True
 
 
 class Flourish(object):
@@ -81,7 +84,9 @@ class Flourish(object):
         if '_source_files' not in kwargs:
             self._add_sources()
 
-        generate = load_source('generate', '%s/generate.py' % self.source_dir)
+        generate = SourceFileLoader(
+                'generate', '%s/generate.py' % self.source_dir
+            ).load_module()
         try:
             self.set_global_context(getattr(generate, 'GLOBAL_CONTEXT'))
         except AttributeError:
@@ -100,7 +105,7 @@ class Flourish(object):
             for url in generate.URLS:
                 has_urls = True
                 self.add_url(*url)
-        except:
+        except NameError:
             # other URLs are optional
             pass
 
