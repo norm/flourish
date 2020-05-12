@@ -1,7 +1,7 @@
 # encoding: utf8
 
 from datetime import datetime
-from imp import load_source
+from importlib.machinery import SourceFileLoader
 from operator import attrgetter, itemgetter
 import os
 from shutil import copyfile, rmtree
@@ -81,7 +81,9 @@ class Flourish(object):
         if '_source_files' not in kwargs:
             self._add_sources()
 
-        generate = load_source('generate', '%s/generate.py' % self.source_dir)
+        generate = SourceFileLoader(
+                'generate', '%s/generate.py' % self.source_dir
+            ).load_module()
         try:
             self.set_global_context(getattr(generate, 'GLOBAL_CONTEXT'))
         except AttributeError:
