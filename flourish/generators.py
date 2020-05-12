@@ -1,7 +1,7 @@
-from datetime import datetime
+from datetime import datetime, timezone
 import os
 
-from pyatom import AtomFeed
+from feedgen.feed import FeedGenerator
 
 from .paginator import Paginator
 
@@ -184,7 +184,7 @@ class AtomGenerator(BaseGenerator):
         Only consider objects that have the key "published" with a
         datetime value that is in the past.
         """
-        _now = datetime.now()
+        _now = datetime.now().replace(tzinfo=timezone.utc)
         _sources = self.get_filtered_sources()
         _already_published = _sources.filter(published__lt=_now)
         _filtered = _already_published.filter(**tokens)
@@ -198,31 +198,55 @@ class AtomGenerator(BaseGenerator):
         return self.source_objects
 
     def render_output(self):
-        _feed_global = {
-            'author': self.flourish.site_config['author'],
-            'title': self.flourish.site_config['title'],
-            'url': self.flourish.site_config['base_url'],
-            'feed_url': '%s%s' % (
+        feed = FeedGenerator()
+        feed.author({'name':self.flourish.site_config['author']})
+        feed.title(self.flourish.site_config['title'])
+        # feed.link(self.flourish.site_config['base_url'])
+        feed.id('%s%s' % (
+            self.flourish.site_config['base_url'],
+            self.current_url,
+        ))
+        feed.link(href='%s%s' % (
                 self.flourish.site_config['base_url'],
                 self.current_url,
-            ),
-        }
-        _feed = AtomFeed(**_feed_global)
+            ), rel='self')
+        feed.link(href=self.flourish.site_config['base_url'], rel='alternate')
+
+        last_updated = self.source_objects[0].published
 
         for _object in self.source_objects:
-            entry = {
-                'title': _object.title,
-                'content': _object.body,
-                'content_type': 'html',
-                'url': _object.absolute_url,
-                'published': _object.published,
-                'updated': _object.published,
-                'author': self.flourish.site_config['author'],
-            }
-            if 'author' in _object:
-                entry['author'] = _object.author
-            if 'updated' in _object:
-                entry['updated'] = _object.updated
-            _feed.add(**entry)
+            entry = feed.add_entry(order='append')
+            entry.title(_object.title)
+            entry.id(_object.absolute_url)
+            entry.link(href=_object.absolute_url, rel='alternate')
+            entry.published(_object.published)
+            entry.content(content=_object.body, type='html')
 
-        return _feed.to_string()
+            if 'author' in _object:
+                entry.author({'name':_object.author})
+            else:
+                entry.author({'name':self.flourish.site_config['author']})
+
+            if 'updated' in _object:
+                entry.updated(_object.updated)
+                if _object.updated > last_updated:
+                    last_updated = _object.updated
+            else:
+                entry.updated(_object.published)
+
+        feed.updated(last_updated)
+
+        return feed.atom_str(pretty=True)
+
+    # FIXME refactor
+    def output_to_file(self):
+        _filename = self.get_output_filename()
+        if self.report:
+            print('->', _filename)
+
+        _rendered = self.render_output()
+        _directory = os.path.dirname(_filename)
+        if not os.path.isdir(_directory):
+            os.makedirs(_directory)
+        with open(_filename, 'wb') as _output:
+            _output.write(_rendered)

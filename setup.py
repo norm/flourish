@@ -25,8 +25,8 @@ setup(
         'Flask',
         'Jinja2',
         'markdown2',
-        'pyatom',
-        'toml.py',
+        'feedgen',
+        'toml',
         'watchdog',
     ],
 

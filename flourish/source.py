@@ -1,5 +1,5 @@
 import codecs
-from datetime import datetime
+from datetime import datetime, timezone
 from glob import glob
 import json
 import os
@@ -177,5 +177,7 @@ class JsonSourceFile(SourceFile):
 
         for _key, _value in _config.items():
             if type(_value) == str and self.ISO8601.match(_value):
-                _config[_key] = datetime.strptime(_value, "%Y-%m-%dT%H:%M:%SZ")
+                _config[_key] = datetime.strptime(
+                        _value, "%Y-%m-%dT%H:%M:%SZ"
+                    ).replace(tzinfo=timezone.utc)
         return _config
