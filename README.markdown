@@ -1,3 +1,5 @@
+![Run tests](https://github.com/norm/flourish/workflows/Run%20tests/badge.svg)
+
 Flourish
 ========
 
