@@ -45,6 +45,14 @@ SOURCE_URL = (
 
 URLS = (
     (
+        # something with a token comes first, as this ensures
+        # that later URLs still generate everything correctly
+        # (ie the flourish object does not have this filter applied)
+        '/tags/#tag/',
+        'tags-tag-page',
+        OnePageIndex.as_generator(),
+    ),
+    (
         '/',
         'homepage',
         NewestFirstIndex.as_generator(),
@@ -58,11 +66,6 @@ URLS = (
         '/404',
         'not-found-page',
         NotFound.as_generator(),
-    ),
-    (
-        '/tags/#tag/',
-        'tags-tag-page',
-        OnePageIndex.as_generator(),
     ),
     (
         '/index.atom',

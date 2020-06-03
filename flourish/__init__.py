@@ -201,7 +201,7 @@ class Flourish(object):
 
     def generate_url(self, name, report=False):
         url = self._urls[name]
-        url.generator(self, url, self.global_context, report=report)
+        url.generator(self.clone(), url, self.global_context, report=report)
 
     def set_global_context(self, global_context):
         self.global_context = global_context
