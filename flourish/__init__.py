@@ -28,6 +28,7 @@ class Flourish(object):
     ARGS = [
         'source_dir',
         'templates_dir',
+        'output_dir',
         'jinja',
     ]
     DATA = [
