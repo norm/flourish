@@ -34,9 +34,15 @@ class BaseGenerator(object):
 
     @classmethod
     def as_generator(cls):
-        def generator(flourish, url, global_context=None, report=False):
+        def generator(
+            flourish,
+            url,
+            global_context=None,
+            report=False,
+            tokens=None,
+        ):
             self = cls(flourish, url, global_context, report)
-            return self.generate()
+            return self.generate(tokens)
 
         return generator
 
@@ -47,11 +53,16 @@ class BaseGenerator(object):
         self.current_url = None
         self.report = report
 
-    def generate(self):
-        for _tokens in self.get_url_tokens():
-            self.get_current_url(_tokens)
-            self.get_objects(_tokens)
-            self.output_to_file()
+    def generate_path(self, _tokens):
+        self.get_current_url(_tokens)
+        self.get_objects(_tokens)
+        self.output_to_file()
+
+    def generate(self, _tokens=None):
+        if not _tokens:
+            _tokens = self.get_url_tokens()
+        for _t in _tokens:
+            self.generate_path(_t)
 
     def get_url_tokens(self):
         self.valid_filters = \
@@ -150,15 +161,14 @@ class IndexGenerator(PageIndexContextMixin, BaseGenerator):
 class PaginatedIndexGenerator(IndexGenerator):
     per_page = 10
 
-    def generate(self):
-        for _tokens in self.get_url_tokens():
-            _base_url = self.get_current_url(_tokens)
-            _paginator = self.get_paginated_objects(_tokens, _base_url)
-            for _page in _paginator:
-                self.current_url = _page.url
-                self.source_objects = _page.object_list
-                self.current_page = _page
-                self.output_to_file()
+    def generate_path(self, _tokens):
+        _base_url = self.get_current_url(_tokens)
+        _paginator = self.get_paginated_objects(_tokens, _base_url)
+        for _page in _paginator:
+            self.current_url = _page.url
+            self.source_objects = _page.object_list
+            self.current_page = _page
+            self.output_to_file()
 
     def get_paginated_objects(self, tokens, base_url):
         _objects = self.get_objects(tokens)

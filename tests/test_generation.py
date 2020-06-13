@@ -86,3 +86,26 @@ class TestFlourishGeneration(CompareDirectories):
             assert 'tags-tag-page' in str(warnings[0].message)
 
         self.compare_directories()
+
+
+class TestSinglePathGeneration(CompareDirectories):
+    expected_directory = 'tests/paths'
+    expected_files = [
+        'index.html',
+        'tags/first/index.atom',
+        'tags/first/index.html',
+        'tags/first/thing-one.html',
+    ]
+
+    def test_generation(self):
+        with pytest.warns(None) as warnings:
+            flourish = Flourish(
+                source_dir='tests/source',
+                templates_dir='tests/templates',
+                output_dir=self.tempdir,
+            )
+            assert len(warnings) == 2
+
+        flourish.generate_path('/')
+        flourish.generate_path('/tags/first/?')
+        self.compare_directories()
