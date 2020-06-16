@@ -11,46 +11,6 @@ class TestFlourishUrls:
             assert len(warnings) == 2
             assert cls.flourish.sources.count() == 8
 
-            cls.flourish.add_url(
-                '/',
-                'homepage',
-                None
-            )
-            cls.flourish.canonical_source_url(
-                '/#slug',
-                None
-            )
-            cls.flourish.add_url(
-                '/tags/#tag/',
-                'tag-index',
-                None
-            )
-            cls.flourish.add_url(
-                '/tags/#tag/#slug',
-                'tag-post-detail',
-                None
-            )
-            cls.flourish.add_url(
-                '/#year/',
-                'year-index',
-                None
-            )
-            cls.flourish.add_url(
-                '/#year/#month/',
-                'month-index',
-                None
-            )
-            cls.flourish.add_url(
-                '/#year/#month/#day',
-                'day-index',
-                None
-            )
-            cls.flourish.add_url(
-                '/#flooble',
-                'no-such-keyword',
-                None
-            )
-
     def test_homepage_resolves(self):
         assert self.flourish.resolve_url('homepage') == '/'
 
@@ -58,14 +18,14 @@ class TestFlourishUrls:
         assert self.flourish.resolve_url('homepage', tag='series') == '/'
 
     def test_tag_index_with_arguments_resolves(self):
-        assert(self.flourish.resolve_url('tag-index', tag='series') ==
+        assert(self.flourish.resolve_url('tags-tag-page', tag='series') ==
                '/tags/series/')
-        assert(self.flourish.resolve_url('tag-index', tag='css') ==
+        assert(self.flourish.resolve_url('tags-tag-page', tag='css') ==
                '/tags/css/')
 
     def test_tag_index_without_arguments_raises(self):
         with pytest.raises(KeyError):
-            self.flourish.resolve_url('tag-index')
+            self.flourish.resolve_url('tags-tag-page')
 
     def test_homepage_has_one_valid_filter(self):
         assert self.flourish.all_valid_filters_for_url('homepage') == [
@@ -85,7 +45,7 @@ class TestFlourishUrls:
         ]
 
     def test_tag_index_has_many_valid_filters(self):
-        assert self.flourish.all_valid_filters_for_url('tag-index') == [
+        assert self.flourish.all_valid_filters_for_url('tags-tag-page') == [
             {'tag': 'basic-page'},
             {'tag': 'basically'},
             {'tag': 'first'},

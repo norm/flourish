@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block body %}
+  <h1>Entries for {{pages[0].published.strftime('%B %Y')}}</h1>
+
+  <ul>
+    {% for page in pages %}
+      <li>
+        <a href='{{page.url}}'>{{page.title}}</a>
+      </li>
+    {% endfor %}
+  </ul>
+
+  {% if pagination %}
+    <ul class='pagination'>
+      {% for page in pagination %}
+        <li>
+          {% if page.number == current_page.number %}
+            <em>Page {{page.number}}</em>
+          {% else %}
+            <a href='{{page.url}}'>Page {{page.number}}</a>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endblock %}
