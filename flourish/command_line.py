@@ -122,7 +122,7 @@ def preview_server(args):
         response.cache_control.max_age = 0
         return response
 
-    app.run(port=3567)
+    app.run(port=args.port)
 
 
 def create_example(args):
