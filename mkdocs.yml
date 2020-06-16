@@ -17,6 +17,7 @@ pages:
         - Generating the HTML: generating-html.markdown
         - Template variables: template-variables.markdown
         - Template functions: template-functions.markdown
+        - Template filters: template-filters.markdown
         - Site configuration: site-configuration.markdown
         - Adding assets: adding-assets.markdown
     - Advanced usage:

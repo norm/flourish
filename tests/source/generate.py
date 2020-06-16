@@ -1,3 +1,4 @@
+from flourish.filters import ordinal
 from flourish.generators import (
     AtomGenerator,
     BaseGenerator,
@@ -52,6 +53,12 @@ def global_context(self):
 
 
 GLOBAL_CONTEXT = global_context
+
+
+TEMPLATE_FILTERS = {
+    'ordinal': ordinal,
+}
+
 
 SOURCE_URL = (
     '/#slug',
