@@ -1,8 +1,0 @@
-language: python
-python:
-    - '3.6'
-
-script: sh tests/run.sh -v
-
-notifications:
-  slack: flourishpy:qJLiHQqOLUUKZJBvUK8mMkAh
