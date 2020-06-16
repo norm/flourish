@@ -185,6 +185,9 @@ def create_example(args):
         source='source',
         templates='templates',
         output='output',
+        action='generate',
+        verbose=True,
+        path=[],
     ))
     print('Example site created: run "flourish preview --generate"')
     print('and go to http://localhost:3567/ in your browser to see the site.')
