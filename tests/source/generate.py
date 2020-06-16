@@ -29,6 +29,22 @@ class NotFound(BaseGenerator):
     template_name = '404.html'
 
 
+class DatedArchive(IndexGenerator):
+    order_by = ('published')
+
+
+class YearIndex(DatedArchive):
+    template_name = 'year.html'
+
+
+class MonthIndex(DatedArchive):
+    template_name = 'month.html'
+
+
+class DayIndex(DatedArchive):
+    template_name = 'day.html'
+
+
 def global_context(self):
     return {
         'copyright_year_range': publication_range(self.flourish),
@@ -53,6 +69,11 @@ URLS = (
         OnePageIndex.as_generator(),
     ),
     (
+        '/tags/#tag/#slug',
+        'tag-post-detail',
+        PageGenerator.as_generator()
+    ),
+    (
         '/',
         'homepage',
         NewestFirstIndex.as_generator(),
@@ -61,6 +82,21 @@ URLS = (
         '/error',
         'erroring-page',
         BadTemplate.as_generator(),
+    ),
+    (
+        '/#year/',
+        'year-index',
+        YearIndex.as_generator()
+    ),
+    (
+        '/#year/#month/',
+        'month-index',
+        MonthIndex.as_generator()
+    ),
+    (
+        '/#year/#month/#day/',
+        'day-index',
+        DayIndex.as_generator()
     ),
     (
         '/404',
@@ -81,5 +117,10 @@ URLS = (
         '/all/',
         'all-paginated',
         FourPagePaginatedIndex.as_generator(),
+    ),
+    (
+        '/#flooble',
+        'no-such-keyword',
+        NotFound.as_generator(),
     ),
 )

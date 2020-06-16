@@ -34,12 +34,14 @@ class Flourish(object):
     DATA = [
         '_assets',
         '_cache',
-        '_filters',
-        '_order_by',
-        '_slice',
         '_source_files',
         '_source_url',
         '_urls',
+    ]
+    ACTIONS = [
+        '_filters',
+        '_order_by',
+        '_slice',
     ]
 
     def __init__(
@@ -75,7 +77,7 @@ class Flourish(object):
             raise AttributeError(
                 'source_dir "%s" must exist' % self.source_dir)
 
-        for _opt in self.DATA:
+        for _opt in self.DATA + self.ACTIONS:
             if _opt in kwargs:
                 if kwargs[_opt] is not None:
                     setattr(self, _opt, kwargs[_opt])
@@ -184,8 +186,20 @@ class Flourish(object):
             )
             return ''
 
+    def get_handler_for_path(self, path):
+        matches = []
+        for key in self._urls:
+            _dicts = self._urls[key].can_generate(path)
+            if _dicts:
+                for _dict in _dicts:
+                    matches.append((key, _dict))
+        return matches
+
     def all_valid_filters_for_url(self, name):
-        return self._urls[name].all_valid_filters()
+        if name in self._urls:
+            return self._urls[name].all_valid_filters()
+        else:
+            raise URL.DoesNotExist
 
     def generate_site(self, report=False):
         if os.path.exists(self.output_dir):
@@ -204,6 +218,18 @@ class Flourish(object):
         url = self._urls[name]
         url.generator(self.clone(), url, self.global_context, report=report)
 
+    def generate_path(self, path, report=False):
+        handlers = self.get_handler_for_path(path)
+        for key, args in handlers:
+            url = self._urls[key]
+            url.generator(
+                self.clone(),
+                url,
+                self.global_context,
+                report=report,
+                tokens=[args],
+            )
+
     def set_global_context(self, global_context):
         self.global_context = global_context
 
@@ -219,6 +245,15 @@ class Flourish(object):
                 print('->', _destination)
 
     def clone(self, **kwargs):
+        for _option in self.ARGS + self.DATA + self.ACTIONS:
+            _value = getattr(self, _option)
+            if type(_value) == list:
+                kwargs.setdefault(_option, _value[:])
+            else:
+                kwargs.setdefault(_option, _value)
+        return type(self)(**kwargs)
+
+    def copy(self, **kwargs):
         for _option in self.ARGS + self.DATA:
             _value = getattr(self, _option)
             if type(_value) == list:

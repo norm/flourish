@@ -1,14 +1,9 @@
 import argparse
 from hashlib import md5
-from multiprocessing import Process
 import os
-import textwrap
-import time
 
 import boto3
 from flask import Flask, send_from_directory
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
 
 from . import Flourish, __version__
 from .examples import example_files
@@ -19,52 +14,101 @@ def main():
     version = ('Flourish static site generator, version %s -- '
                'http://withaflourish.net' % __version__)
     parser = argparse.ArgumentParser(
-        description=textwrap.dedent("""\
-            Flourish generates websites from source data and templates.
-            Version %s -- http://withaflourish.net
+        description=(
+            'Flourish generates websites from source data and templates.'
+        ),
+        epilog=(
+            'Version %s -- http://withaflourish.net' % __version__
+        ),
+    )
+    parser.add_argument(
+        '--base',
+        default=None,
+        help='Base directory that contains all others (default: .)',
+    )
+    parser.add_argument(
+        '--source',
+        default='source',
+        help='Directory containing source files (default: %(default)s)',
+    )
+    parser.add_argument(
+        '--templates',
+        default='templates',
+        help='Directory containing templates (default: %(default)s)',
+    )
+    parser.add_argument(
+        '--output',
+        default='output',
+        help='Directory to output to (default: %(default)s)',
+    )
+    parser.add_argument(
+        '--version',
+        action='store_true',
+        help='Report the version of flourish',
+    )
+    subparsers = parser.add_subparsers(
+        title='Actions',
+        description=(
+            'To get more information, run "flourish [command] --help".'
+        ),
+        dest='action',
+    )
 
-            Commands:
-                generate        creates the output HTML
-                preview         preview the generated content from your local
-                                computer before uploading
-                example         creates a new flourish website in the
-                                current directory, with some example content
-                upload          upload the generated site to an AWS S3 bucket
-        """ % __version__),
-        formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument(
-        'action', nargs='?', choices=ACTIONS.keys()),
-    parser.add_argument(
-        '-b', '--base', default=None,
-        help='Base directory that contains all others')
-    parser.add_argument(
-        '-s', '--source', default='source',
-        help='Directory containing source files (default: %(default)s)')
-    parser.add_argument(
-        '-t', '--templates', default='templates',
-        help='Directory containing templates (default: %(default)s)')
-    parser.add_argument(
-        '-o', '--output', default='output',
-        help='Directory to output to (default: %(default)s)')
-    parser.add_argument(
-        '-p', '--port', default='3567',
-        help='Port on which to bind preview webserver (default: %(default)s)')
-    parser.add_argument(
-        '-v', '--verbose', action='store_true',
-        help='Report each URL as it is generated')
-    parser.add_argument(
-        '--version', action='store_true',
-        help='Report the version of flourish')
-    parser.add_argument(
-        '--rebuild', action='store_true',
-        help='Watch the source and template directories for changes, '
-             'regenerating the site automatically.')
-    parser.add_argument(
-        '--bucket',
-        help='The name of the AWS S3 bucket to upload to (with upload)')
+    parser_generate = subparsers.add_parser(
+        'generate',
+        help='creates the output HTML',
+    )
+    parser_generate.add_argument(
+        '-v', '--verbose',
+        action='store_true',
+        help='Report each URL as it is generated'
+    )
+    parser_generate.add_argument(
+        'path',
+        nargs='*',
+        help=(
+            'Generate only this path (appending ? makes it a wildcard '
+            'match to generate anything that starts with this path '
+            ' -- eg. /2020/?). Can be specified repeatedly.'
+        ),
+    )
+
+    parser_preview = subparsers.add_parser(
+        'preview',
+        help=(
+            'preview the generated content from your local computer '
+            'before uploading'
+        ),
+    )
+    parser_preview.add_argument(
+        '-p', '--port',
+        default='3567',
+        help='Port on which to bind preview webserver (default: %(default)s)',
+    )
+    parser_preview.add_argument(
+        '-g', '--generate',
+        action='store_true',
+        help='Regenerate the requested page before serving',
+    )
+
+    parser_upload = subparsers.add_parser(
+        'upload',
+        help='upload the generated site to an AWS S3 bucket',
+    )
+    parser_upload.add_argument(
+        'bucket',
+        help='bucket to upload to (default: bucket entry in _site.toml)',
+    )
+
+    parser_example = subparsers.add_parser(             # noqa: F841
+        'example',
+        help=(
+            'creates a new flourish website in the '
+            'current directory with some example content'
+        ),
+    )
 
     args = parser.parse_args()
-
     if args.version:
         print(version)
     elif args.action is None:
@@ -79,56 +123,19 @@ def main():
 
 
 def generate(args):
-    if args.rebuild:
-        generate_once(args)
-        generate_on_change(args)
-    else:
-        generate_once(args)
-
-
-def generate_once(args):
     flourish = Flourish(
         source_dir=args.source,
         templates_dir=args.templates,
         output_dir=args.output,
     )
-    flourish.generate_site(report=args.verbose)
-
-
-def generate_on_change(args):
-    class Handler(FileSystemEventHandler):
-        def on_any_event(self, event):
-            # ignore some duplicate events
-            if event.src_path.endswith('.pyc'):
-                return
-            if os.path.isdir(event.src_path):
-                return
-
-            print('**', event.src_path, event.event_type)
-            generate_once(args)
-
-    generate_once(args)
-    observer = Observer()
-    observer.daemon = True
-    observer.schedule(Handler(), args.source, recursive=True)
-    observer.schedule(Handler(), args.templates, recursive=True)
-    observer.start()
-    try:
-        while True:
-            time.sleep(0.5)
-    except KeyboardInterrupt:
-        observer.stop()
-    observer.join()
+    if args.path:
+        for path in args.path:
+            flourish.generate_path(path, report=args.verbose)
+    else:
+        flourish.generate_site(report=args.verbose)
 
 
 def preview_server(args):
-    if args.rebuild:
-        preview_rebuildserver(args)
-    else:
-        preview_runserver(args)
-
-
-def preview_runserver(args):
     output_dir = os.path.abspath(args.output)
     app = Flask(__name__)
 
@@ -138,13 +145,25 @@ def preview_runserver(args):
     @app.route('/')
     @app.route('/<path:path>')
     def send_file(path=''):
+        generate = '/%s' % path
+
+        # fix URLs for .html
         filename = os.path.basename(path)
         if filename == '':
             path = '%sindex.html' % path
-        root, ext = os.path.splitext(path)
+        _, ext = os.path.splitext(path)
         if ext == '':
-            path = '%s.html' % path
-        print('->', path)
+            path += '.html'
+
+        # regenerate if requested
+        if args.generate:
+            flourish = Flourish(
+                source_dir=args.source,
+                templates_dir=args.templates,
+                output_dir=args.output,
+            )
+            flourish.generate_path(generate, report=True)
+
         return send_from_directory(output_dir, path)
 
     @app.after_request
@@ -152,14 +171,7 @@ def preview_runserver(args):
         response.cache_control.max_age = 0
         return response
 
-    app.run(port=3567)
-
-
-def preview_rebuildserver(args):
-    _server = Process(target=preview_runserver, args=(args,))
-    _server.start()
-    _goc = Process(target=generate_on_change, args=(args,))
-    _goc.start()
+    app.run(port=args.port)
 
 
 def create_example(args):
@@ -169,12 +181,12 @@ def create_example(args):
     for _filename in example_files:
         with open(_filename, 'w') as _example_file:
             _example_file.write(example_files[_filename])
-    generate_once(argparse.Namespace(
+    generate(argparse.Namespace(
         source='source',
         templates='templates',
         output='output',
     ))
-    print('Example site created: run "flourish --rebuild preview"')
+    print('Example site created: run "flourish preview --generate"')
     print('and go to http://localhost:3567/ in your browser to see the site.')
     print('Then click on "Welcome to your new blog" to get started.')
 

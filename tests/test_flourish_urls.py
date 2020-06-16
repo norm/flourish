@@ -1,4 +1,5 @@
 from flourish import Flourish
+from flourish.url import URL
 
 import pytest
 
@@ -11,46 +12,6 @@ class TestFlourishUrls:
             assert len(warnings) == 2
             assert cls.flourish.sources.count() == 8
 
-            cls.flourish.add_url(
-                '/',
-                'homepage',
-                None
-            )
-            cls.flourish.canonical_source_url(
-                '/#slug',
-                None
-            )
-            cls.flourish.add_url(
-                '/tags/#tag/',
-                'tag-index',
-                None
-            )
-            cls.flourish.add_url(
-                '/tags/#tag/#slug',
-                'tag-post-detail',
-                None
-            )
-            cls.flourish.add_url(
-                '/#year/',
-                'year-index',
-                None
-            )
-            cls.flourish.add_url(
-                '/#year/#month/',
-                'month-index',
-                None
-            )
-            cls.flourish.add_url(
-                '/#year/#month/#day',
-                'day-index',
-                None
-            )
-            cls.flourish.add_url(
-                '/#flooble',
-                'no-such-keyword',
-                None
-            )
-
     def test_homepage_resolves(self):
         assert self.flourish.resolve_url('homepage') == '/'
 
@@ -58,14 +19,14 @@ class TestFlourishUrls:
         assert self.flourish.resolve_url('homepage', tag='series') == '/'
 
     def test_tag_index_with_arguments_resolves(self):
-        assert(self.flourish.resolve_url('tag-index', tag='series') ==
+        assert(self.flourish.resolve_url('tags-tag-page', tag='series') ==
                '/tags/series/')
-        assert(self.flourish.resolve_url('tag-index', tag='css') ==
+        assert(self.flourish.resolve_url('tags-tag-page', tag='css') ==
                '/tags/css/')
 
     def test_tag_index_without_arguments_raises(self):
         with pytest.raises(KeyError):
-            self.flourish.resolve_url('tag-index')
+            _ = self.flourish.resolve_url('tags-tag-page')
 
     def test_homepage_has_one_valid_filter(self):
         assert self.flourish.all_valid_filters_for_url('homepage') == [
@@ -85,7 +46,7 @@ class TestFlourishUrls:
         ]
 
     def test_tag_index_has_many_valid_filters(self):
-        assert self.flourish.all_valid_filters_for_url('tag-index') == [
+        assert self.flourish.all_valid_filters_for_url('tags-tag-page') == [
             {'tag': 'basic-page'},
             {'tag': 'basically'},
             {'tag': 'first'},
@@ -161,6 +122,10 @@ class TestFlourishUrls:
     def test_no_such_keyword_has_no_filters(self):
         assert self.flourish.all_valid_filters_for_url('no-such-keyword') == []
 
+    def test_not_configured_has_no_filters(self):
+        with pytest.raises(URL.DoesNotExist):
+            _ = self.flourish.all_valid_filters_for_url('awooga')
+
     def test_urls_for_sources(self):
         assert [
             '/basic-page',
@@ -172,6 +137,26 @@ class TestFlourishUrls:
             '/series/part-three',
             '/series/part-two',
         ] == [source.url for source in self.flourish.sources.all()]
+
+    def test_lookup_url_handler(self):
+        paths = (
+            ('/',               ('homepage',        {})),
+            ('/tags/first/',    ('tags-tag-page',   {'tag': 'first'})),
+            ('/index.atom',     ('atom-feed',       {})),
+            ('/thing-one',      ('source',          {'slug': 'thing-one'})),
+        )
+        for path, args in paths:
+            matches = self.flourish.get_handler_for_path(path)
+            assert matches[0] == args
+        assert [] == self.flourish.get_handler_for_path('/rabble')
+
+    def test_lookup_url_handler_wildcard(self):
+        expected = [
+            ('tags-tag-page',   {'tag': 'first'}),
+            ('tag-post-detail', {'slug': 'thing-one', 'tag': 'first'}),
+            ('tags-atom-feed',  {'tag': 'first'}),
+        ]
+        assert expected == self.flourish.get_handler_for_path('/tags/first/?')
 
 
 class TestFlourishSourcesUrl:
