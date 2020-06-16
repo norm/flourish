@@ -2,7 +2,7 @@
 
 # Release notes for Flourish
 
-## 0.7 — UNRELEASED
+## 0.7 — 16 June 2020
 
   * Flourish can now [generate specific paths][gn] as well as the entire site.
     The `preview` command-line option now takes advantage of this to only
