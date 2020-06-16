@@ -63,6 +63,15 @@ def main():
         action='store_true',
         help='Report each URL as it is generated'
     )
+    parser_generate.add_argument(
+        'path',
+        nargs='*',
+        help=(
+            'Generate only this path (appending ? makes it a wildcard '
+            'match to generate anything that starts with this path '
+            ' -- eg. /2020/?). Can be specified repeatedly.'
+        ),
+    )
 
     parser_preview = subparsers.add_parser(
         'preview',
@@ -119,7 +128,11 @@ def generate(args):
         templates_dir=args.templates,
         output_dir=args.output,
     )
-    flourish.generate_site(report=args.verbose)
+    if args.path:
+        for path in args.path:
+            flourish.generate_path(path, report=args.verbose)
+    else:
+        flourish.generate_site(report=args.verbose)
 
 
 def preview_server(args):
