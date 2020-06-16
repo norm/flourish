@@ -137,4 +137,4 @@ and uses keys from the source to link to the source page.
 
 Flourish uses Jinja2 to render templates. You can learn a lot more about the
 things you can do in your templates by reading the
-[Jinja2 documentation](http://jinja.pocoo.org).
+[Jinja2 documentation](https://jinja.palletsprojects.com/).

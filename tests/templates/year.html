@@ -4,11 +4,27 @@
   <h1>Entries for {{pages[0].published.year}}</h1>
 
   <ul>
-    {% for page in pages %}
-      <li>
-        <a href='{{page.url}}'>{{page.title}}</a>
+  {% for page in pages %}
+    {% if loop.changed(page.published.month) %}
+      {% if not loop.first %}
+          </li>
+        </ul>
+      {% endif %}
+        <li>
+          <h2><a href='{{ url("month-index", year=page.published.strftime("%Y"), month=page.published.strftime("%m")) }}'>{{page.published.strftime('%B')}}</a></h2>
+          <ul>
+    {% endif %}
+
+          <li>
+            {{page.published.day}}{{page.published.day|ordinal}}
+            {{page.published.strftime('%H:%M')}} <a href='{{page.url}}'>{{page.title}}</a>
+          </li>
+  
+    {% if loop.last %}
+        </ul>
       </li>
-    {% endfor %}
+    {% endif %}
+  {% endfor %}
   </ul>
 
   {% if pagination %}

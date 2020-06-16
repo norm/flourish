@@ -90,10 +90,17 @@ class Flourish(object):
         generate = SourceFileLoader(
                 'generate', '%s/generate.py' % self.source_dir
             ).load_module()
+
         try:
             self.set_global_context(getattr(generate, 'GLOBAL_CONTEXT'))
         except AttributeError:
             # global context is optional
+            pass
+
+        try:
+            self.add_template_filters(getattr(generate, 'TEMPLATE_FILTERS'))
+        except AttributeError:
+            # filters are optional
             pass
 
         has_urls = False
@@ -232,6 +239,10 @@ class Flourish(object):
 
     def set_global_context(self, global_context):
         self.global_context = global_context
+
+    def add_template_filters(self, filters):
+        for key, value in filters.items():
+            self.jinja.filters[key] = value
 
     def copy_assets(self, report=False):
         for _file in self._assets:
