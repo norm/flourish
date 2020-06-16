@@ -4,8 +4,8 @@ To generate your Flourish website, use the `flourish` command line tool:
 
   * `flourish generate` — to generate the site
   * `flourish preview` — to preview the generated site
-  * `flourish --rebuild preview` — to preview the site, regenerating it as you
-    change things
+  * `flourish preview --generate` — to preview the site, regenerating pages
+    as you request them in your browser
 
 However, unlike some static site generators, Flourish will not generate any
 output without being told explicitly what to do.
