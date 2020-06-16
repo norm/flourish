@@ -1,14 +1,10 @@
 import argparse
 from hashlib import md5
-from multiprocessing import Process
 import os
 import textwrap
-import time
 
 import boto3
 from flask import Flask, send_from_directory
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
 
 from . import Flourish, __version__
 from .examples import example_files
@@ -57,8 +53,10 @@ def main():
         help='Report the version of flourish')
     parser.add_argument(
         '--rebuild', action='store_true',
-        help='Watch the source and template directories for changes, '
-             'regenerating the site automatically.')
+        help=(
+            'When previewing a site, '
+            'regenerate the requested page before serving'
+        ))
     parser.add_argument(
         '--bucket',
         help='The name of the AWS S3 bucket to upload to (with upload)')
@@ -79,14 +77,6 @@ def main():
 
 
 def generate(args):
-    if args.rebuild:
-        generate_once(args)
-        generate_on_change(args)
-    else:
-        generate_once(args)
-
-
-def generate_once(args):
     flourish = Flourish(
         source_dir=args.source,
         templates_dir=args.templates,
@@ -95,40 +85,7 @@ def generate_once(args):
     flourish.generate_site(report=args.verbose)
 
 
-def generate_on_change(args):
-    class Handler(FileSystemEventHandler):
-        def on_any_event(self, event):
-            # ignore some duplicate events
-            if event.src_path.endswith('.pyc'):
-                return
-            if os.path.isdir(event.src_path):
-                return
-
-            print('**', event.src_path, event.event_type)
-            generate_once(args)
-
-    generate_once(args)
-    observer = Observer()
-    observer.daemon = True
-    observer.schedule(Handler(), args.source, recursive=True)
-    observer.schedule(Handler(), args.templates, recursive=True)
-    observer.start()
-    try:
-        while True:
-            time.sleep(0.5)
-    except KeyboardInterrupt:
-        observer.stop()
-    observer.join()
-
-
 def preview_server(args):
-    if args.rebuild:
-        preview_rebuildserver(args)
-    else:
-        preview_runserver(args)
-
-
-def preview_runserver(args):
     output_dir = os.path.abspath(args.output)
     app = Flask(__name__)
 
@@ -138,13 +95,26 @@ def preview_runserver(args):
     @app.route('/')
     @app.route('/<path:path>')
     def send_file(path=''):
+        generate = '/%s' % path
+
+        # fix URLs for .html
         filename = os.path.basename(path)
         if filename == '':
             path = '%sindex.html' % path
-        root, ext = os.path.splitext(path)
+        _, ext = os.path.splitext(path)
         if ext == '':
-            path = '%s.html' % path
-        print('->', path)
+            path += '.html'
+
+        # regenerate if requested
+        if args.rebuild:
+            flourish = Flourish(
+                source_dir=args.source,
+                templates_dir=args.templates,
+                output_dir=args.output,
+            )
+            flourish.generate_path(generate, report=args.verbose)
+
+        print('<-', path)
         return send_from_directory(output_dir, path)
 
     @app.after_request
@@ -155,13 +125,6 @@ def preview_runserver(args):
     app.run(port=3567)
 
 
-def preview_rebuildserver(args):
-    _server = Process(target=preview_runserver, args=(args,))
-    _server.start()
-    _goc = Process(target=generate_on_change, args=(args,))
-    _goc.start()
-
-
 def create_example(args):
     for _dir in ['source', 'templates']:
         if not os.path.isdir(_dir):
@@ -169,7 +132,7 @@ def create_example(args):
     for _filename in example_files:
         with open(_filename, 'w') as _example_file:
             _example_file.write(example_files[_filename])
-    generate_once(argparse.Namespace(
+    generate(argparse.Namespace(
         source='source',
         templates='templates',
         output='output',
