@@ -2,6 +2,11 @@
 
 # Release notes for Flourish
 
+## 0.8 - UNRELEASED
+
+  * Always apply the MIME type of a file when uploading to S3.
+
+
 ## 0.7 — 16 June 2020
 
   * Flourish can now [generate specific paths][gn] as well as the entire site.

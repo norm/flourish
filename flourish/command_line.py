@@ -1,5 +1,6 @@
 import argparse
 from hashlib import md5
+import mimetypes
 import os
 
 import boto3
@@ -195,6 +196,8 @@ def create_example(args):
 
 
 def upload(args):
+    mimetypes.init()
+
     _bucket_name = args.bucket
     if _bucket_name is None:
         flourish = Flourish(args.source, args.templates, args.output)
@@ -209,8 +212,8 @@ def upload(args):
         _objects.update({_object.key: _object})
 
     for _path in _files:
-        _type = None
         _file = os.path.basename(_path)
+        _type, _ = mimetypes.guess_type(_file)
         _s3path = _path
         if _file.endswith('.html'):
             _type = 'text/html'
@@ -233,9 +236,8 @@ def upload(args):
                 'Key': _s3path,
                 'ACL': 'public-read',
                 'Body': open('%s/%s' % (args.output, _path), 'rb'),
+                'ContentType': _type,
             }
-            if _type:
-                _object_args['ContentType'] = _type
             _bucket.put_object(**_object_args)
 
 
