@@ -138,6 +138,11 @@ def generate(args):
 
 def preview_server(args):
     output_dir = os.path.abspath(args.output)
+    flourish = Flourish(
+        source_dir=args.source,
+        templates_dir=args.templates,
+        output_dir=args.output,
+    )
     app = Flask(__name__)
 
     # TODO 3xx redirects
@@ -158,11 +163,7 @@ def preview_server(args):
 
         # regenerate if requested
         if args.generate:
-            flourish = Flourish(
-                source_dir=args.source,
-                templates_dir=args.templates,
-                output_dir=args.output,
-            )
+            flourish._rescan_sources()
             flourish.generate_path(generate, report=True)
 
         return send_from_directory(output_dir, path)

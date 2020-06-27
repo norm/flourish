@@ -5,6 +5,8 @@
 ## 0.8 - UNRELEASED
 
   * Always apply the MIME type of a file when uploading to S3.
+  * Speed up previewing a site with dynamic generation by only re-reading
+    source files that have changed, instead of everything each time.
 
 
 ## 0.7 — 16 June 2020

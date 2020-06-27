@@ -64,8 +64,8 @@ class Flourish(object):
         self.jinja.globals['url'] = self.template_resolve_url
         self.jinja.globals['lookup'] = self.template_get
 
-        self._assets = []
-        self._cache = []
+        self._assets = {}
+        self._cache = {}
         self._filters = []
         self._order_by = []
         self._slice = None
@@ -85,7 +85,7 @@ class Flourish(object):
         self.site_config = self._read_site_config()
 
         if '_source_files' not in kwargs:
-            self._add_sources()
+            self._rescan_sources()
 
         generate = SourceFileLoader(
                 'generate', '%s/generate.py' % self.source_dir
@@ -139,10 +139,10 @@ class Flourish(object):
 
     def get(self, slug):
         """ Get a single source document by slug. """
-        for source in self._cache:
-            if source.slug == slug:
-                return source
-        raise SourceFile.DoesNotExist
+        try:
+            return self._cache[slug]
+        except KeyError:
+            raise SourceFile.DoesNotExist
 
     def template_get(self, slug):
         try:
@@ -283,31 +283,39 @@ class Flourish(object):
                     '"%s" is a required entry in _site.toml' % key)
         return _config
 
-    def _add_sources(self):
+    def _rescan_sources(self):
         """ Find source documents and register them. """
         for _file in relative_list_of_files_in_directory(self.source_dir):
-            # FIXME check for slug-ishness and otherwise ignore
-            # (this could simplify _site.toml by being just another
-            # ignored filename?)
-            is_attachment_file = (
-                _file.endswith(('.markdown', '.html')) and
-                len(_file.split('.')) == 3
-            )
-
             if _file == '_site.toml':
                 continue
             if _file.startswith('generate.py'):
                 continue
+            slug, _ = os.path.splitext(_file)
+            timestamp = os.stat(os.path.join(self.source_dir, _file)).st_mtime
+            try:
+                source = self.get(slug)
+                assert timestamp == source.timestamp
+            except:     # noqa: E722
+                # FIXME check for slug-ishness and otherwise ignore
+                # (this could simplify _site.toml by being just another
+                # ignored filename?)
+                is_attachment_file = (
+                    _file.endswith(('.markdown', '.html')) and
+                    len(_file.split('.')) == 3
+                )
 
-            if _file.endswith('.toml'):
-                self._cache.append(TomlSourceFile(self, _file))
-            elif _file.endswith('.markdown') and len(_file.split('.')) == 2:
-                self._cache.append(MarkdownSourceFile(self, _file))
-            elif _file.endswith('.json'):
-                self._cache.append(JsonSourceFile(self, _file))
-            elif not is_attachment_file:
-                self._assets.append(_file)
-        self._source_files = list(self._cache)
+                if _file.endswith('.toml'):
+                    self._cache[slug] = TomlSourceFile(self, _file)
+                elif (
+                    _file.endswith('.markdown')
+                    and len(_file.split('.')) == 2
+                ):
+                    self._cache[slug] = MarkdownSourceFile(self, _file)
+                elif _file.endswith('.json'):
+                    self._cache[slug] = JsonSourceFile(self, _file)
+                elif not is_attachment_file:
+                    self._assets[_file] = True
+        self._source_files = self._cache.values()
 
     def get_valid_filters_for_tokens(self, tokens, objects=None):
         if objects is None:

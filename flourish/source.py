@@ -17,6 +17,9 @@ class SourceFile(object):
         self._slug = slug
         self._parent = parent
         self._config = self._read_configuration(filename)
+        self._timestamp = os.stat(
+                os.path.join(self._parent.source_dir, filename)
+            ).st_mtime
         self._add_markdown_attachments()
         self._add_html_attachments()
         self._convert_markdown()
@@ -51,6 +54,10 @@ class SourceFile(object):
     @property
     def absolute_url(self):
         return '%s%s' % (self._parent.site_config['base_url'], self.url)
+
+    @property
+    def timestamp(self):
+        return self._timestamp
 
     def related(self, key):
         try:
