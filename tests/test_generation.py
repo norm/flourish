@@ -21,6 +21,7 @@ class TestFlourishGeneration(CompareDirectories):
         'all/index.html',
         'all/page-2.html',
         'basic-page.html',
+        'css/debug.css',
         'css/screen.css',
         'error.html',
         'images/an-image.jpg',
@@ -75,6 +76,7 @@ class TestFlourishGeneration(CompareDirectories):
             flourish = Flourish(
                 source_dir='tests/source',
                 templates_dir='tests/templates',
+                sass_dir='tests/sass',
                 output_dir=self.tempdir,
             )
             assert len(warnings) == 2

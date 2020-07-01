@@ -27,6 +27,7 @@ setup(
         'markdown2',
         'feedgen',
         'toml',
+        'libsass',
     ],
 
     classifiers=[

@@ -2,6 +2,7 @@ from datetime import datetime, timezone
 import os
 
 from feedgen.feed import FeedGenerator
+import sass
 
 from .paginator import Paginator
 
@@ -22,6 +23,7 @@ class PageIndexContextMixin(object):
     def get_context_data(self):
         _context = super(PageIndexContextMixin, self).get_context_data()
         _context['pages'] = self.source_objects
+        _context['tokens'] = self._tokens
         return _context
 
 
@@ -31,6 +33,7 @@ class BaseGenerator(object):
     sources_filter = None
     template_name = None
     limit = None
+    file_extension = '.html'
 
     @classmethod
     def as_generator(cls):
@@ -62,6 +65,7 @@ class BaseGenerator(object):
         if not _tokens:
             _tokens = self.get_url_tokens()
         for _t in _tokens:
+            self._tokens = _t
             self.generate_path(_t)
 
     def get_url_tokens(self):
@@ -112,7 +116,7 @@ class BaseGenerator(object):
         _destination = '%s%s' % (self.flourish.output_dir, self.current_url)
         if _destination.endswith('/'):
             _destination = _destination + 'index.html'
-        if not _destination.endswith(('.html', '.atom')):
+        if not _destination.endswith(self.file_extension):
             _destination = _destination + '.html'
         return _destination
 
@@ -188,6 +192,7 @@ class PaginatedIndexGenerator(IndexGenerator):
 
 class AtomGenerator(BaseGenerator):
     order_by = ('-published')
+    file_extension = '.atom'
 
     def get_objects(self, tokens):
         """
@@ -260,3 +265,44 @@ class AtomGenerator(BaseGenerator):
             os.makedirs(_directory)
         with open(_filename, 'wb') as _output:
             _output.write(_rendered)
+
+
+class SassGenerator(BaseGenerator):
+    output_dir = 'css'
+    output_style = 'expanded'
+    file_extension = '.css'
+
+    def get_url_tokens(self):
+        tokens = []
+        for root, dirs, files in os.walk(self.flourish.sass_dir):
+            root = root[len(self.flourish.sass_dir):]
+            for file in files:
+                base, ext = os.path.splitext(file)
+                if not base.startswith('_') and ext == '.scss':
+                    tokens.append(os.path.join(root, base))
+        return tokens
+
+    def get_current_url(self, tokens):
+        self.current_url = os.path.join(
+            '/',
+            self.get_output_dir(),
+            '%s.css' % tokens
+        )
+        return self.current_url
+
+    def get_output_dir(self):
+        return self.output_dir
+
+    def get_objects(self, tokens):
+        # there are no Source objects
+        pass
+
+    def render_output(self):
+        source = os.path.join(
+            self.flourish.sass_dir,
+            '%s.scss' % self._tokens,
+        )
+        return sass.compile(
+            filename = source,
+            output_style = self.output_style,
+        )

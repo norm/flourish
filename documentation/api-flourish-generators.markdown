@@ -23,6 +23,8 @@ only a small part of it.
     the class for generating paginated lists of source pages
   * [`AtomGenerator`](/api-flourish-generators-atom/) — the class for
     generating an Atom feed
+  * [`SassGenerator`](/api-flourish-generators-sass/) — the class for
+    generating CSS files from SASS-formatted sources
 
 ## The included mixins
 

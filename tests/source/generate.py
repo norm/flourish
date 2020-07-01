@@ -5,6 +5,7 @@ from flourish.generators import (
     IndexGenerator,
     PageGenerator,
     PaginatedIndexGenerator,
+    SassGenerator,
 )
 from flourish.helpers import publication_range
 
@@ -129,5 +130,10 @@ URLS = (
         '/#flooble',
         'no-such-keyword',
         NotFound.as_generator(),
+    ),
+    (
+        '/css/#slug.css',
+        'sass-generated-css',
+        SassGenerator.as_generator(),
     ),
 )
