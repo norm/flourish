@@ -7,7 +7,9 @@
   * Always apply the MIME type of a file when uploading to S3.
   * Speed up previewing a site with dynamic generation by only re-reading
     source files that have changed, instead of everything each time.
+  * Add a [generator for compiling SASS][sass] into CSS
 
+[sass]: https://flourish.readthedocs.io/en/latest/api-flourish-generators-sass/
 
 ## 0.7 — 16 June 2020
 
@@ -31,11 +33,11 @@
 
   * Some generation bugs have been fixed.
 
-[gn]: http://flourish.readthedocs.io/en/latest/generating-the-site/
-[ft]: http://flourish.readthedocs.io/en/latest/template-filters/
-[fn]: http://flourish.readthedocs.io/en/latest/template-functions/
-[ln]: http://flourish.readthedocs.io/en/latest/linking-sources/
-[as]: http://flourish.readthedocs.io/en/latest/adding-sources/
+[gn]: https://flourish.readthedocs.io/en/latest/generating-the-site/
+[ft]: https://flourish.readthedocs.io/en/latest/template-filters/
+[fn]: https://flourish.readthedocs.io/en/latest/template-functions/
+[ln]: https://flourish.readthedocs.io/en/latest/linking-sources/
+[as]: https://flourish.readthedocs.io/en/latest/adding-sources/
 
 
 ## 0.6 — 6 August 2016

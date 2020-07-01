@@ -29,6 +29,7 @@ class Flourish(object):
         'source_dir',
         'templates_dir',
         'output_dir',
+        'sass_dir',
         'jinja',
     ]
     DATA = [
@@ -49,12 +50,14 @@ class Flourish(object):
         source_dir='source',
         templates_dir='templates',
         output_dir='output',
+        sass_dir='sass',
         global_context=None,
         **kwargs
     ):
         self.source_dir = source_dir
         self.templates_dir = templates_dir
         self.output_dir = output_dir
+        self.sass_dir = sass_dir
         self.global_context = global_context
         self.jinja = Environment(
             loader=FileSystemLoader(self.templates_dir),

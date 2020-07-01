@@ -15,6 +15,7 @@ fl = Flourish(
     source_dir='words',
     templates_dir='html',
     output_dir='site',
+    sass_dir='styles',
 )
 ```
 

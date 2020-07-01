@@ -36,6 +36,7 @@ pages:
         - flourish.generators.IndexGenerator: api-flourish-generators-index.markdown
         - flourish.generators.PaginatedIndexGenerator: api-flourish-generators-paginatedindex.markdown
         - flourish.generators.AtomGenerator: api-flourish-generators-atom.markdown
+        - flourish.generators.SassGenerator: api-flourish-generators-sass.markdown
         - flourish.helpers: api-flourish-helpers.markdown
         - flourish.paginator: api-flourish-paginator.markdown
     - Release notes: release-notes.markdown

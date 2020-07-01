@@ -55,7 +55,7 @@ The Flourish documentation is available on [Read the Docs][rtd].
 
 There is also a (very quiet and empty) [Slack][slack] for users of Flourish.
 
-[rtd]: http://flourish.readthedocs.io/en/latest/
+[rtd]: https://flourish.readthedocs.io/en/latest/
 [slack]: http://slack.withaflourish.net
 
 

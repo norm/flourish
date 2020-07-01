@@ -34,24 +34,28 @@ and calls [`generate()`](#generate). This causes the following things to be
 run in order:
 
   * [`generate`](#generate) calls:
-      * [`get_url_tokens`](#get_url_tokens), then for every set of tokens found:
-          * [`get_current_url`](#get_current_urltokens)
-          * [`get_objects`](#get_objectstokens), which calls:
-              * [`get_filtered_sources`](#get_filtered_sources)
-              * [`get_order_by`](#get_order_by)
-          * [`output_to_file`](#output_to_file), which calls:
-              * [`get_output_filename`](#get_output_filename)
-              * [`render_output`](#render_output), which calls:
-                  * [`get_context_data`](#get_context_data)
-                  * [`get_template`](#get_template), which calls:
-                      * [`get_template_name`](#get_template_name)
-                  * [`render_template`](#render_templatetemplate-context_data)
+      * [`get_url_tokens`](#get_url_tokens) if tokens were not passed as an
+        argument; then for every set of tokens:
+          * [`generate_path`](#generate_pathtokens), which calls:
+              * [`get_current_url`](#get_current_urltokens)
+              * [`get_objects`](#get_objectstokens), which calls:
+                  * [`get_filtered_sources`](#get_filtered_sources)
+                  * [`get_order_by`](#get_order_by)
+              * [`output_to_file`](#output_to_file), which calls:
+                  * [`get_output_filename`](#get_output_filename)
+                  * [`render_output`](#render_output), which calls:
+                      * [`get_context_data`](#get_context_data)
+                      * [`get_template`](#get_template), which calls:
+                          * [`get_template_name`](#get_template_name)
+                      * [`render_template`](#render_templatetemplate-context_data)
 
 ### generate()
 
-Gets the matching [URL tokens](#get-url-tokens) for the URL, and for each
-set determines the URL (and hence, where to write the output page to),
-fetches the matching source objects and outputs what is generated to a file.
+Generate all possible pages for a given page type.
+
+Unless given a subset of tokens to use, it fetches all matching
+[URL tokens](#get-url-tokens) for the URL. For each set of tokens, call 
+[`generate_path`](#generate-pathtokens) to generate a single page.
 
 ### get_url_tokens()
 
@@ -73,6 +77,13 @@ and a URL of `/tags/#tag`, it would return a structure:
     {'tag': 'post', },
 ]
 ```
+
+### generate_path(tokens)
+
+Calls [`get_current_url`](#get-current-urltokens) to determine the page
+to be generated, [`get_objects`](#get-objects) to get the sources that
+match the tokens, and [`output_to_file`](#output-to-file) to create the
+page.
 
 ### get_current_url(tokens)
 
