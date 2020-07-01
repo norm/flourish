@@ -27,7 +27,6 @@ setup(
         'markdown2',
         'feedgen',
         'toml',
-        'watchdog',
     ],
 
     classifiers=[
