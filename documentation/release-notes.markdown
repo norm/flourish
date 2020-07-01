@@ -33,11 +33,11 @@
 
   * Some generation bugs have been fixed.
 
-[gn]: http://flourish.readthedocs.io/en/latest/generating-the-site/
-[ft]: http://flourish.readthedocs.io/en/latest/template-filters/
-[fn]: http://flourish.readthedocs.io/en/latest/template-functions/
-[ln]: http://flourish.readthedocs.io/en/latest/linking-sources/
-[as]: http://flourish.readthedocs.io/en/latest/adding-sources/
+[gn]: https://flourish.readthedocs.io/en/latest/generating-the-site/
+[ft]: https://flourish.readthedocs.io/en/latest/template-filters/
+[fn]: https://flourish.readthedocs.io/en/latest/template-functions/
+[ln]: https://flourish.readthedocs.io/en/latest/linking-sources/
+[as]: https://flourish.readthedocs.io/en/latest/adding-sources/
 
 
 ## 0.6 — 6 August 2016
