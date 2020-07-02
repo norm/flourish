@@ -4,6 +4,14 @@
   <h1>Entries for {{year.year}}</h1>
 
   <ul>
+    {% for date in publication_dates %}
+      {% with month=date.month %}
+        <li><a href='{{ url("month-index", year=month.year, month=month.month) }}'>{{month.strftime('%B')}}</a></li>
+      {% endwith %}
+    {% endfor %}
+  </ul>
+
+  <ul>
   {% for page in pages %}
     {% if loop.changed(page.published.month) %}
       {% if not loop.first %}

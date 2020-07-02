@@ -24,7 +24,7 @@ class URL(object):
                 if key in kwargs:
                     if kwargs[key] is None:
                         raise RuntimeError
-                    _resolved = _resolved + kwargs[key]
+                    _resolved = '%s%s' % (_resolved, kwargs[key])
                 else:
                     raise KeyError
             else:

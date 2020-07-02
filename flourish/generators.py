@@ -335,6 +335,8 @@ class CalendarMonthGenerator(CalendarGenerator):
             month=int(self._tokens['month']),
             year=int(self._tokens['year']),
         )
+        dates = self.source_objects.publication_dates
+        _context['publication_dates'] = dates[0]['months'][0]['days']
         return _context
 
 
@@ -348,4 +350,6 @@ class CalendarYearGenerator(CalendarGenerator):
             month=1,
             year=int(self._tokens['year']),
         )
+        dates = self.source_objects.publication_dates
+        _context['publication_dates'] = dates[0]['months']
         return _context

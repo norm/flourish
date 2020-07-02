@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 
 import pytest
 
@@ -895,3 +895,44 @@ class TestFlourish:
             'series/part-three',
             'series/part-two',
         ] == [_s.slug for _s in source.index_set]
+
+    def test_publication_dates(self):
+        all_dates = [
+            {
+                'year': date(2015, 1,1),
+                'months': [
+                    {
+                        'month': date(2015, 12, 1),
+                        'days': [
+                            date(2015, 12, 25),
+                        ],
+                    },
+                ],
+            },
+            {
+                'year': date(2016, 1, 1),
+                'months': [
+                    {
+                        'month': date(2016, 2, 1),
+                        'days': [
+                            date(2016, 2, 29),
+                        ],
+                    },
+                    {
+                        'month': date(2016, 6, 1),
+                        'days': [
+                            date(2016, 6, 4),
+                            date(2016, 6, 6),
+                        ],
+                    },
+                ],
+            },
+        ]
+        assert all_dates == self.flourish.publication_dates
+
+        on = datetime(2016, 1, 1, 0, 0, 0, tzinfo=timezone.utc)
+        sources = self.flourish.sources.exclude(published__lt=on)
+        assert [all_dates[1]] == sources.publication_dates
+
+        # ensure still unfiltered
+        assert all_dates == self.flourish.publication_dates

@@ -34,6 +34,14 @@ class NotFound(BaseGenerator):
     template_name = '404.html'
 
 
+class ArchivePage(BaseGenerator):
+    template_name = 'archive.html'
+
+    def get_context_data(self):
+        _context = super().get_context_data()
+        _context['dates'] = self.flourish.publication_dates
+        return _context
+
 def global_context(self):
     return {
         'copyright_year_range': publication_range(self.flourish),
@@ -107,6 +115,11 @@ URLS = (
         '/tags/#tag/index.atom',
         'tags-atom-feed',
         AtomGenerator.as_generator(),
+    ),
+    (
+        '/archives',
+        'archives',
+        ArchivePage.as_generator(),
     ),
     (
         '/all/',

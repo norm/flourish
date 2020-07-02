@@ -4,6 +4,12 @@
   <h1>Entries for {{month.strftime('%B %Y')}}</h1>
 
   <ul>
+    {% for day in publication_dates %}
+      <li><a href='{{ url("day-index", year=day.year, month=day.month, day=day.day) }}'>{{day.day}}</a></li>
+    {% endfor %}
+  </ul>
+
+  <ul>
     {% for page in pages %}
       <li>
         <a href='{{page.url}}'>{{page.title}}</a>
