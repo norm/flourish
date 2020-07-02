@@ -3,30 +3,6 @@
 from collections import defaultdict
 
 
-def all_valid_dates(flourish, key='published'):
-    def recursively_default_dict():
-        return defaultdict(recursively_default_dict)
-
-    _captured = recursively_default_dict()
-    for _source in flourish.sources.all():
-        try:
-            _date = getattr(_source, key)
-            _captured[_date.year][_date.month][_date.day] = 1
-        except AttributeError:
-            pass
-
-    _dates = []
-    for _year in sorted(_captured):
-        _months = []
-        for _month in sorted(_captured[_year]):
-            _days = []
-            for _day in sorted(_captured[_year][_month]):
-                _days.append({'day': '%02d' % _day})
-            _months.append({'month': '%02d' % _month, 'days': _days})
-        _dates.append({'year': '%04d' % _year, 'months': _months})
-    return _dates
-
-
 def publication_range(flourish, key='published'):
     _lowest = None
     _highest = None
