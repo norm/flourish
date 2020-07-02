@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block body %}
-  <h1>Entries for {{pages[0].published.strftime('%B %Y')}}</h1>
+  <h1>Entries for {{month.strftime('%B %Y')}}</h1>
 
   <ul>
     {% for page in pages %}

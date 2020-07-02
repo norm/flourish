@@ -6,6 +6,9 @@ from flourish.generators import (
     PageGenerator,
     PaginatedIndexGenerator,
     SassGenerator,
+    CalendarDayGenerator,
+    CalendarMonthGenerator,
+    CalendarYearGenerator,
 )
 from flourish.helpers import publication_range
 
@@ -29,22 +32,6 @@ class FourPagePaginatedIndex(PaginatedIndexGenerator):
 
 class NotFound(BaseGenerator):
     template_name = '404.html'
-
-
-class DatedArchive(IndexGenerator):
-    order_by = ('published')
-
-
-class YearIndex(DatedArchive):
-    template_name = 'year.html'
-
-
-class MonthIndex(DatedArchive):
-    template_name = 'month.html'
-
-
-class DayIndex(DatedArchive):
-    template_name = 'day.html'
 
 
 def global_context(self):
@@ -94,17 +81,17 @@ URLS = (
     (
         '/#year/',
         'year-index',
-        YearIndex.as_generator()
+        CalendarYearGenerator.as_generator()
     ),
     (
         '/#year/#month/',
         'month-index',
-        MonthIndex.as_generator()
+        CalendarMonthGenerator.as_generator()
     ),
     (
         '/#year/#month/#day/',
         'day-index',
-        DayIndex.as_generator()
+        CalendarDayGenerator.as_generator()
     ),
     (
         '/404',
