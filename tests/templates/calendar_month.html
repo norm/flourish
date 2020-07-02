@@ -1,7 +1,13 @@
 {% extends "base.html" %}
 
 {% block body %}
-  <h1>Entries for {{pages[0].published.strftime('%B %Y')}}</h1>
+  <h1>Entries for {{month.strftime('%B %Y')}}</h1>
+
+  <ul>
+    {% for day in publication_dates %}
+      <li><a href='{{ url("day-index", year=day.year, month=day.month, day=day.day) }}'>{{day.day}}</a></li>
+    {% endfor %}
+  </ul>
 
   <ul>
     {% for page in pages %}

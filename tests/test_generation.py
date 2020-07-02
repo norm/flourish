@@ -20,6 +20,7 @@ class TestFlourishGeneration(CompareDirectories):
         '404.html',
         'all/index.html',
         'all/page-2.html',
+        'archives.html',
         'basic-page.html',
         'css/debug.css',
         'css/screen.css',

@@ -1,19 +1,89 @@
 # Adding date-based navigation to your site
 
-To add some form of date-based navigation to your site, first ensure that
-anything you want to show up in the date-based navigation is using the
+The following will generate pages of the form:
+
+* `/2020/index.html`
+* `/2020/01/index.html`
+* `/2020/02/index.html`
+* ...
+
+that contain links to individual source pages.
+
+
+## Add the published date your sources
+
+To add date-based navigation to your site, first ensure that anything
+you want to show up in the date-based navigation is using the
 [special key](/adding-sources/#special-keys-in-sources) `published` to store
 the date (it is fine to duplicate the date if you are already using a
 different key).
 
+
+## Add year and month based index pages
+
+To generate a year and month index pages, add the following to your
+`generate.py`:
+
+```python
+from flourish.generators import CalendarYearGenerator, CalendarMonthGenerator
+
+URLS = (
+    # ...
+    # your existing URLs should be here, don't remove them,
+    # ...
+    (
+        '/#year/',
+        'year-index',
+        CalendarYearGenerator.as_generator()
+    ),
+    (
+        '/#year/#month/',
+        'month-index',
+        CalendarYearGenerator.as_generator()
+    ),
+)
+```
+
+Create a `calendar_year.html` template:
+
+```html
+<h1>Entries for {{year.year}}</h1>
+
+<ol>
+  {% for month in publication_dates %}
+    {% with m=month.month %}
+    <li>
+      <a href='{{ url("month-index", year=m.year, month=m.month) }}'>
+        {{m.strftime('%B')}}
+      </a>
+    </li>
+    {% endwith %}
+  {% endfor %}
+</ol>
+```
+
+Create a `calendar_month.html` template:
+
+```html
+<h1>Entries for {{month.strftime('%B %Y')}}</h1>
+
+<ol>
+{% for page in pages %}
+  <li>
+    <a href='{{page.url}}'>{{page.title}}</a>
+  </li>
+{% endfor %}
+</ol>
+```
+
+## Add navigation links
+
 Add the following to your `generate.py`:
 
 ```python
-from flourish import helpers
-
 def global_context(self):
     return {
-        'dates': helpers.all_valid_dates(self.flourish),
+        'dates': self.flourish.publication_dates,
     }
 
 GLOBAL_CONTEXT = global_context
@@ -23,66 +93,22 @@ This makes a variable `global.dates` available to all of your templates, which
 contains a structure that lists all years, months and days that have
 associated source objects.
 
-Then, to generate indexes for the date-based navigation, add the following to
-your `generate.py`:
-
-```python
-URLS = (
-    # your existing URLs should be here, don't remove them,
-    # just add the two new URLs listed below:
-    (
-        '/#year/',
-        'year-index',
-        IndexGenerator.as_generator()
-    ),
-    (
-        '/#year/#month',
-        'month-index',
-        IndexGenerator.as_generator()
-    ),
-)
-```
-
-This will generate pages for each year and month that you can link to in 
-the navigation.
-
-Lastly, add something like this to your templates:
+Lastly, add something like this to your template(s) to link to the
+date-based pages:
 
 ```html
 <nav>
   <ul>
     {% for year in global.dates %}
       <li>
-        <a href='/{{year.year}}/'>{{year.year}}</a>:
-        <ul>
-          {% for month in year.months %}
-            <li><a href='/{{year.year}}/{{month.month}}'>{{month.month}}</a></li>
-          {% endfor %}
-        </ul>
+        <a href='/{{year.year}}/'>{{year.year}}</a>
       </li>
     {% endfor %}
   </ul>
 </nav>
 ```
 
-This will create a nested list of links to the year and month index pages.
-
 Adjusting the content and styling of the generated navigation and index pages
-is left up to you. If you need to use a different template, you can subclass
-the generator code like so:
-
-```python
-# specialise the index generator with a new template
-class YearIndexGenerator(IndexGenerator):
-    template_name = 'year-index.html'
-
-# use that in the URLS
-URLS = (
-    # ... existing URLs
-    (
-        '/#year/',
-        'year-index',
-        YearIndexGenerator.as_generator()
-    )
-)
-```
+is left up to you. There is also a day-based page generator if you would
+like to have finer-grained archives, see their
+[documentation](/api-flourish-generators-calendar/).

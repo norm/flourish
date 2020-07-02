@@ -1,6 +1,7 @@
 # encoding: utf8
 
-from datetime import datetime
+from collections import defaultdict
+from datetime import date, datetime
 from importlib.machinery import SourceFileLoader
 from operator import attrgetter, itemgetter
 import os
@@ -319,6 +320,33 @@ class Flourish(object):
                 elif not is_attachment_file:
                     self._assets[_file] = True
         self._source_files = self._cache.values()
+
+    @property
+    def publication_dates(self):
+        def recursively_default_dict():
+            return defaultdict(recursively_default_dict)
+
+        _captured = recursively_default_dict()
+        for _source in self.all():
+            try:
+                _date = getattr(_source, 'published')
+                _captured[_date.year][_date.month][_date.day] = 1
+            except AttributeError:
+                pass
+
+        _dates = []
+        for _year in sorted(_captured):
+            _months = []
+            for _month in sorted(_captured[_year]):
+                _days = []
+                for _day in sorted(_captured[_year][_month]):
+                    _days.append(date(_year, _month, _day))
+                _months.append({
+                    'month': date(_year, _month, 1),
+                    'days': _days
+                })
+            _dates.append({'year': date(_year, 1, 1), 'months': _months})
+        return _dates
 
     def get_valid_filters_for_tokens(self, tokens, objects=None):
         if objects is None:

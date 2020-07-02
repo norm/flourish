@@ -6,6 +6,9 @@ from flourish.generators import (
     PageGenerator,
     PaginatedIndexGenerator,
     SassGenerator,
+    CalendarDayGenerator,
+    CalendarMonthGenerator,
+    CalendarYearGenerator,
 )
 from flourish.helpers import publication_range
 
@@ -31,21 +34,13 @@ class NotFound(BaseGenerator):
     template_name = '404.html'
 
 
-class DatedArchive(IndexGenerator):
-    order_by = ('published')
+class ArchivePage(BaseGenerator):
+    template_name = 'archive.html'
 
-
-class YearIndex(DatedArchive):
-    template_name = 'year.html'
-
-
-class MonthIndex(DatedArchive):
-    template_name = 'month.html'
-
-
-class DayIndex(DatedArchive):
-    template_name = 'day.html'
-
+    def get_context_data(self):
+        _context = super().get_context_data()
+        _context['dates'] = self.flourish.publication_dates
+        return _context
 
 def global_context(self):
     return {
@@ -94,17 +89,17 @@ URLS = (
     (
         '/#year/',
         'year-index',
-        YearIndex.as_generator()
+        CalendarYearGenerator.as_generator()
     ),
     (
         '/#year/#month/',
         'month-index',
-        MonthIndex.as_generator()
+        CalendarMonthGenerator.as_generator()
     ),
     (
         '/#year/#month/#day/',
         'day-index',
-        DayIndex.as_generator()
+        CalendarDayGenerator.as_generator()
     ),
     (
         '/404',
@@ -120,6 +115,11 @@ URLS = (
         '/tags/#tag/index.atom',
         'tags-atom-feed',
         AtomGenerator.as_generator(),
+    ),
+    (
+        '/archives',
+        'archives',
+        ArchivePage.as_generator(),
     ),
     (
         '/all/',
