@@ -125,7 +125,7 @@ class SourceFile(object):
         if key.endswith('_set'):
             _fkey = '%s_fkey' % key[:-4]
             _filter = {_fkey: self.slug}
-            return self._parent.filter(**_filter)
+            return self._parent.sources.filter(**_filter)
 
         if key in ['body', 'title']:
             # these are required for atom feeds, so if they've not been

@@ -9,9 +9,13 @@
     source files that have changed, instead of everything each time.
   * Add a [generator for compiling SASS][sass] into CSS.
   * Add [generators][cal] for calendar-based index pages.
+  * Altered the result of `flourish.sources` to be a [`SourceList`][sl]
+    object rather than a `Flourish` object.
 
 [sass]: https://flourish.readthedocs.io/en/latest/api-flourish-generators-sass/
 [cal]: https://flourish.readthedocs.io/en/latest/api-flourish-generators-calendar/
+[sl]: https://flourish.readthedocs.io/en/latest/api-flourish-sourcelist/
+
 
 ## 0.7 — 16 June 2020
 

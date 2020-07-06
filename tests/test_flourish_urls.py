@@ -89,9 +89,11 @@ class TestFlourishUrls:
             {'year': '2015'},
             {'year': '2016'},
         ]
+        sources = self.flourish.sources
 
-        assert self.flourish.filter(**_filters[0]).count() == 1   # 2015
-        assert self.flourish.filter(**_filters[1]).count() == 7   # 2016
+        assert sources.filter(**_filters[0]).count() == 1   # 2015
+        assert sources.filter(**_filters[1]).count() == 7   # 2016
+        assert sources.filter(**_filters[0]).count() == 1   # 2015
 
     def test_month_index(self):
         _filters = self.flourish.all_valid_filters_for_url('month-index')
@@ -100,10 +102,11 @@ class TestFlourishUrls:
             {'month': '02', 'year': '2016'},
             {'month': '06', 'year': '2016'},
         ]
+        sources = self.flourish.sources
 
-        assert self.flourish.filter(**_filters[0]).count() == 1   # 2015/12
-        assert self.flourish.filter(**_filters[1]).count() == 1   # 2016/02
-        assert self.flourish.filter(**_filters[2]).count() == 6   # 2016/06
+        assert sources.filter(**_filters[0]).count() == 1   # 2015/12
+        assert sources.filter(**_filters[1]).count() == 1   # 2016/02
+        assert sources.filter(**_filters[2]).count() == 6   # 2016/06
 
     def test_day_index(self):
         _filters = self.flourish.all_valid_filters_for_url('day-index')
@@ -113,11 +116,12 @@ class TestFlourishUrls:
             {'day': '04', 'month': '06', 'year': '2016'},
             {'day': '06', 'month': '06', 'year': '2016'},
         ]
+        sources = self.flourish.sources
 
-        assert self.flourish.filter(**_filters[0]).count() == 1   # 2015/12/25
-        assert self.flourish.filter(**_filters[1]).count() == 1   # 2016/02/29
-        assert self.flourish.filter(**_filters[2]).count() == 5   # 2016/06/04
-        assert self.flourish.filter(**_filters[3]).count() == 1   # 2016/06/06
+        assert sources.filter(**_filters[0]).count() == 1   # 2015/12/25
+        assert sources.filter(**_filters[1]).count() == 1   # 2016/02/29
+        assert sources.filter(**_filters[2]).count() == 5   # 2016/06/04
+        assert sources.filter(**_filters[3]).count() == 1   # 2016/06/06
 
     def test_no_such_keyword_has_no_filters(self):
         assert self.flourish.all_valid_filters_for_url('no-such-keyword') == []
