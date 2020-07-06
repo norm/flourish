@@ -27,40 +27,23 @@ sys.dont_write_bytecode = True
 
 
 class Flourish(object):
-    ARGS = [
-        'source_dir',
-        'templates_dir',
-        'output_dir',
-        'sass_dir',
-        'jinja',
-    ]
-    DATA = [
-        '_assets',
-        '_cache',
-        '_source_files',
-        '_source_url',
-        '_urls',
-    ]
-    ACTIONS = [
-        '_filters',
-        '_order_by',
-        '_slice',
-    ]
-
     def __init__(
         self,
         source_dir='source',
         templates_dir='templates',
         output_dir='output',
         sass_dir='sass',
-        global_context=None,
-        **kwargs
     ):
         self.source_dir = source_dir
         self.templates_dir = templates_dir
         self.output_dir = output_dir
         self.sass_dir = sass_dir
-        self.global_context = global_context
+        self._assets = {}
+        self._cache = {}
+        self._source_files = []
+        self._source_url = None
+        self._urls = {}
+
         self.jinja = Environment(
             loader=FileSystemLoader(self.templates_dir),
             keep_trailing_newline=True,
@@ -69,28 +52,12 @@ class Flourish(object):
         self.jinja.globals['url'] = self.template_resolve_url
         self.jinja.globals['lookup'] = self.template_get
 
-        self._assets = {}
-        self._cache = {}
-        self._filters = []
-        self._order_by = []
-        self._slice = None
-        self._source_files = []
-        self._source_url = None
-        self._urls = {}
-
         if not os.path.isdir(self.source_dir):
             raise AttributeError(
                 'source_dir "%s" must exist' % self.source_dir)
 
-        for _opt in self.DATA + self.ACTIONS:
-            if _opt in kwargs:
-                if kwargs[_opt] is not None:
-                    setattr(self, _opt, kwargs[_opt])
-
         self.site_config = self._read_site_config()
-
-        if '_source_files' not in kwargs:
-            self._rescan_sources()
+        self._rescan_sources()
 
         generate = SourceFileLoader(
                 'generate', '%s/generate.py' % self.source_dir
