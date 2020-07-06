@@ -1,7 +1,5 @@
 # encoding: utf8
 
-from collections import defaultdict
-
 
 def publication_range(flourish, key='published'):
     _lowest = None

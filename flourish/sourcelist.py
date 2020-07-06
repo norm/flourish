@@ -136,8 +136,8 @@ class SourceList:
             try:
                 sources = sorted(
                     sources,
-                    key = attrgetter(attr),
-                    reverse = rev
+                    key=attrgetter(attr),
+                    reverse=rev
                 )
             except AttributeError:
                 warnings.warn(

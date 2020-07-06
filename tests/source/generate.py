@@ -42,6 +42,7 @@ class ArchivePage(BaseGenerator):
         _context['dates'] = self.flourish.publication_dates
         return _context
 
+
 def global_context(self):
     return {
         'copyright_year_range': publication_range(self.flourish),

@@ -864,7 +864,7 @@ class TestFlourish:
     def test_publication_dates(self):
         all_dates = [
             {
-                'year': date(2015, 1,1),
+                'year': date(2015, 1, 1),
                 'months': [
                     {
                         'month': date(2015, 12, 1),

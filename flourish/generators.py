@@ -303,8 +303,8 @@ class SassGenerator(BaseGenerator):
             '%s.scss' % self._tokens,
         )
         return sass.compile(
-            filename = source,
-            output_style = self.output_style,
+            filename=source,
+            output_style=self.output_style,
         )
 
 
