@@ -30,6 +30,7 @@ pages:
         - Uploading to Amazon S3: uploading-to-s3.markdown
     - Flourish API:
         - flourish: api-flourish.markdown
+        - flourish.sourcelist: api-flourish-sourcelist.markdown
         - flourish.generators: api-flourish-generators.markdown
         - flourish.generators.BaseGenerator: api-flourish-generators-base.markdown
         - flourish.generators.PageGenerator: api-flourish-generators-page.markdown
