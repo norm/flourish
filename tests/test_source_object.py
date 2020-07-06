@@ -23,7 +23,7 @@ class TestFlourishPage:
             cls.warnings = warnings
 
     def test_toml_configuration(self):
-        page = self.flourish.sources.get('basic-page')
+        page = self.flourish.get('basic-page')
         assert {
                 'body': u'<p>Hello “world”.</p>',
                 'category': 'static',
@@ -34,7 +34,7 @@ class TestFlourishPage:
             } == page._config
 
     def test_toml_with_inherent_markdown(self):
-        page = self.flourish.sources.get('series/part-one')
+        page = self.flourish.get('series/part-one')
         assert {
                 'body_markdown': '# Part One\n\nI come from Markdown.\n',
                 'body': '<h1>Part One</h1>\n\n<p>I come from Markdown.</p>\n',
@@ -48,7 +48,7 @@ class TestFlourishPage:
                 'type': 'post',
             } == page._config
 
-        page = self.flourish.sources.get('thing-two')
+        page = self.flourish.get('thing-two')
         assert {
                 'body_markdown': u'Body read from Markdown attachment‽\n',
                 'body': u'<p>Body read from Markdown attachment‽</p>\n',
@@ -64,7 +64,7 @@ class TestFlourishPage:
             } == page._config
 
     def test_toml_with_inherent_markdown_overridden_by_adherent(self):
-        page = self.flourish.sources.get('series/part-three')
+        page = self.flourish.get('series/part-three')
         assert {
                 'body_markdown': '# Part Three\n\n'
                                  'The embedded Markdown gets overridden.\n',
@@ -88,7 +88,7 @@ class TestFlourishPage:
         )
 
     def test_toml_with_adherent_markdown(self):
-        page = self.flourish.sources.get('series/part-two')
+        page = self.flourish.get('series/part-two')
         assert {
                 'body_markdown': '# Part Two\n\n'
                                  'I come from a Markdown file.\n',
@@ -111,7 +111,7 @@ class TestFlourishPage:
         )
 
     def test_page_markdown_with_frontmatter(self):
-        page = self.flourish.sources.get('markdown-page')
+        page = self.flourish.get('markdown-page')
         assert {
                 'body_markdown': u'\n\n# ¡Markdown!\n\n'
                                  'I was generated from Markdown alone, '
@@ -126,7 +126,7 @@ class TestFlourishPage:
             } == page._config
 
     def test_json_with_adherent_html(self):
-        page = self.flourish.sources.get('thing-one')
+        page = self.flourish.get('thing-one')
         assert {
                 'body': '<h1>Thing the First</h1>\n'
                         '<p>This is raw HTML.</p>\n',

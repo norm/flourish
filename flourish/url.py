@@ -51,7 +51,7 @@ class URL(object):
         if len(_args) == 0:
             _valid_filters.append({})
         else:
-            _filters = self.parent.copy().get_valid_filters_for_tokens(_args)
+            _filters = self.parent.get_valid_filters_for_tokens(_args)
             for _dict in _filters:
                 _valid_filters.append(_dict)
         return _valid_filters
