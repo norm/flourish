@@ -13,7 +13,7 @@ pages:
     - Using flourish:
         - Adding sources: adding-sources.markdown
         - Generating the site: generating-the-site.markdown
-        - Adding URLs: adding-urls.markdown
+        - Adding paths: adding-paths.markdown
         - Generating the HTML: generating-html.markdown
         - Template variables: template-variables.markdown
         - Template functions: template-functions.markdown
@@ -32,13 +32,13 @@ pages:
         - flourish: api-flourish.markdown
         - flourish.sourcelist: api-flourish-sourcelist.markdown
         - flourish.generators: api-flourish-generators.markdown
-        - flourish.generators.BaseGenerator: api-flourish-generators-base.markdown
-        - flourish.generators.PageGenerator: api-flourish-generators-page.markdown
-        - flourish.generators.IndexGenerator: api-flourish-generators-index.markdown
-        - flourish.generators.PaginatedIndexGenerator: api-flourish-generators-paginatedindex.markdown
-        - flourish.generators.AtomGenerator: api-flourish-generators-atom.markdown
-        - flourish.generators.SassGenerator: api-flourish-generators-sass.markdown
-        - flourish.generators.CalendarGenerator: api-flourish-generators-calendar.markdown
+        - flourish.generators.base.BaseGenerator: api-flourish-generators-base.markdown
+        - flourish.generators.base.SourceGenerator: api-flourish-generators-source.markdown
+        - flourish.generators.base.IndexGenerator: api-flourish-generators-index.markdown
+        - flourish.generators.base.PaginatedIndexGenerator: api-flourish-generators-paginatedindex.markdown
+        - flourish.generators.base.AtomGenerator: api-flourish-generators-atom.markdown
+        - flourish.generators.base.SassGenerator: api-flourish-generators-sass.markdown
+        - flourish.generators.calendar.CalendarGenerator: api-flourish-generators-calendar.markdown
         - flourish.helpers: api-flourish-helpers.markdown
         - flourish.paginator: api-flourish-paginator.markdown
     - Release notes: release-notes.markdown

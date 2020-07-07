@@ -39,7 +39,7 @@ for source in fl.sources.filter(published__lte=date(2016, 1, 1))
 object, which can be used to query the sources in a number of ways.
 
 
-## Adding URLs
+## Adding paths
 
 ### Source URLs
 

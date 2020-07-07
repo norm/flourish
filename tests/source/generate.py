@@ -1,15 +1,17 @@
-from flourish.filters import ordinal
-from flourish.generators import (
-    AtomGenerator,
-    BaseGenerator,
-    IndexGenerator,
-    PageGenerator,
-    PaginatedIndexGenerator,
-    SassGenerator,
-    CalendarDayGenerator,
-    CalendarMonthGenerator,
+from flourish.generators.atom import AtomGenerator
+from flourish.generators.calendar import (
     CalendarYearGenerator,
+    CalendarMonthGenerator,
+    CalendarDayGenerator,
 )
+from flourish.generators.base import (
+    IndexGenerator,
+    PaginatedIndexGenerator,
+    SourceGenerator,
+    StaticGenerator,
+)
+from flourish.generators.sass import SassGenerator
+from flourish.filters import ordinal
 from flourish.helpers import publication_range
 
 
@@ -30,22 +32,23 @@ class FourPagePaginatedIndex(PaginatedIndexGenerator):
     per_page = 4
 
 
-class NotFound(BaseGenerator):
+class NotFound(StaticGenerator):
     template_name = '404.html'
 
 
-class ArchivePage(BaseGenerator):
+class ArchivePage(SourceGenerator):
     template_name = 'archive.html'
 
     def get_context_data(self):
         _context = super().get_context_data()
+        _context['title'] = 'Archives'
         _context['dates'] = self.flourish.publication_dates
         return _context
 
 
 def global_context(self):
     return {
-        'copyright_year_range': publication_range(self.flourish),
+        'copyright_year_range': publication_range(self),
     }
 
 
@@ -57,84 +60,74 @@ TEMPLATE_FILTERS = {
 }
 
 
-SOURCE_URL = (
-    '/#slug',
-    PageGenerator.as_generator(),
-)
 
 
-URLS = (
-    (
+
+PATHS = (
+    OnePageIndex(
         # something with a token comes first, as this ensures
-        # that later URLs still generate everything correctly
+        # that later paths still generate everything correctly
         # (ie the flourish object does not have this filter applied)
-        '/tags/#tag/',
-        'tags-tag-page',
-        OnePageIndex.as_generator(),
+        path = '/tags/#tag/',
+        name = 'tags-tag-page',
     ),
-    (
-        '/tags/#tag/#slug',
-        'tag-post-detail',
-        PageGenerator.as_generator()
+    SourceGenerator(
+        path = '/tags/#tag/#slug',
+        name = 'tag-post-detail',
     ),
-    (
-        '/',
-        'homepage',
-        NewestFirstIndex.as_generator(),
+    NewestFirstIndex(
+        path = '/',
+        name = 'homepage',
     ),
-    (
-        '/error',
-        'erroring-page',
-        BadTemplate.as_generator(),
+    BadTemplate(
+        path = '/error',
+        name = 'erroring-page',
     ),
-    (
-        '/#year/',
-        'year-index',
-        CalendarYearGenerator.as_generator()
+    CalendarYearGenerator(
+        path = '/#year/',
+        name = 'year-index',
     ),
-    (
-        '/#year/#month/',
-        'month-index',
-        CalendarMonthGenerator.as_generator()
+    CalendarMonthGenerator(
+        path = '/#year/#month/',
+        name = 'month-index',
     ),
-    (
-        '/#year/#month/#day/',
-        'day-index',
-        CalendarDayGenerator.as_generator()
+    CalendarDayGenerator(
+        path = '/#year/#month/#day/',
+        name = 'day-index',
     ),
-    (
-        '/404',
-        'not-found-page',
-        NotFound.as_generator(),
+    NotFound(
+        path = '/404',
+        name = 'not-found-page',
+        extras = {
+            'title': 'Not Found',
+        },
     ),
-    (
-        '/index.atom',
-        'atom-feed',
-        AtomGenerator.as_generator(),
+    AtomGenerator(
+        path = '/index.atom',
+        name = 'atom-feed',
     ),
-    (
-        '/tags/#tag/index.atom',
-        'tags-atom-feed',
-        AtomGenerator.as_generator(),
+    AtomGenerator(
+        path = '/tags/#tag/index.atom',
+        name = 'tags-atom-feed',
     ),
-    (
-        '/archives',
-        'archives',
-        ArchivePage.as_generator(),
+    ArchivePage(
+        path = '/archives',
+        name = 'archives',
     ),
-    (
-        '/all/',
-        'all-paginated',
-        FourPagePaginatedIndex.as_generator(),
+    FourPagePaginatedIndex(
+        path = '/all/',
+        name = 'all-paginated',
     ),
-    (
-        '/#flooble',
-        'no-such-keyword',
-        NotFound.as_generator(),
+    SourceGenerator(
+        path = '/#flooble',
+        name = 'no-such-keyword',
     ),
-    (
-        '/css/#slug.css',
-        'sass-generated-css',
-        SassGenerator.as_generator(),
+    SassGenerator(
+        path = '/css/#sass_source.css',
+        name = 'sass-generated-css',
+    ),
+    SourceGenerator(
+        path = '/#slug',
+        name = 'source',
     ),
 )

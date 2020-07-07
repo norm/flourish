@@ -4,10 +4,10 @@ from math import ceil
 
 # FIXME add in concertina nav
 class Paginator(object):
-    def __init__(self, object_list=[], per_page=10, base_url='/'):
+    def __init__(self, object_list=[], per_page=10, base_path='/'):
         self.object_list = list(object_list)
         self.per_page = per_page
-        self.base_url = base_url
+        self.base_path = base_path
 
     @property
     def count(self):
@@ -84,8 +84,8 @@ class Page(Sequence):
         return self.number * self.paginator.per_page
 
     @property
-    def url(self):
+    def path(self):
         if self.number > 1:
-            return '%s%s' % (self.paginator.base_url, 'page-%s' % self.number)
+            return '%s%s' % (self.paginator.base_path, 'page-%s' % self.number)
         else:
-            return self.paginator.base_url
+            return self.paginator.base_path

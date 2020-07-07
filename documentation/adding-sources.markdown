@@ -146,7 +146,7 @@ be aware of:
     Atom feeds.
   * `published` — is used as the publication timestamp of a source when
     generating Atom feeds, and is used as the basis of the `#year`, `#month`
-    and `#day` special tokens in [URLs](/adding-urls/). It is expected to be a
+    and `#day` special tokens in [paths](/adding-paths/). It is expected to be a
     timestamp (explained in [Adding sources](/adding-sources/)).
   * `title` — is used as the title of an individual source when generating
     Atom feeds.

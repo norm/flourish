@@ -13,7 +13,7 @@ from flourish import helpers
 
 def global_context(self):
     return {
-        'publication_range': helpers.publication_range(self.flourish),
+        'publication_range': helpers.publication_range(self),
     }
 
 GLOBAL_CONTEXT = global_context

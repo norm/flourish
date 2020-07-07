@@ -1,10 +1,11 @@
 from flourish import Flourish
-from flourish.url import URL
+from flourish.generators.base import SourceGenerator
+from flourish.source import SourceFile
 
 import pytest
 
 
-class TestFlourishUrls:
+class TestFlourishPaths:
     @classmethod
     def setup_class(cls):
         with pytest.warns(None) as warnings:
@@ -13,28 +14,28 @@ class TestFlourishUrls:
             assert cls.flourish.sources.count() == 8
 
     def test_homepage_resolves(self):
-        assert self.flourish.resolve_url('homepage') == '/'
+        assert self.flourish.resolve_path('homepage') == '/'
 
     def test_homepage_resolves_even_with_arguments(self):
-        assert self.flourish.resolve_url('homepage', tag='series') == '/'
+        assert self.flourish.resolve_path('homepage', tag='series') == '/'
 
     def test_tag_index_with_arguments_resolves(self):
-        assert(self.flourish.resolve_url('tags-tag-page', tag='series') ==
+        assert(self.flourish.resolve_path('tags-tag-page', tag='series') ==
                '/tags/series/')
-        assert(self.flourish.resolve_url('tags-tag-page', tag='css') ==
+        assert(self.flourish.resolve_path('tags-tag-page', tag='css') ==
                '/tags/css/')
 
     def test_tag_index_without_arguments_raises(self):
         with pytest.raises(KeyError):
-            _ = self.flourish.resolve_url('tags-tag-page')
+            _ = self.flourish.resolve_path('tags-tag-page')
 
     def test_homepage_has_one_valid_filter(self):
-        assert self.flourish.all_valid_filters_for_url('homepage') == [
+        assert self.flourish.all_valid_filters_for_path('homepage') == [
             {}
         ]
 
     def test_post_detail_has_many_valid_filters(self):
-        assert self.flourish.all_valid_filters_for_url('source') == [
+        assert self.flourish.all_valid_filters_for_path('source') == [
             {'slug': 'basic-page'},
             {'slug': 'markdown-page'},
             {'slug': 'series/index'},
@@ -46,7 +47,7 @@ class TestFlourishUrls:
         ]
 
     def test_tag_index_has_many_valid_filters(self):
-        assert self.flourish.all_valid_filters_for_url('tags-tag-page') == [
+        assert self.flourish.all_valid_filters_for_path('tags-tag-page') == [
             {'tag': 'basic-page'},
             {'tag': 'basically'},
             {'tag': 'first'},
@@ -59,7 +60,7 @@ class TestFlourishUrls:
         ]
 
     def test_tag_post_detail_resolves_to_many_with_only_one_source_each(self):
-        _filters = self.flourish.all_valid_filters_for_url('tag-post-detail')
+        _filters = self.flourish.all_valid_filters_for_path('tag-post-detail')
         assert _filters == [
             {'tag': 'basic-page', 'slug': 'basic-page'},
             {'tag': 'basically', 'slug': 'thing-one'},
@@ -84,7 +85,7 @@ class TestFlourishUrls:
             assert self.flourish.sources.filter(**_filter).count() == 1
 
     def test_year_index(self):
-        _filters = self.flourish.all_valid_filters_for_url('year-index')
+        _filters = self.flourish.all_valid_filters_for_path('year-index')
         assert _filters == [
             {'year': '2015'},
             {'year': '2016'},
@@ -96,7 +97,7 @@ class TestFlourishUrls:
         assert sources.filter(**_filters[0]).count() == 1   # 2015
 
     def test_month_index(self):
-        _filters = self.flourish.all_valid_filters_for_url('month-index')
+        _filters = self.flourish.all_valid_filters_for_path('month-index')
         assert _filters == [
             {'month': '12', 'year': '2015'},
             {'month': '02', 'year': '2016'},
@@ -109,7 +110,7 @@ class TestFlourishUrls:
         assert sources.filter(**_filters[2]).count() == 6   # 2016/06
 
     def test_day_index(self):
-        _filters = self.flourish.all_valid_filters_for_url('day-index')
+        _filters = self.flourish.all_valid_filters_for_path('day-index')
         assert _filters == [
             {'day': '25', 'month': '12', 'year': '2015'},
             {'day': '29', 'month': '02', 'year': '2016'},
@@ -124,13 +125,14 @@ class TestFlourishUrls:
         assert sources.filter(**_filters[3]).count() == 1   # 2016/06/06
 
     def test_no_such_keyword_has_no_filters(self):
-        assert self.flourish.all_valid_filters_for_url('no-such-keyword') == []
+        assert self.flourish.all_valid_filters_for_path('no-such-keyword') \
+                == []
 
     def test_not_configured_has_no_filters(self):
-        with pytest.raises(URL.DoesNotExist):
-            _ = self.flourish.all_valid_filters_for_url('awooga')
+        with pytest.raises(SourceFile.DoesNotExist):
+            _ = self.flourish.all_valid_filters_for_path('awooga')
 
-    def test_urls_for_sources(self):
+    def test_paths_for_sources(self):
         assert [
             '/basic-page',
             '/markdown-page',
@@ -140,9 +142,9 @@ class TestFlourishUrls:
             '/series/part-one',
             '/series/part-three',
             '/series/part-two',
-        ] == [source.url for source in self.flourish.sources.all()]
+        ] == [source.path for source in self.flourish.sources.all()]
 
-    def test_lookup_url_handler(self):
+    def test_lookup_path_handler(self):
         paths = (
             ('/',               ('homepage',        {})),
             ('/tags/first/',    ('tags-tag-page',   {'tag': 'first'})),
@@ -154,7 +156,7 @@ class TestFlourishUrls:
             assert matches[0] == args
         assert [] == self.flourish.get_handler_for_path('/rabble')
 
-    def test_lookup_url_handler_wildcard(self):
+    def test_lookup_path_handler_wildcard(self):
         expected = [
             ('tags-tag-page',   {'tag': 'first'}),
             ('tag-post-detail', {'slug': 'thing-one', 'tag': 'first'}),
@@ -163,16 +165,18 @@ class TestFlourishUrls:
         assert expected == self.flourish.get_handler_for_path('/tags/first/?')
 
 
-class TestFlourishSourcesUrl:
+class TestFlourishSourcesPath:
     def test_category_prefixed_sources(self):
         with pytest.warns(None) as _warnings:
             _flourish = Flourish('tests/source')
             assert len(_warnings) == 2
             assert _flourish.sources.count() == 8
 
-            _flourish.canonical_source_url(
-                '/#category/#slug',
-                None
+            _flourish.add_path(
+                SourceGenerator(
+                    path = '/#category/#slug',
+                    name = 'source',
+                ),
             )
 
             assert [
@@ -184,7 +188,7 @@ class TestFlourishSourcesUrl:
                 '/article/series/part-one',
                 '/article/series/part-three',
                 '/article/series/part-two',
-            ] == [source.url for source in _flourish.sources.all()]
+            ] == [source.path for source in _flourish.sources.all()]
 
     def test_invalid_prefixed_sources(self):
         with pytest.warns(None) as _warnings:
@@ -192,9 +196,11 @@ class TestFlourishSourcesUrl:
             assert len(_warnings) == 2
             assert _flourish.sources.count() == 8
 
-            _flourish.canonical_source_url(
-                '/#type/#slug',
-                None
+            _flourish.add_path(
+                SourceGenerator(
+                    path = '/#type/#slug',
+                    name = 'source',
+                ),
             )
 
             assert [
@@ -206,7 +212,7 @@ class TestFlourishSourcesUrl:
                 '/post/series/part-one',
                 '/post/series/part-three',
                 '/post/series/part-two',
-            ] == [source.url for source in _flourish.sources.all()]
+            ] == [source.path for source in _flourish.sources.all()]
             # FIXME catch third warning
 
     def test_multiple_option_prefixed_sources(self):
@@ -215,9 +221,11 @@ class TestFlourishSourcesUrl:
             assert len(_warnings) == 2
             assert _flourish.sources.count() == 8
 
-            _flourish.canonical_source_url(
-                '/#tag/#slug',
-                None
+            _flourish.add_path(
+                SourceGenerator(
+                    path = '/#tag/#slug',
+                    name = 'source',
+                ),
             )
 
             assert [
@@ -229,5 +237,5 @@ class TestFlourishSourcesUrl:
                 '/series/series/part-one',
                 '/three/series/part-three',
                 '/series/series/part-two',
-            ] == [source.url for source in _flourish.sources.all()]
+            ] == [source.path for source in _flourish.sources.all()]
             # FIXME catch third warning

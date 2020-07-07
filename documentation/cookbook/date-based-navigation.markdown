@@ -25,21 +25,22 @@ To generate a year and month index pages, add the following to your
 `generate.py`:
 
 ```python
-from flourish.generators import CalendarYearGenerator, CalendarMonthGenerator
+from flourish.generators.calendar import (
+    CalendarYearGenerator,
+    CalendarMonthGenerator,
+)
 
-URLS = (
+PATHS = (
     # ...
-    # your existing URLs should be here, don't remove them,
+    # your existing paths should be here, don't remove them,
     # ...
-    (
-        '/#year/',
-        'year-index',
-        CalendarYearGenerator.as_generator()
+    CalendarYearGenerator(
+        path = '/#year/',
+        name = 'year-index',
     ),
-    (
-        '/#year/#month/',
-        'month-index',
-        CalendarYearGenerator.as_generator()
+    CalendarMonthGenerator(
+        path = '/#year/#month/',
+        name = 'month-index',
     ),
 )
 ```
@@ -53,7 +54,7 @@ Create a `calendar_year.html` template:
   {% for month in publication_dates %}
     {% with m=month.month %}
     <li>
-      <a href='{{ url("month-index", year=m.year, month=m.month) }}'>
+      <a href='{{ path("month-index", year=m.year, month=m.month) }}'>
         {{m.strftime('%B')}}
       </a>
     </li>
@@ -70,7 +71,7 @@ Create a `calendar_month.html` template:
 <ol>
 {% for page in pages %}
   <li>
-    <a href='{{page.url}}'>{{page.title}}</a>
+    <a href='{{page.path}}'>{{page.title}}</a>
   </li>
 {% endfor %}
 </ol>

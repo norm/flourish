@@ -9,7 +9,7 @@
       <h3>{{month.month.strftime('%B')}}</h3>
       <ul>
         {% for day in month.days %}
-          <li><a href='{{ url("day-index", year=day.year, month=day.month, day=day.day) }}'>{{day.day}}</a></li>
+          <li><a href='{{ path("day-index", year=day.year, month=day.month, day=day.day) }}'>{{day.day}}</a></li>
         {% endfor %}
       </ul>
     {% endfor %}

@@ -3,26 +3,26 @@
 There are functions made available for use in templates.
 
 
-## Resolving URLs
+## Resolving paths
 
-If you hardcode URLs in links in your templates, you are forcing yourself to
-edit multiple files if/when you change the URL. Rather than hardcoding URLs in
-your templates you can use the `url()` function, like so:
+If you hardcode paths in links in your templates, you are forcing yourself to
+edit multiple files if/when you change the path. Rather than hardcoding paths
+in your templates you can use the `path()` function, like so:
 
 ```html
 <nav>
   <ul>
-    <li><a href='{{ url("homepage") }}'>Homepage</a></li>
-    <li><a href='{{ url("tag-index", tag="css") }}'>Pages tagged CSS</a></li>
+    <li><a href='{{ path("homepage") }}'>Homepage</a></li>
+    <li><a href='{{ path("tag-index", tag="css") }}'>Pages tagged CSS</a></li>
   </ul>
 </nav>
 ```
 
-The first argument is the [symbolic name of the URL](/adding-urls/) as defined
-in your `URLS` list. If the URL requires any 
-[replacable tokens](/adding-urls/#url-paths) those come after the name.
+The first argument is the [symbolic name of the path](/adding-paths/) as defined
+in your `PATHS` list. If the path requires any 
+[replacable tokens](/adding-paths/#url-paths) #FIXME those come after the name.
 
-For a [canonical source](/adding-urls/#source-urls) page, the symbolic name
+For a [canonical source](/adding-urls/#source-urls) #FIXME page, the symbolic name
 is always `'source'`.
 
 
@@ -36,7 +36,7 @@ like so:
 {% with post=lookup("something-amazing") %}
 <p>
   If you're bored, why not read our most popular post
-  <a href='{{post.url}}'>{{post.title}}</a>?
+  <a href='{{post.path}}'>{{post.title}}</a>?
 </p>
 {% endwith %}
 ```

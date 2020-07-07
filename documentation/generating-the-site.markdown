@@ -22,5 +22,5 @@ from flourish.generators import (
 )
 ```
 
-This file then needs [some URLs added](/adding-urls/), and these will need
+This file then needs [some paths added](/adding-paths/), and these will need
 code that says how to [generate the HTML](/generating-html/).

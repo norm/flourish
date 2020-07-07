@@ -1,9 +1,23 @@
-# AtomGenerator
+# Flourish API: `flourish.generators.atom.AtomGenerator`
 
 `AtomGenerator` is the class for generating an Atom feed of sources.
 
 Other than as noted below, it behaves the same as
 [`BaseGenerator`](/api-flourish-generators-base/).
+
+```python
+from flourish.generators import atom
+
+PATHS = (
+    ...
+    atom.AtomGenerator(
+        name = 'atom-feed',
+        path = '/index.atom',
+    ),
+    ...
+)
+
+```
 
 
 ## Class attributes

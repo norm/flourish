@@ -1,4 +1,4 @@
-# Flourish API: `flourish.generators.IndexGenerator`
+# Flourish API: `flourish.generators.base.IndexGenerator`
 
 `IndexGenerator` is the class for generating pages that contain lists of
 sources. For example: a list of links such as an archive page, or an
@@ -6,6 +6,19 @@ aggregated page such as a one-page summary.
 
 Other than as noted below, it behaves the same as
 [`BaseGenerator`](/api-flourish-generators-base/).
+
+```python
+from flourish.generators import base
+
+PATHS = (
+    ...
+    base.IndexGenerator(
+        name = 'homepage',
+        path = '/',
+    ),
+    ...
+)
+```
 
 
 ## Class attributes

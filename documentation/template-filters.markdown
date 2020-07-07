@@ -22,9 +22,10 @@ in the templates to a callable.
 Flourish comes with two filters that you can use:
 
 ```python
-from flourish.filters import ordinal
+from flourish.filters import month_name, ordinal
 
 TEMPLATE_FILTERS = {
+    'month_name': month_name,
     'ordinal': ordinal,
 }
 ```

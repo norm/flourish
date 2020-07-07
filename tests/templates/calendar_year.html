@@ -6,7 +6,7 @@
   <ul>
     {% for date in publication_dates %}
       {% with month=date.month %}
-        <li><a href='{{ url("month-index", year=month.year, month=month.month) }}'>{{month.strftime('%B')}}</a></li>
+        <li><a href='{{ path("month-index", year=month.year, month=month.month) }}'>{{month.strftime('%B')}}</a></li>
       {% endwith %}
     {% endfor %}
   </ul>
@@ -19,13 +19,13 @@
         </ul>
       {% endif %}
         <li>
-          <h2><a href='{{ url("month-index", year=page.published.strftime("%Y"), month=page.published.strftime("%m")) }}'>{{page.published.strftime('%B')}}</a></h2>
+          <h2><a href='{{ path("month-index", year=page.published.strftime("%Y"), month=page.published.strftime("%m")) }}'>{{page.published.strftime('%B')}}</a></h2>
           <ul>
     {% endif %}
 
           <li>
             {{page.published.day}}{{page.published.day|ordinal}}
-            {{page.published.strftime('%H:%M')}} <a href='{{page.url}}'>{{page.title}}</a>
+            {{page.published.strftime('%H:%M')}} <a href='{{page.path}}'>{{page.title}}</a>
           </li>
   
     {% if loop.last %}
@@ -42,7 +42,7 @@
           {% if page.number == current_page.number %}
             <em>Page {{page.number}}</em>
           {% else %}
-            <a href='{{page.url}}'>Page {{page.number}}</a>
+            <a href='{{page.path}}'>Page {{page.number}}</a>
           {% endif %}
         </li>
       {% endfor %}

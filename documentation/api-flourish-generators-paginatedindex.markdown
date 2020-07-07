@@ -1,4 +1,4 @@
-# Flourish API: `flourish.generators.PaginatedIndexGenerator`
+# Flourish API: `flourish.generators.base.PaginatedIndexGenerator`
 
 `PaginatedIndexGenerator` is the class for generating paginated pages that
 contain lists of sources. For example: a series of list of links such as site
@@ -6,6 +6,19 @@ archives.
 
 Other than as noted below, it behaves the same as
 [`IndexGenerator`](/api-flourish-generators-index/).
+
+```python
+from flourish.generators import base
+
+PATHS = (
+    ...
+    base.PaginatedIndexGenerator(
+        name = 'all-paginated',
+        path = '/all/',
+    ),
+    ...
+)
+```
 
 
 ## Class attributes
