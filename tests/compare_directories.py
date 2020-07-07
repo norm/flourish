@@ -13,7 +13,7 @@ class CompareDirectories:
 
     def compare_directories(self):
         tested_files = relative_list_of_files_in_directory(self.tempdir)
-        assert sorted(self.expected_files) == sorted(tested_files)
+        assert sorted(tested_files) == sorted(self.expected_files)
 
         for filename in self.expected_files:
             self.compare_file(filename)
@@ -26,4 +26,4 @@ class CompareDirectories:
         with open(tested_file) as file:
             tested = file.read()
 
-        assert expected == tested
+        assert tested == expected
