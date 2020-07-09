@@ -1,9 +1,30 @@
-# CalendarGenerator
+# Flourish API: `flourish.generators.calendar`
 
 `CalendarGenerator` is the base class for the date-based generators. It
 inherits from `IndexGenerator`, and orders sources by date of publication.
 There are three generators than use `CalendarGenerator` as their base.
 
+```python
+from flourish.generators import calendar
+
+PATHS = (
+    ...
+    calendar.CalendarYearGenerator(
+        name = 'year-index',
+        path = '/#year/',
+    ),
+    calendar.CalendarMonthGenerator(
+        name = 'month-index',
+        path = '/#year/#month/',
+    ),
+    calendar.CalendarDayGenerator(
+        name = 'day-index',
+        path = '/#year/#month/#day/',
+    ),
+    ...
+)
+
+```
 
 ## CalendarYearGenerator
 

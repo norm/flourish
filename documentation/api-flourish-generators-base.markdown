@@ -1,6 +1,6 @@
 [TOC]
 
-# Flourish API: `flourish.generators.BaseGenerator`
+# Flourish API: `flourish.generators.base.BaseGenerator`
 
 `BaseGenerator` contains the majority of Flourish's page generation code, and
 should be easily subclassable where code needs to alter the default manner
@@ -29,9 +29,12 @@ of generating pages.
 
 ## Generator method flow
 
-When `as_generator()` is called, it creates an instance of the generator view
-and calls [`generate()`](#generate). This causes the following things to be
-run in order:
+When the generator is instantiated from `generate.py`, `setup()` is called
+and Flourish passes itself in as an argument so the generator can store
+the reference for later use.
+
+When page generation starts, Flourish calls `generate()`, which causes the
+following things to be run in order:
 
   * [`generate`](#generate) calls:
       * [`get_url_tokens`](#get_url_tokens) if tokens were not passed as an

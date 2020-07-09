@@ -15,7 +15,7 @@ only a small part of it.
 
   * [`BaseGenerator`](/api-flourish-generators-base/) — the base class of all
     Flourish generators
-  * [`PageGenerator`](/api-flourish-generators-page/) — the class for
+  * [`SourceGenerator`](/api-flourish-generators-source/) — the class for
     generating individual source pages
   * [`IndexGenerator`](/api-flourish-generators-index/) — the class for
     generating lists of source pages
@@ -25,6 +25,8 @@ only a small part of it.
     generating an Atom feed
   * [`SassGenerator`](/api-flourish-generators-sass/) — the class for
     generating CSS files from SASS-formatted sources
+  * [`CalendarGenerator`](/api-flourish-generators-calendar/) — classes for
+    generating date-based indexes
 
 ## The included mixins
 

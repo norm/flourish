@@ -11,10 +11,15 @@
   * Add [generators][cal] for calendar-based index pages.
   * Altered the result of `flourish.sources` to be a [`SourceList`][sl]
     object rather than a `Flourish` object.
+  * A substantial and breaking change to how generators are declared in the
+    `generate.py` file. Previously, Flourish used `URLS` and `SOURCE_URL`, but
+    now only uses `PATHS`, and how generators are declared has changed. See
+    the documentation on [adding paths][ap].
 
 [sass]: https://flourish.readthedocs.io/en/latest/api-flourish-generators-sass/
 [cal]: https://flourish.readthedocs.io/en/latest/api-flourish-generators-calendar/
 [sl]: https://flourish.readthedocs.io/en/latest/api-flourish-sourcelist/
+[ap]: https://flourish.readthedocs.io/en/latest/adding-paths/
 
 
 ## 0.7 — 16 June 2020

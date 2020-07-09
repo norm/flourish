@@ -6,7 +6,7 @@
   {% with post=lookup("thing-one") %}
     <p>
       Why not try our most popular post
-      <a href='{{ post.url }}'>{{ post.title }}</a>?
+      <a href='{{ post.path }}'>{{ post.title }}</a>?
     </p>
   {% endwith %}
 

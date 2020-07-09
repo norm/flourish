@@ -4,7 +4,7 @@
   <ul>
     {% for source in page.index_set.order_by('published') %}
       <li>
-        <a href='{{source.url}}'>{{source.title}}</a>
+        <a href='{{source.path}}'>{{source.title}}</a>
       </li>
     {% endfor %}
   </ul>

@@ -13,7 +13,7 @@ key `series`, this code will get the other articles in the same series:
 <h3>Related articles</h3>
 <ul id='related'>
   {% for related in page.related('series') %}
-    <li><a href='{{related.url}}'>{{related.title}}</a></li>
+    <li><a href='{{related.path}}'>{{related.title}}</a></li>
   {% endfor %}
 </ul>
 ```
@@ -41,7 +41,7 @@ then the following template fragment in the context of the `advanced-bbq`:
 ```html
 <p>
   Make sure you've read
-  <a href='{{page.parent.url}}'>{{page.parent.title}}</a>
+  <a href='{{page.parent.path}}'>{{page.parent.title}}</a>
   first!
 </p>
 ```
@@ -72,7 +72,7 @@ reference it.
 <h2>Articles that link to this</h2>
 <ul>
   {% for child in page.parent_set %}
-    <li><a href='{{child.url}}'>{{child.title}}</a></li>
+    <li><a href='{{child.path}}'>{{child.title}}</a></li>
   {% endfor %}
 </ul>
 ```

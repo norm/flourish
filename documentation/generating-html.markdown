@@ -4,7 +4,7 @@
 
 Once you have [added some sources](/adding-sources/),
 [created the generate.py script](/generating-the-site/), and
-[added some URLs](/adding-urls/), you need to know how the HTML is generated.
+[added some paths](/adding-paths/), you need to know how the HTML is generated.
 
 
 ## Source pages
@@ -19,8 +19,8 @@ SOURCE_URL = (
 )
 ```
 
-In between the brackets are two arguments. The first is the URL path, 
-explained in [Adding URLs](/adding-urls/); the second is what code should be 
+In between the brackets are two arguments. The first is the path,
+explained in [Adding paths](/adding-paths/); the second is what code should be
 run to create each page.
 
 The code `PageGenerator.as_generator()` will pass all of the key/value pairs

@@ -20,7 +20,6 @@ from .source import (
     TomlSourceFile,
 )
 from .sourcelist import SourceList
-from .url import URL
 from .version import __version__    # noqa: F401
 
 sys.dont_write_bytecode = True
@@ -41,15 +40,15 @@ class Flourish(object):
         self._assets = {}
         self._cache = {}
         self._source_files = []
-        self._source_url = None
-        self._urls = {}
+        self._source_path = None
+        self._paths = {}
 
         self.jinja = Environment(
             loader=FileSystemLoader(self.templates_dir),
             keep_trailing_newline=True,
             extensions=['jinja2.ext.with_'],
         )
-        self.jinja.globals['url'] = self.template_resolve_url
+        self.jinja.globals['path'] = self.template_resolve_path
         self.jinja.globals['lookup'] = self.template_get
 
         if not os.path.isdir(self.source_dir):
@@ -75,24 +74,12 @@ class Flourish(object):
             # filters are optional
             pass
 
-        has_urls = False
         try:
-            self.canonical_source_url(*generate.SOURCE_URL)
-            has_urls = True
-        except AttributeError:
-            # source URLs are optional
-            pass
-
-        try:
-            for url in generate.URLS:
-                has_urls = True
-                self.add_url(*url)
+            for path in generate.PATHS:
+                self.add_path(path)
         except NameError:
-            # other URLs are optional
-            pass
-
-        if not has_urls:
-            warnings.warn('There are no URLs configured in generate.py')
+            raise AttributeError(
+                'There are no paths configured in generate.py')
 
     @property
     def sources(self):
@@ -112,70 +99,57 @@ class Flourish(object):
             warnings.warn('Cannot get "%s" as it does not exist' % slug)
             return None
 
-    def canonical_source_url(self, url, generator):
-        # FIXME hmmmm
-        self._source_url = URL(self, url, 'source', generator)
-        self.add_url(url, 'source', generator)
+    def add_path(self, path):
+        path.setup(self)
+        if path.name == 'source':
+            self._source_path = path
+        self._paths.update({path.name: path})
 
-    def add_url(self, url, name, generator):
-        _url_dict = {name: URL(self, url, name, generator)}
-        self._urls.update(_url_dict)
+    def resolve_path(self, name, **kwargs):
+        return self._paths[name].resolve(**kwargs)
 
-    def resolve_url(self, name, **kwargs):
-        return self._urls[name].resolve(**kwargs)
-
-    def template_resolve_url(self, name, **kwargs):
+    def template_resolve_path(self, name, **kwargs):
         try:
-            return self.resolve_url(name, **kwargs)
+            return self.resolve_path(name, **kwargs)
         except KeyError:
             warnings.warn(
-                'Cannot resolve URL "%s", it has missing arguments' % name
+                'Cannot resolve path "%s", it has missing arguments' % name
             )
             return ''
 
     def get_handler_for_path(self, path):
         matches = []
-        for key in self._urls:
-            _dicts = self._urls[key].can_generate(path)
+        for key in self._paths:
+            _dicts = self._paths[key].can_generate(path)
             if _dicts:
                 for _dict in _dicts:
                     matches.append((key, _dict))
         return matches
 
-    def all_valid_filters_for_url(self, name):
-        if name in self._urls:
-            return self._urls[name].all_valid_filters()
+    def all_valid_filters_for_path(self, name):
+        if name in self._paths:
+            return self._paths[name].all_valid_filters()
         else:
-            raise URL.DoesNotExist
+            raise SourceFile.DoesNotExist
 
     def generate_site(self, report=False):
         if os.path.exists(self.output_dir):
             rmtree(self.output_dir)
         os.makedirs(self.output_dir)
-        self.generate_all_urls(report=report)
+        self.generate_all_paths(report=report)
         self.copy_assets(report=report)
         if report:
             print('')
 
-    def generate_all_urls(self, report=False):
-        for _entry in self._urls:
-            self.generate_url(_entry, report=report)
-
-    def generate_url(self, name, report=False):
-        url = self._urls[name]
-        url.generator(self, url, self.global_context, report=report)
+    def generate_all_paths(self, report=False):
+        for path in self._paths:
+            self._paths[path].generate(report)
 
     def generate_path(self, path, report=False):
         handlers = self.get_handler_for_path(path)
         for key, args in handlers:
-            url = self._urls[key]
-            url.generator(
-                self,
-                url,
-                self.global_context,
-                report=report,
-                tokens=[args],
-            )
+            path = self._paths[key]
+            path.generate(report, tokens=[args])
 
     def set_global_context(self, global_context):
         self.global_context = global_context

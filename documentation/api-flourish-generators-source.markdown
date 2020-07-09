@@ -1,9 +1,22 @@
-# Flourish API: `flourish.generators.PageGenerator`
+# Flourish API: `flourish.generators.base.SourceGenerator`
 
-`PageGenerator` is the class for generating individual source pages.
+`SourceGenerator` is the class for generating individual source pages.
 
 Other than as noted below, it behaves the same as
 [`BaseGenerator`](/api-flourish-generators-base/).
+
+```python
+from flourish.generators import base
+
+PATHS = (
+    ...
+    base.SourceGenerator(
+        name = 'source',
+        path = '/#slug',
+    ),
+    ...
+)
+```
 
 
 ## Class attributes

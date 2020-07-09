@@ -25,16 +25,15 @@ published = 2016-06-30T13:30:00Z
 Then add this at the top of your [generation script](/generating-the-site/):
 
 ```python
-from flourish.generators import AtomGenerator
+from flourish.generators.atom import AtomGenerator
 ```
 
-then below, add this to your list of `URLS`:
+then below, add this to your list of `PATHS`:
 
 ```python
-    (
-        '/index.atom',
-        'site-atom-feed',
-        AtomGenerator.as_generator(),
+    AtomGenerator(
+        path = '/index.atom',
+        name = 'site-atom-feed',
     ),
 ```
 

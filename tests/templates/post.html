@@ -7,7 +7,7 @@
     <section>
       Related pages:
       {% for related in page.related('line') %}
-        <a href='{{related.url}}'>{{related.title}}</a>
+        <a href='{{related.path}}'>{{related.title}}</a>
       {% endfor %}
     </section>
   {% endif %}

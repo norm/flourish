@@ -29,11 +29,11 @@ class SourceFile(object):
         return self._slug
 
     @property
-    def url(self):
+    def path(self):
         # FIXME when _source_url is not set
-        _url = self._parent._source_url
+        _path = self._parent._source_path
         _filter = {}
-        for _arg in _url.arguments:
+        for _arg in _path.arguments:
             try:
                 _value = getattr(self, _arg)
                 if type(_value) == list:
@@ -46,14 +46,14 @@ class SourceFile(object):
                         self._slug, _arg)
                 )
                 return None
-        _resolved = _url.resolve(**_filter)
+        _resolved = _path.resolve(**_filter)
         if _resolved.endswith('/index'):
             _resolved = _resolved[:-5]
         return _resolved
 
     @property
     def absolute_url(self):
-        return '%s%s' % (self._parent.site_config['base_url'], self.url)
+        return '%s%s' % (self._parent.site_config['base_url'], self.path)
 
     @property
     def timestamp(self):
