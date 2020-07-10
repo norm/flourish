@@ -15,10 +15,10 @@ class BaseGenerator(ContextMixin, PathMixin, GeneratorMixin, TemplateMixin):
     """
     The BaseGenerator takes care of the interface with Flourish.
     """
-    def __init__(self, path, name, extras={}):
+    def __init__(self, path, name, context={}):
         self.path = path
         self.name = name
-        self.extras = extras
+        self.context = context
 
     def setup(self, flourish):
         self.flourish = flourish

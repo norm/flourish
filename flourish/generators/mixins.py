@@ -11,8 +11,8 @@ class ContextMixin:
         context['site'] = self.flourish.site_config
         context['global'] = self.flourish.global_context(self.flourish)
         context['tokens'] = self.tokens
-        if self.extras:
-            context.update(**self.extras)
+        if self.context:
+            context.update(**self.context)
         return context
 
 

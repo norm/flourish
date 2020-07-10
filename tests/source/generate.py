@@ -98,7 +98,7 @@ PATHS = (
     NotFound(
         path = '/404',
         name = 'not-found-page',
-        extras = {
+        context = {
             'title': 'Not Found',
         },
     ),

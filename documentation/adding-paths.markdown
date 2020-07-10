@@ -107,7 +107,7 @@ This is more commonly used for index pages (eg `/archives/#year`,
 canonical, path.
 
 
-## `extras`
+## `context`
 
 FIXME [template's context][] link?
 Extra values to be passed to the template's context.
