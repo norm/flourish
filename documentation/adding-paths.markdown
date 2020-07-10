@@ -58,7 +58,6 @@ them explicitly to your sources:
     [Adding Sources](/adding-sources/#the-slug))
   * `year`, `month`, `day` — are created from the `published` key, if it
     is a timestamp (explained further in [Adding sources](/adding-sources/))
-    # FIXME better link
 
 In the example above, the path was `/#slug`. This means each source will be
 generated at a path that matches the slug of the source. For example, a source
@@ -109,5 +108,4 @@ canonical, path.
 
 ## `context`
 
-FIXME [template's context][] link?
 Extra values to be passed to the template's context.

@@ -20,9 +20,9 @@ in your templates you can use the `path()` function, like so:
 
 The first argument is the [symbolic name of the path](/adding-paths/) as defined
 in your `PATHS` list. If the path requires any 
-[replacable tokens](/adding-paths/#url-paths) #FIXME those come after the name.
+[replacable tokens](/adding-paths/#url-paths) those come after the name.
 
-For a [canonical source](/adding-urls/#source-urls) #FIXME page, the symbolic name
+For a [canonical source](/adding-urls/#source-urls) page, the symbolic name
 is always `'source'`.
 
 
