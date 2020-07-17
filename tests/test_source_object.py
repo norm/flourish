@@ -19,7 +19,7 @@ class TestFlourishPage:
         with pytest.warns(None) as warnings:
             cls.flourish = Flourish('tests/source')
             assert len(warnings) == 2
-            assert cls.flourish.sources.count() == 8
+            assert cls.flourish.sources.count() == 9
             cls.warnings = warnings
 
     def test_toml_configuration(self):

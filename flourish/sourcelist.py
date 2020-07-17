@@ -65,6 +65,9 @@ class SourceList:
             add = True
             if len(self.filters):
                 for filter in self.filters:
+                    if not add:
+                        # already filtered out by a previous filter
+                        continue
                     if '__' in filter[0]:
                         field, operator = filter[0].split('__', 2)
                     else:
@@ -182,19 +185,31 @@ def _not_equal_or_inside(value, test):
 
 
 def _less_than(value, test):
-    return value < test
+    try:
+        return value < test
+    except TypeError:
+        return False
 
 
 def _less_than_or_equal_to(value, test):
-    return value <= test
+    try:
+        return value <= test
+    except TypeError:
+        return False
 
 
 def _greater_than(value, test):
-    return value > test
+    try:
+        return value > test
+    except TypeError:
+        return False
 
 
 def _greater_than_or_equal_to(value, test):
-    return value >= test
+    try:
+        return value >= test
+    except TypeError:
+        return False
 
 
 def _contains(value, test):

@@ -16,6 +16,7 @@ from flourish.helpers import publication_range
 
 
 class NewestFirstIndex(IndexGenerator):
+    sources_filter = {'published__set': ''}
     order_by = ('-published')
 
 
@@ -28,6 +29,7 @@ class OnePageIndex(IndexGenerator):
 
 
 class FourPagePaginatedIndex(PaginatedIndexGenerator):
+    sources_filter = {'published__set': ''}
     order_by = ('published')
     per_page = 4
 

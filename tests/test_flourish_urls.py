@@ -11,7 +11,7 @@ class TestFlourishPaths:
         with pytest.warns(None) as warnings:
             cls.flourish = Flourish('tests/source')
             assert len(warnings) == 2
-            assert cls.flourish.sources.count() == 8
+            assert cls.flourish.sources.count() == 9
 
     def test_homepage_resolves(self):
         assert self.flourish.resolve_path('homepage') == '/'
@@ -38,6 +38,7 @@ class TestFlourishPaths:
         assert self.flourish.all_valid_filters_for_path('source') == [
             {'slug': 'basic-page'},
             {'slug': 'markdown-page'},
+            {'slug': 'nothing'},
             {'slug': 'series/index'},
             {'slug': 'series/part-one'},
             {'slug': 'series/part-three'},
@@ -136,6 +137,7 @@ class TestFlourishPaths:
         assert [
             '/basic-page',
             '/markdown-page',
+            '/nothing',
             '/thing-one',
             '/thing-two',
             '/series/',
@@ -170,7 +172,7 @@ class TestFlourishSourcesPath:
         with pytest.warns(None) as _warnings:
             _flourish = Flourish('tests/source')
             assert len(_warnings) == 2
-            assert _flourish.sources.count() == 8
+            assert _flourish.sources.count() == 9
 
             _flourish.add_path(
                 SourceGenerator(
@@ -182,6 +184,7 @@ class TestFlourishSourcesPath:
             assert [
                 '/static/basic-page',
                 '/post/markdown-page',
+                None,
                 '/thing/thing-one',
                 '/thing/thing-two',
                 '/article/series/',
@@ -194,7 +197,7 @@ class TestFlourishSourcesPath:
         with pytest.warns(None) as _warnings:
             _flourish = Flourish('tests/source')
             assert len(_warnings) == 2
-            assert _flourish.sources.count() == 8
+            assert _flourish.sources.count() == 9
 
             _flourish.add_path(
                 SourceGenerator(
@@ -204,6 +207,7 @@ class TestFlourishSourcesPath:
             )
 
             assert [
+                None,
                 None,
                 None,
                 '/post/thing-one',
@@ -219,7 +223,7 @@ class TestFlourishSourcesPath:
         with pytest.warns(None) as _warnings:
             _flourish = Flourish('tests/source')
             assert len(_warnings) == 2
-            assert _flourish.sources.count() == 8
+            assert _flourish.sources.count() == 9
 
             _flourish.add_path(
                 SourceGenerator(
@@ -230,6 +234,7 @@ class TestFlourishSourcesPath:
 
             assert [
                 '/basic-page/basic-page',
+                None,
                 None,
                 '/basically/thing-one',
                 '/basically/thing-two',

@@ -31,6 +31,7 @@ class TestFlourishGeneration(CompareDirectories):
         'logo.png',
         'markdown-page.html',
         'nope.txt',
+        'nothing.html',
         'thing-one.html',
         'thing-two.html',
         'series/index.html',
