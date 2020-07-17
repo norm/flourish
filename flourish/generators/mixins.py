@@ -17,6 +17,9 @@ class ContextMixin:
 
 
 class PathMixin:
+    PATH_SEGMENTS = r'(#\w+)'
+    STRIP_PATH = r'^[\w_-]+'
+
     def get_current_path(self, tokens):
         self.current_path = self.resolve(**tokens)
         return self.current_path
@@ -24,7 +27,7 @@ class PathMixin:
     def resolve(self, **kwargs):
         resolved = ''
         # FIXME use self.arguments
-        for segment in re.split(r'(#\w+)', self.path):
+        for segment in re.split(self.PATH_SEGMENTS, self.path):
             if segment.startswith('#'):
                 key = segment[1:]
                 if key in kwargs:
@@ -40,8 +43,30 @@ class PathMixin:
     def can_generate(self, path):
         subpath = None
         if path.endswith('?'):
-            subpath = path[:len(path)-1]
+            subpath = path[:-1]
         generates = []
+
+        # see if the path can be rejected before continuing to the
+        # expensive check-all-possible-matches, by checking if each
+        # non-token part of the requested path is found in our path
+        check_path = path
+        segments = re.split(self.PATH_SEGMENTS, self.path)
+        while len(segments) > 1:
+            pos = check_path.find(segments[0])
+            if pos < 0:
+                return []
+            check_path = check_path[(pos + len(segments[0])):]
+            stripped = re.split(self.STRIP_PATH, check_path)
+            if len(stripped) > 1:
+                check_path = stripped[1]
+            segments.pop(0)
+            segments.pop(0)
+        if check_path.endswith('?'):
+            if segments[0].find(check_path[:-1]) < 0:
+                return []
+        elif not check_path.endswith(segments[0]):
+            return []
+
         for _filter in self.all_valid_filters():
             filter_path = self.resolve(**_filter)
             if path == filter_path:
@@ -65,7 +90,7 @@ class PathMixin:
     @property
     def arguments(self):
         arguments = []
-        for segment in re.split(r'(#\w+)', self.path):
+        for segment in re.split(self.PATH_SEGMENTS, self.path):
             if segment.startswith('#'):
                 arguments.append(segment[1:])
         return arguments
