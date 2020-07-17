@@ -98,6 +98,7 @@ def main():
     )
     parser_upload.add_argument(
         'bucket',
+        nargs='?',
         help='bucket to upload to (default: bucket entry in _site.toml)',
     )
 
