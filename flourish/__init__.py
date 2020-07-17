@@ -181,6 +181,7 @@ class Flourish(object):
 
     def _rescan_sources(self):
         """ Find source documents and register them. """
+        _seen = {}
         for _file in relative_list_of_files_in_directory(self.source_dir):
             if _file == '_site.toml':
                 continue
@@ -191,6 +192,7 @@ class Flourish(object):
             try:
                 source = self.get(slug)
                 assert timestamp == source.timestamp
+                _seen[slug] = 1
             except:     # noqa: E722
                 # FIXME check for slug-ishness and otherwise ignore
                 # (this could simplify _site.toml by being just another
@@ -211,6 +213,17 @@ class Flourish(object):
                     self._cache[slug] = JsonSourceFile(self, _file)
                 elif not is_attachment_file:
                     self._assets[_file] = True
+                _seen[slug] = 1
+
+        # remove anything no longer there
+        # FIXME will also need output removing
+        _removed = {}
+        for source in self._cache:
+            if source not in _seen:
+                _removed[source] = 1
+        for source in _removed:
+            del self._cache[source]
+
         self._source_files = self._cache.values()
 
     @property
