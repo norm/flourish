@@ -23,6 +23,7 @@ PATHS = (
 ## Class attributes
 
   * `limit` — This generator should return no more than `limit` sources.
+    Default value is `20`. Set to `None` to return all sources.
   * `order_by` — This generator should sort matching sources in this way.
     Default value is `-published` (most-recent first).
   * `sources_exclude` — This generator should exclude sources that match

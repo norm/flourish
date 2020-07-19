@@ -10,6 +10,7 @@ from flourish.generators.mixins import SourcesMixin
 class AtomGenerator(SourcesMixin, BaseGenerator):
     order_by = ('-published')
     file_extension = '.atom'
+    limit = 20
 
     def get_objects(self, tokens):
         """
