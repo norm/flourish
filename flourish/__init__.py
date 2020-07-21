@@ -10,9 +10,11 @@ import sys
 import warnings
 
 from jinja2 import Environment, FileSystemLoader
+from sectile import Sectile
 import toml
 
 from .lib import relative_list_of_files_in_directory
+from .sectileloader import SectileLoader
 from .source import (
     JsonSourceFile,
     MarkdownSourceFile,
@@ -32,9 +34,11 @@ class Flourish(object):
         templates_dir='templates',
         output_dir='output',
         sass_dir='sass',
+        fragments_dir=None,
     ):
         self.source_dir = source_dir
         self.templates_dir = templates_dir
+        self.fragments_dir = fragments_dir
         self.output_dir = output_dir
         self.sass_dir = sass_dir
         self._assets = {}
@@ -43,11 +47,20 @@ class Flourish(object):
         self._source_path = None
         self._paths = {}
 
-        self.jinja = Environment(
-            loader=FileSystemLoader(self.templates_dir),
-            keep_trailing_newline=True,
-            extensions=['jinja2.ext.with_'],
-        )
+        # using sectile fragments overrides standard filesystem templates
+        if self.fragments_dir:
+            self.using_sectile = True
+            self.jinja = Environment(
+                loader=SectileLoader(self.fragments_dir),
+                keep_trailing_newline=True,
+            )
+        else:
+            self.using_sectile = False
+            self.jinja = Environment(
+                loader=FileSystemLoader(self.templates_dir),
+                keep_trailing_newline=True,
+            )
+
         self.jinja.globals['path'] = self.template_resolve_path
         self.jinja.globals['lookup'] = self.template_get
 

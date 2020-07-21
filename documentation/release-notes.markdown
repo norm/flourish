@@ -17,11 +17,14 @@
     the documentation on [adding paths][ap].
   * Set Atom feeds to include at most 20 items by default.
   * Bug fixes and performance improvements.
+  * Can use [Sectile][sec] for template assembly. Experimental, so not yet
+    supported or documented.
 
 [sass]: https://flourish.readthedocs.io/en/latest/api-flourish-generators-sass/
 [cal]: https://flourish.readthedocs.io/en/latest/api-flourish-generators-calendar/
 [sl]: https://flourish.readthedocs.io/en/latest/api-flourish-sourcelist/
 [ap]: https://flourish.readthedocs.io/en/latest/adding-paths/
+[sec]: https://pypi.org/project/sectile/
 
 
 ## 0.7 — 16 June 2020

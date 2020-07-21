@@ -1,0 +1,10 @@
+[generator]
+year-index      = "calendar"
+month-index     = "calendar"
+day-index       = "calendar"
+all-paginated   = "index"
+homepage        = "index"
+tags-tag-page   = "index"
+tag-post-detail = "source"
+
+[type]

@@ -139,7 +139,7 @@ context data.
 
 Returns the data to be used in the template's context.
 
-### get_template()
+### get_template(context)
 
 Returns the template to use to render the page. Raises a `MissingValue`
 exception if `get_template_name()` returns no value.

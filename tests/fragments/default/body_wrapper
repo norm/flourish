@@ -1,0 +1,20 @@
+<body class='[[ sectile insert body_class ]]'>
+
+<header>
+  <nav>
+    <ul>
+      <li><a href='{{ path("homepage") }}'>Homepage</a></li>
+      <li><a href='{{ path("atom-feed") }}'>Atom Feed</a></li>
+      <li><a href='{{ path("tags-tag-page", tag="css") }}'>Posts tagged CSS</a></li>
+    </ul>
+  </nav>
+</header>
+
+[[ sectile insert body ]]
+[[ sectile insert related ]]
+
+<footer>
+  <p>Copyright {{global.copyright_year_range}} {{site.author}}.</p>
+</footer>
+
+</body>
