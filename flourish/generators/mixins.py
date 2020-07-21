@@ -156,14 +156,33 @@ class GeneratorMixin:
 class TemplateMixin:
     def render_output(self):
         context = self.get_context_data()
-        template = self.get_template()
+        template = self.get_template(context)
         return self.render_template(template, context)
 
-    def get_template(self):
+    def get_template(self, context):
         name = self.get_template_name()
         if name is None:
             raise MissingValue
-        return self.flourish.jinja.get_template(name)
+        if self.flourish.using_sectile:
+            # Sectile templates need to be constructed rather than just found
+            # on the filesystem. Because the entrypoint to the jinja loader
+            # doesn't allow any extra context than the name of the template to
+            # be passed, we pre-construct and cache a template and then use
+            # that cached value as the template's "name".
+            dimensions = {
+                'generator': self.name,
+            }
+            for dimension in self.flourish.jinja.loader.dimensions():
+                if dimension in context:
+                    dimensions[dimension] = context[dimension]
+            digest = self.flourish.jinja.loader.prepare_template(
+                self.current_path,
+                name,
+                **dimensions,
+            )
+            return self.flourish.jinja.get_template(digest)
+        else:
+            return self.flourish.jinja.get_template(name)
 
     def get_template_name(self):
         return self.template_name

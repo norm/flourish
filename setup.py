@@ -23,11 +23,12 @@ setup(
     install_requires=[
         'boto3',
         'Flask',
-        'Jinja2',
+        'Jinja2>=2.9',
         'markdown2',
         'feedgen',
         'toml',
         'libsass',
+        'sectile',
     ],
     python_requires='>=3.6',
 

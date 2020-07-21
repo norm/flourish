@@ -5,7 +5,7 @@ from flourish import Flourish
 from .compare_directories import CompareDirectories
 
 
-class TestFlourishGeneration(CompareDirectories):
+class FullGeneration(CompareDirectories):
     expected_directory = 'tests/output'
     expected_files = [
         '2015/12/25/index.html',
@@ -73,11 +73,33 @@ class TestFlourishGeneration(CompareDirectories):
         'thing-two.html',
     ]
 
+
+class TestFlourishGeneration(FullGeneration):
     def test_generation(self):
         with pytest.warns(None) as warnings:
             flourish = Flourish(
                 source_dir='tests/source',
                 templates_dir='tests/templates',
+                sass_dir='tests/sass',
+                output_dir=self.tempdir,
+            )
+            assert len(warnings) == 2
+
+        with pytest.warns(None) as warnings:
+            # one template has an invalid url() use
+            flourish.generate_site()
+            assert len(warnings) == 1
+            assert 'tags-tag-page' in str(warnings[0].message)
+
+        self.compare_directories()
+
+
+class TestSectileTemplatesGeneration(FullGeneration):
+    def test_generation(self):
+        with pytest.warns(None) as warnings:
+            flourish = Flourish(
+                source_dir='tests/source',
+                fragments_dir='tests/fragments',
                 sass_dir='tests/sass',
                 output_dir=self.tempdir,
             )
