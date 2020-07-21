@@ -2,13 +2,113 @@ import argparse
 from hashlib import md5
 import mimetypes
 import os
+from textwrap import dedent
 
 import boto3
-from flask import Flask, send_from_directory
+from flask import Flask, request, send_from_directory
+from jinja2 import Template
 
 from . import Flourish, __version__
 from .examples import example_files
 from .lib import relative_list_of_files_in_directory
+
+
+recipe_html = Template(dedent("""\
+    <html>
+    <head>
+      <style>
+        #dimensions dt {
+          float: left;
+          margin-right: 20px;
+          min-width: 100px;
+        }
+        #dimensions dd {
+          font-weight: bold;
+        }
+        #template ol {
+          margin: 0;
+          padding: 0;
+        }
+        #template ol ol li {
+          padding: 0 0 0 17px;
+          border-left: 1px solid #999;
+          margin-left: 3px;
+          margin-bottom: 15px;
+        }
+        #template li {
+          list-style: none;
+          margin-top: 10px;
+        }
+        #template li i {
+          color: #66a;
+          font-size: 0.8em;
+        }
+        #template li.missing {
+          margin-bottom: 10px;
+        }
+        #template li.missing > i {
+          font-weight: bold;
+          color: #f99;
+        }
+        #template li pre {
+          margin: 0;
+        }
+      </style>
+    </head>
+    <body>
+      <h1>Recipe for {{path|e}}</h1>
+      <div id='template'>
+        {% if sectile_dimensions %}
+          <h2>Dimensions</h2>
+          <dl id='dimensions'>
+          {% for dim in sectile_dimensions %}
+            <dt>{{dim}}</dt>
+            <dd>{{sectile_dimensions[dim]}}</dd>
+          {% endfor %}
+          </dl>
+        {% endif %}
+        <h2>Template: <i>{{template_name|e}}</i></h2>
+        {% if sectile_fragments %}
+          {% set depth = namespace(previous=-1) %}
+          {% for fragment in sectile_fragments %}
+            {% if depth.previous < fragment.depth %}
+              <ol>
+            {% elif depth.previous > fragment.depth %}
+              {% for i in range(fragment.depth, depth.previous) %}
+                </li></ol>
+              {% endfor %}
+            {% else %}
+              </li>
+            {% endif %}
+            <li class='{% if not fragment.found %}missing{% endif %}'>
+            {% if not fragment.found %}
+              <i>{{fragment.file}}: None</i>
+            {% else %}
+              <i>{{fragment.found}}</i>
+              <pre>{{fragment.fragment|e}}</pre>
+            {% endif %}
+
+            {% if depth.previous < fragment.depth %}
+
+            {% elif depth.previous > fragment.depth %}
+            {% else %}
+              </li>
+            {% endif %}
+            {% set depth.previous = fragment.depth %}
+          {% endfor %}
+          </ol>
+          {% for i in range(depth.previous) %}
+            </li></ol>
+          {% endfor %}
+          <p>Result:</p>
+        {% endif %}
+        <pre>{{template|e}}</pre>
+      </div>
+      <h2>Context:</h2>
+      <div id='context'>{{context|e}}</div>
+    </body>
+    </html>
+    """))
 
 
 def main():
@@ -168,20 +268,23 @@ def preview_server(args):
     def send_file(path=''):
         generate = '/%s' % path
 
-        # fix URLs for .html
-        filename = os.path.basename(path)
-        if filename == '':
-            path = '%sindex.html' % path
-        _, ext = os.path.splitext(path)
-        if ext == '':
-            path += '.html'
+        if 'showrecipe' in request.args:
+            return recipe_html.render(flourish.path_recipe(generate))
+        else:
+            # fix URLs for .html
+            filename = os.path.basename(path)
+            if filename == '':
+                path = '%sindex.html' % path
+            _, ext = os.path.splitext(path)
+            if ext == '':
+                path += '.html'
 
-        # regenerate if requested
-        if args.generate:
-            flourish._rescan_sources()
-            flourish.generate_path(generate, report=True)
+            # regenerate if requested
+            if args.generate:
+                flourish._rescan_sources()
+                flourish.generate_path(generate, report=True)
 
-        return send_from_directory(output_dir, path)
+            return send_from_directory(output_dir, path)
 
     @app.after_request
     def add_header(response):
