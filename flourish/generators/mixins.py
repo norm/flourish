@@ -1,4 +1,7 @@
+import os
 import re
+
+from sectile import Sectile
 
 
 class MissingValue(Exception):
@@ -151,6 +154,38 @@ class GeneratorMixin:
         self.get_current_path(tokens)
         self.get_objects(tokens)
         self.output_to_file()
+
+    def get_recipe(self, tokens):
+        for tokenset in tokens:
+            self.tokens = tokenset
+            self.get_current_path(tokenset)
+            self.get_objects(tokenset)
+            context = self.get_context_data()
+            name = self.get_template_name()
+            recipe = {
+                'path': self.current_path,
+                'context': context,
+                'template_name': name,
+            }
+            if self.flourish.using_sectile:
+                sectile = Sectile(fragments=self.flourish.fragments_dir)
+                dimensions = {
+                    'generator': self.name,
+                }
+                for dimension in self.flourish.jinja.loader.dimensions():
+                    if dimension in context:
+                        dimensions[dimension] = context[dimension]
+                recipe['template'], recipe['sectile_fragments'] = sectile.generate(
+                    self.current_path,
+                    name,
+                    **dimensions
+                )
+                recipe['sectile_dimensions'] = dimensions
+            else:
+                filename = os.path.join(self.flourish.templates_dir, name)
+                with open(filename, 'r') as handle:
+                    recipe['template'] = handle.read()
+            return recipe
 
 
 class TemplateMixin:

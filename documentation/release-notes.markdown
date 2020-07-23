@@ -16,9 +16,12 @@
     now only uses `PATHS`, and how generators are declared has changed. See
     the documentation on [adding paths][ap].
   * Set Atom feeds to include at most 20 items by default.
-  * Bug fixes and performance improvements.
   * Can use [Sectile][sec] for template assembly. Experimental, so not yet
     supported or documented.
+  * When previewing the site, you can add `?showrecipe` to the URL to see
+    a "recipe" page detailing the template(s) and context used to generate
+    the page.
+  * Bug fixes and performance improvements.
 
 [sass]: https://flourish.readthedocs.io/en/latest/api-flourish-generators-sass/
 [cal]: https://flourish.readthedocs.io/en/latest/api-flourish-generators-calendar/
