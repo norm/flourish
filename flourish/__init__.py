@@ -10,7 +10,6 @@ import sys
 import warnings
 
 from jinja2 import Environment, FileSystemLoader
-from sectile import Sectile
 import toml
 
 from .lib import relative_list_of_files_in_directory

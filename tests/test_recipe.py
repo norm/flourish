@@ -123,7 +123,7 @@ class TestRecipe:
 
             </body>
             </html>
-        """)
+        """)  # noqa: E501
         assert recipe['template'] == expected_template
 
         context_contains = {

@@ -62,9 +62,6 @@ TEMPLATE_FILTERS = {
 }
 
 
-
-
-
 PATHS = (
     OnePageIndex(
         # something with a token comes first, as this ensures
