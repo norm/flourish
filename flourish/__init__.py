@@ -35,6 +35,7 @@ class Flourish(object):
         output_dir='output',
         sass_dir='sass',
         fragments_dir=None,
+        skip_scan=False,
     ):
         self.source_dir = source_dir
         self.templates_dir = templates_dir
@@ -69,7 +70,8 @@ class Flourish(object):
                 'source_dir "%s" must exist' % self.source_dir)
 
         self.site_config = self._read_site_config()
-        self._rescan_sources()
+        if not skip_scan:
+            self._rescan_sources()
 
         generate = SourceFileLoader(
                 'generate', '%s/generate.py' % self.source_dir

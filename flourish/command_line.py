@@ -319,7 +319,13 @@ def upload(args):
 
     _bucket_name = args.bucket
     if _bucket_name is None:
-        flourish = Flourish(args.source, args.templates, args.output)
+        flourish = Flourish(
+            source_dir=args.source,
+            templates_dir=args.templates,
+            fragments_dir=args.fragments,
+            output_dir=args.output,
+            skip_scan=True,
+        )
         _bucket_name = flourish.site_config['bucket']
 
     # FIXME remove nonexistent files
