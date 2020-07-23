@@ -38,6 +38,14 @@ def main():
         help='Directory containing templates (default: %(default)s)',
     )
     parser.add_argument(
+        '--fragments',
+        default='fragments',
+        help=(
+            'Directory containing Sectile template fragments'
+            ' (experimental feature, no default)'
+        ),
+    )
+    parser.add_argument(
         '--output',
         default='output',
         help='Directory to output to (default: %(default)s)',
@@ -119,7 +127,11 @@ def main():
         if args.base is not None:
             args.source = os.path.join(args.base, args.source)
             args.templates = os.path.join(args.base, args.templates)
+            args.fragments = os.path.join(args.base, args.fragments)
             args.output = os.path.join(args.base, args.output)
+        # find default 'fragments' directory but without forcing it
+        if not os.path.isdir(args.fragments):
+            args.fragments = None
         action = ACTIONS[args.action]
         action(args)
 
@@ -128,6 +140,7 @@ def generate(args):
     flourish = Flourish(
         source_dir=args.source,
         templates_dir=args.templates,
+        fragments_dir=args.fragments,
         output_dir=args.output,
     )
     if args.path:
@@ -142,6 +155,7 @@ def preview_server(args):
     flourish = Flourish(
         source_dir=args.source,
         templates_dir=args.templates,
+        fragments_dir=args.fragments,
         output_dir=args.output,
     )
     app = Flask(__name__)
