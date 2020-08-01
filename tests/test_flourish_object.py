@@ -2,7 +2,7 @@ from datetime import date, datetime, timezone
 
 import pytest
 
-from flourish import Flourish, SourceList, TomlSourceFile
+from flourish import Flourish, JsonSourceFile, SourceList, TomlSourceFile
 
 
 class TestFlourishNoArgs:
@@ -59,12 +59,14 @@ class TestFlourish:
             self.flourish.get('invalid-name.things')
 
     def test_get_by_index(self):
-        source = self.flourish.sources.all()[0]
-        assert type(source) == TomlSourceFile
+        source = self.flourish.sources.all()[3]
+        assert type(source) == JsonSourceFile
+        assert source.slug == 'thing-one'
 
-    def test_get_by_negative_index_raises(self):
-        with pytest.raises(ValueError):
-            self.flourish.sources.all()[-1]
+    def test_get_by_negative_index(self):
+        source = self.flourish.sources.all()[-6]
+        assert type(source) == JsonSourceFile
+        assert source.slug == 'thing-one'
 
     def test_get_by_bad_index_raises(self):
         with pytest.raises(IndexError):
@@ -79,9 +81,42 @@ class TestFlourish:
                 'markdown-page',
             ] == [source.slug for source in sources]
 
-    def test_get_sources_by_negative_slice_raises(self):
-        with pytest.raises(ValueError):
-            self.flourish.sources.all()[-2:2]
+    def test_get_filtered_sources_by_slice(self):
+        sources = self.flourish.sources.filter(series__set='')
+        assert type(sources) == SourceList
+        assert len(sources) == 4
+        assert [
+                'series/index',
+                'series/part-one',
+                'series/part-three',
+                'series/part-two',
+            ] == [source.slug for source in sources]
+
+        assert [
+                'series/part-three',
+                'series/part-two',
+            ] == [source.slug for source in sources[2:]]
+
+    def test_get_sources_by_negative_values(self):
+        sources = self.flourish.sources.all()[-3:-1]
+        assert type(sources) == SourceList
+        assert len(sources) == 2
+        assert [
+                'series/part-one',
+                'series/part-three',
+            ] == [source.slug for source in sources]
+
+    def test_get_sources_by_negative_stop(self):
+        sources = self.flourish.sources.all()[:-4]
+        assert type(sources) == SourceList
+        assert len(sources) == 5
+        assert [
+                'basic-page',
+                'markdown-page',
+                'nothing',
+                'thing-one',
+                'thing-two',
+            ] == [source.slug for source in sources]
 
     def test_get_sources_with_ordering(self):
         sources = self.flourish.sources.filter(published__set='')
@@ -130,6 +165,29 @@ class TestFlourish:
                 'thing-two',
                 'thing-one',
             ] == [source.slug for source in titled]
+
+    def test_get_sources_with_ordering_and_slice(self):
+        sources = self.flourish.sources.filter(published__set='')
+        # just those with a published key
+        published = sources.order_by('published')
+        assert type(published) == SourceList
+        assert len(published) == 8
+        assert [
+                'basic-page',
+                'markdown-page',
+                'series/index',
+                'series/part-one',
+                'series/part-two',
+                'thing-one',
+                'thing-two',
+                'series/part-three',
+            ] == [source.slug for source in published]
+
+        assert [
+                'basic-page',
+                'markdown-page',
+                'series/index',
+        ] == [source.slug for source in published[0:3]]
 
     def test_order_by_key_not_in_all_sources_issues_warning(self):
         with pytest.warns(None) as warnings:

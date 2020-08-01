@@ -96,8 +96,6 @@ class SourceList:
                         add = False
             if add:
                 sources.append(source)
-        if self.slice is not None:
-            sources = sources.__getitem__(self.slice)
         return sources
 
     @property
@@ -148,6 +146,8 @@ class SourceList:
                     'not all sources have that attribute' % order
                 )
 
+        if self.slice is not None:
+            sources = sources.__getitem__(self.slice)
         return iter(sources)
 
     def __len__(self):
@@ -158,11 +158,15 @@ class SourceList:
 
     def __getitem__(self, item):
         if isinstance(item, slice):
-            if (item.start < 0) or (item.stop < 0):
-                raise ValueError('Cannot use negative indexes with Flourish')
-            return self.clone(slice=item)
+            start = item.start
+            stop = item.stop
+            if start and start < 0:
+                start = self.count() + start
+            if stop and stop < 0:
+                stop = self.count() + stop
+            return self.clone(slice=slice(start, stop))
         if item < 0:
-            raise ValueError('Cannot use negative indexes with Flourish')
+            item = self.count() + item
         iterator = iter(self)
         try:
             for i in range(0, item+1):
