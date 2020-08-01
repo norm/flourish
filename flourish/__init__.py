@@ -152,8 +152,6 @@ class Flourish(object):
         os.makedirs(self.output_dir)
         self.generate_all_paths(report=report)
         self.copy_assets(report=report)
-        if report:
-            print('')
 
     def generate_all_paths(self, report=False):
         for path in self._paths:
@@ -190,7 +188,7 @@ class Flourish(object):
                 os.makedirs(_directory)
             copyfile(_source, _destination)
             if report:
-                print('->', _destination)
+                print('++', _destination)
 
     def _read_site_config(self):
         _config_file = '%s/_site.toml' % self.source_dir
