@@ -201,7 +201,7 @@ class TestFlourishSourcesPath:
 
             _flourish.add_path(
                 SourceGenerator(
-                    path = '/#type/#slug',
+                    path = '/#page_type/#slug',
                     name = 'source',
                 ),
             )

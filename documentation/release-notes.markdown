@@ -21,6 +21,8 @@
   * When previewing the site, you can add `?showrecipe` to the URL to see
     a "recipe" page detailing the template(s) and context used to generate
     the page.
+  * Change the special behaviour applied to the key `type` to apply to the
+    key `page_type` to be more explicit as to its meaning.
   * Bug fixes and performance improvements.
 
 [sass]: https://flourish.readthedocs.io/en/latest/api-flourish-generators-sass/

@@ -4,6 +4,6 @@
     "published": "2016-06-04T12:30:00Z",
     "tag": ["basically", "one", "first"],
     "title": "Thing—the First",
-    "type": "post",
+    "page_type": "post",
     "updated": "2016-06-04T14:00:00Z"
 }

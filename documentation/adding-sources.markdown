@@ -55,7 +55,7 @@ I am a blog post, written in Markdown.
 published = 2016-07-01T12:00:00Z
 tag = ['example', 'toml']
 title = 'A TOML example'
-type = 'post'
+page_type = 'post'
 ```
 
 For more information on the rules of correctly formatting TOML sources, see

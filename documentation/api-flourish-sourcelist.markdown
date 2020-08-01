@@ -25,7 +25,7 @@ This list can be sliced, but it does not currently support negative indicies.
 
 ```python
 num_sources = fl.sources.count
-num_posts = fl.sources.filter(type='post').count
+num_posts = fl.sources.filter(page_type='post').count
 ```
 
 The number of sources that match all
@@ -44,7 +44,7 @@ To get one specific source by its [slug](/adding-sources/#the-slug).
 ```python
 from datetime import datetime
 
-posts = fl.sources.filter(type='post')
+posts = fl.sources.filter(page_type='post')
 older = fl.sources.filter(published__lte=datetime(2016, 1, 1))
 future = fl.sources.filter(published__gt=datetime.now())
 ```
@@ -137,7 +137,7 @@ possible values.
 ### Excluding sources
 
 ```python
-not_posts = fl.sources.exclude(type='post')
+not_posts = fl.sources.exclude(page_type='post')
 current = fl.sources.exclude(published__gt=datetime.now())
 ```
 
@@ -149,7 +149,7 @@ make illustrating the intention of some filters clearer.
 ## Ordering sources
 
 ```python
-posts = fl.sources.filter(type='post')
+posts = fl.sources.filter(page_type='post')
 posts_oldest_first = posts.order_by('published')
 posts_newest_first = posts.order_by('-published')
 ```
@@ -171,10 +171,10 @@ ordering takes place.
 aged = datetime(2010, 1, 1)
 
 # these are equivalent:
-old_posts1 = fl.sources.filter(type='post').filter(published__lt=aged)
-old_posts2 = fl.sources.filter(published__lt=aged).filter(type='post')
-old_posts3 = fl.sources.filter(type='post', published__lt=aged)
-old_posts4 = fl.sources.exclude(published_gte=aged).filter(type='post')
+old_posts1 = fl.sources.filter(page_type='post').filter(published__lt=aged)
+old_posts2 = fl.sources.filter(published__lt=aged).filter(page_type='post')
+old_posts3 = fl.sources.filter(page_type='post', published__lt=aged)
+old_posts4 = fl.sources.exclude(published_gte=aged).filter(page_type='post')
 ```
 
 As you can see above, it is possible to chain the results of queries against

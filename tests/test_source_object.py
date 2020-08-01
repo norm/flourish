@@ -45,7 +45,7 @@ class TestFlourishPage:
                 'series': 'series-in-three-parts',
                 'tag': ['series', 'one'],
                 'title': 'Part One',
-                'type': 'post',
+                'page_type': 'post',
             } == page._config
 
         page = self.flourish.get('thing-two')
@@ -60,7 +60,7 @@ class TestFlourishPage:
                 'summary': '<p>Thing Two summary.</p>\n',
                 'tag': ['basically', 'second', 'two'],
                 'title': 'Second Thing',
-                'type': 'post',
+                'page_type': 'post',
             } == page._config
 
     def test_toml_with_inherent_markdown_overridden_by_adherent(self):
@@ -77,7 +77,7 @@ class TestFlourishPage:
                 'series': 'series-in-three-parts',
                 'tag': ['three', 'series'],
                 'title': 'Part Three',
-                'type': 'post',
+                'page_type': 'post',
             } == page._config
         # a warning is issued for this source during the initialisation of
         # Flourish, which is captured in setup_class
@@ -101,7 +101,7 @@ class TestFlourishPage:
                 'series': 'series-in-three-parts',
                 'tag': ['series', 'two'],
                 'title': 'Part Two',
-                'type': 'post',
+                'page_type': 'post',
             } == page._config
         # a warning is issued for this source during the initialisation of
         # Flourish, which is captured in setup_class
@@ -136,7 +136,7 @@ class TestFlourishPage:
                     2016, 6, 4, 12, 30, 0, tzinfo=timezone.utc),
                 'tag': ['basically', 'one', 'first'],
                 'title': u'Thing—the First',
-                'type': 'post',
+                'page_type': 'post',
                 'updated': datetime(
                     2016, 6, 4, 14, 0, 0, tzinfo=timezone.utc),
             } == page._config

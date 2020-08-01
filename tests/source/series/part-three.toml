@@ -9,4 +9,4 @@ published = 2016-06-06T10:00:00Z
 series = 'series-in-three-parts'
 tag = ['three', 'series']
 title = 'Part Three'
-type = 'post'
+page_type = 'post'

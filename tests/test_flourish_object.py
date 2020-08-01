@@ -563,7 +563,7 @@ class TestFlourish:
             ] == [source.slug for source in sources]
 
     def test_filter_set(self):
-        sources = self.flourish.sources.filter(type__set='')
+        sources = self.flourish.sources.filter(page_type__set='')
         assert type(sources) == SourceList
         assert len(sources) == 6
         assert [
@@ -576,7 +576,7 @@ class TestFlourish:
             ] == [source.slug for source in sources]
 
     def test_exclude_set(self):
-        sources = self.flourish.sources.exclude(type__set='')
+        sources = self.flourish.sources.exclude(page_type__set='')
         assert type(sources) == SourceList
         assert len(sources) == 3
         assert [
@@ -586,7 +586,7 @@ class TestFlourish:
             ] == [source.slug for source in sources]
 
     def test_filter_unset(self):
-        sources = self.flourish.sources.filter(type__unset='')
+        sources = self.flourish.sources.filter(page_type__unset='')
         assert type(sources) == SourceList
         assert len(sources) == 3
         assert [
@@ -596,7 +596,7 @@ class TestFlourish:
             ] == [source.slug for source in sources]
 
     def test_exclude_unset(self):
-        sources = self.flourish.sources.exclude(type__unset='')
+        sources = self.flourish.sources.exclude(page_type__unset='')
         assert type(sources) == SourceList
         assert len(sources) == 6
         assert [
@@ -722,14 +722,14 @@ class TestFlourish:
         # only two sources are not of the type 'post'; one was published
         # in 2015, one in 2016
         on = datetime(2016, 1, 1, 0, 0, 0, tzinfo=timezone.utc)
-        sources = self.flourish.sources.exclude(type='post', published__gte=on)
+        sources = self.flourish.sources.exclude(page_type='post', published__gte=on)
         assert type(sources) == SourceList
         assert len(sources) == 1
         assert [
                 'basic-page',
             ] == [source.slug for source in sources]
 
-        sources = self.flourish.sources.exclude(type='post', published__lte=on)
+        sources = self.flourish.sources.exclude(page_type='post', published__lte=on)
         assert type(sources) == SourceList
         assert len(sources) == 2
         assert [
@@ -738,7 +738,7 @@ class TestFlourish:
             ] == [source.slug for source in sources]
 
         # can "stack" .filter() as well as use multiple arguments to it
-        two_sources = self.flourish.sources.exclude(type='post')
+        two_sources = self.flourish.sources.exclude(page_type='post')
         sources = two_sources.exclude(published__gte=on)
         assert type(sources) == SourceList
         assert len(sources) == 1
@@ -756,7 +756,7 @@ class TestFlourish:
 
     def test_filter_then_exclude(self):
         on = datetime(2016, 6, 4, 12, 00, 00, tzinfo=timezone.utc)
-        posts = self.flourish.sources.filter(type='post')
+        posts = self.flourish.sources.filter(page_type='post')
         sources = posts.exclude(published__gte=on)
         assert type(sources) == SourceList
         assert len(sources) == 1
@@ -766,7 +766,7 @@ class TestFlourish:
 
         # other way around is the same
         sources = self.flourish.sources.exclude(published__gte=on)
-        posts = sources.filter(type='post')
+        posts = sources.filter(page_type='post')
         assert type(posts) == SourceList
         assert len(posts) == 1
         assert [
@@ -783,7 +783,7 @@ class TestFlourish:
                 'thing-two',
             ] == [source.slug for source in filtered]
 
-        filtered_away = self.flourish.sources.exclude(type='post')
+        filtered_away = self.flourish.sources.exclude(page_type='post')
         assert type(filtered_away) == SourceList
         assert len(filtered_away) == 4
         assert [
@@ -899,20 +899,20 @@ class TestFlourish:
 
     def test_order_after_filter_or_exclude_does_not_warn_on_absent_keys(self):
         with pytest.warns(None) as warnings:
-            sources = self.flourish.sources.order_by('type')
+            sources = self.flourish.sources.order_by('page_type')
             assert type(sources) == SourceList
             assert len(sources) == 9
             assert len(warnings) == 1
             assert (
                 str(warnings[0].message) ==
-                'sorting sources by "type" failed: '
+                'sorting sources by "page_type" failed: '
                 'not all sources have that attribute'
             )
 
         with pytest.warns(None) as warnings:
-            sources = self.flourish.sources.filter(type='post')
+            sources = self.flourish.sources.filter(page_type='post')
             assert len(sources) == 5
-            sources = sources.order_by('type', 'published')
+            sources = sources.order_by('page_type', 'published')
             assert type(sources) == SourceList
             assert len(sources) == 5
             assert len(warnings) == 0
@@ -928,7 +928,7 @@ class TestFlourish:
             on = datetime(2016, 6, 4, 12, 15, 0, tzinfo=timezone.utc)
             sources = self.flourish.sources.exclude(published__lt=on)
             assert len(sources) == 3
-            sources = sources.order_by('type', '-published')
+            sources = sources.order_by('page_type', '-published')
             assert type(sources) == SourceList
             assert len(sources) == 3
             assert len(warnings) == 0

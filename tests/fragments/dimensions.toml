@@ -7,4 +7,4 @@ homepage        = "index"
 tags-tag-page   = "index"
 tag-post-detail = "source"
 
-[type]
+[page_type]

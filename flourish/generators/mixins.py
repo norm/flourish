@@ -236,6 +236,6 @@ class PageTemplateMixin:
         if self.source_objects:
             if 'template' in self.source_objects[0]:
                 return self.source_objects[0]['template']
-            if 'type' in self.source_objects[0]:
-                return '%s.html' % self.source_objects[0]['type']
+            if 'page_type' in self.source_objects[0]:
+                return '%s.html' % self.source_objects[0]['page_type']
         return super().get_template_name()
