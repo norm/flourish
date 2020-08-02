@@ -85,7 +85,10 @@ class PathMixin:
         if len(args) == 0:
             valid_filters.append({})
         else:
-            filters = self.flourish.get_valid_filters_for_tokens(args)
+            filters = self.flourish.get_valid_filters_for_tokens(
+                args,
+                self.get_filtered_sources(),
+            )
             for _filter in filters:
                 valid_filters.append(_filter)
         return valid_filters
