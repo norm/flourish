@@ -205,6 +205,11 @@ def main():
         help='upload the generated site to an AWS S3 bucket',
     )
     parser_upload.add_argument(
+        '--dry-run',
+        action='store_true',
+        help='only list what would be uploaded',
+    )
+    parser_upload.add_argument(
         'bucket',
         nargs='?',
         help='bucket to upload to (default: bucket entry in _site.toml)',
@@ -356,14 +361,15 @@ def upload(args):
             pass
 
         if _upload:
-            print('->', _s3path)
-            _object_args = {
-                'Key': _s3path,
-                'ACL': 'public-read',
-                'Body': open('%s/%s' % (args.output, _path), 'rb'),
-                'ContentType': _type,
-            }
-            _bucket.put_object(**_object_args)
+            print('>>', _s3path)
+            if not args.dry_run:
+                _object_args = {
+                    'Key': _s3path,
+                    'ACL': 'public-read',
+                    'Body': open('%s/%s' % (args.output, _path), 'rb'),
+                    'ContentType': _type,
+                }
+                _bucket.put_object(**_object_args)
 
 
 ACTIONS = {
