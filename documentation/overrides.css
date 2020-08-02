@@ -10,7 +10,7 @@ p code {
 }
 
 /* trim some margins */
-p + ul {
+.rst-content p + ul {
     margin-top: -24px;
 }
 
