@@ -2,7 +2,7 @@
 
 # Release notes for Flourish
 
-## 0.8 - UNRELEASED
+## 0.8 - 2 August 2020
 
   * Always apply the MIME type of a file when uploading to S3.
   * Speed up previewing a site with dynamic generation by only re-reading
@@ -23,6 +23,8 @@
     the page.
   * Change the special behaviour applied to the key `type` to apply to the
     key `page_type` to be more explicit as to its meaning.
+  * Add `--dry-run` option to `flourish upload` to list what would be
+    uploaded without actually doing so.
   * Bug fixes and performance improvements.
 
 [sass]: https://flourish.readthedocs.io/en/latest/api-flourish-generators-sass/
