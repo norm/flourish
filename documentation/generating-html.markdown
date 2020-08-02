@@ -73,8 +73,8 @@ would create the following HTML:
 If you need to use a different template from `page.html` to render a given
 source, you can set one of two keys:
 
-  * `type` — the template becomes the value of this key with `.html` added;
-    for example a source with `type = 'photo'` in its configuration will try
+  * `page_type` — the template becomes the value of this key with `.html` added;
+    for example a source with `page_type = 'photo'` in its configuration will try
     to use the template `photo.html`.
   * `template` — the template becomes the value of this key with no
     modification; for example `template = 'pages/awesome-page.html'`
