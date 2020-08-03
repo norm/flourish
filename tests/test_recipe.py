@@ -1,4 +1,4 @@
-from textwrap import dedent
+from textwrap import dedent, indent
 
 import pytest
 
@@ -55,7 +55,6 @@ class TestRecipe:
                      'title': 'Flourish Blog'},
             'tokens': {},
         }
-        print(recipe)
         assert recipe['context'].items() >= context_contains.items()
         assert type(recipe['context']['sources']) == SourceList
         assert recipe['context']['sources'].count() == 8
@@ -139,14 +138,64 @@ class TestRecipe:
         assert type(recipe['context']['pages']) == SourceList
         assert recipe['context']['pages'].count() == 8
 
+        with open('tests/fragments/index/all/body', 'r') as handle:
+            body = handle.read()
+        with open('tests/fragments/default/body_wrapper', 'r') as bw_handle:
+            body_wrapper = bw_handle.read()
+
         expected_fragments = [
-            {'depth': 0, 'index.html': 'default/index.html'},
-            {'depth': 1, 'base.html': 'default/base.html'},
-            {'depth': 2, 'head_wrapper': 'default/head_wrapper'},
-            {'depth': 2, 'body_wrapper': 'default/body_wrapper'},
-            {'depth': 3, 'body_class': None},
-            {'depth': 3, 'body': 'index/all/body'},
-            {'depth': 3, 'related': None},
+            {
+                'depth': 0,
+                'file': 'index.html',
+                'found': 'default/index.html',
+                'fragment': '[[ sectile insert base.html ]]\n',
+            },
+            {
+                'depth': 1,
+                'file': 'base.html',
+                'found': 'default/base.html',
+                'fragment': (
+                    "<html lang='en-GB'>\n"
+                    '[[ sectile insert head_wrapper ]]\n'
+                    '[[ sectile insert body_wrapper ]]\n'
+                    '</html>\n'
+                ),
+            },
+            {
+                'depth': 2,
+                'file': 'head_wrapper',
+                'found': 'default/head_wrapper',
+                'fragment': dedent("""\
+                    <head>
+                      <meta charset='UTF-8'>
+                      <title>{{title}}</title>
+                    </head>
+                    """),
+            },
+            {
+                'depth': 2,
+                'file': 'body_wrapper',
+                'found': 'default/body_wrapper',
+                'fragment': body_wrapper,
+            },
+            {
+                'depth': 3,
+                'file': 'body_class',
+                'found': None,
+                'fragment': '',
+            },
+            {
+                'depth': 3,
+                'file': 'body',
+                'found': 'index/all/body',
+                'fragment': body,
+            },
+            {
+                'depth': 3,
+                'file': 'related',
+                'found': None,
+                'fragment': '',
+            },
         ]
         assert recipe['sectile_fragments'] == expected_fragments
         assert recipe['sectile_dimensions'] == {'generator': 'homepage'}

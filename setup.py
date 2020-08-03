@@ -28,7 +28,7 @@ setup(
         'feedgen',
         'toml',
         'libsass',
-        'sectile',
+        'sectile>=0.3',
     ],
     python_requires='>=3.6',
 
