@@ -2,24 +2,17 @@
 
 # Release notes for Flourish
 
-## NEW_VERSION - UNRELEASED
-
-High level description, if applicable.
+## 0.9 - 18 September 2020
 
 #### New
 
   * Add a [CSV generator][csv].
 
-#### Other changes
+#### Changes
 
   * Update the [Atom generator][atom] to allow some values to be
     overridden from the default. Mostly to allow the body of the Atom
     entry to include more content than just the source's body.
-
-#### Bug fixes
-
-#### Dependency updates
-
 
 [csv]: https://flourish.readthedocs.io/en/latest/api-flourish-generators-csv/
 [atom]: https://flourish.readthedocs.io/en/latest/api-flourish-generators-atom/
