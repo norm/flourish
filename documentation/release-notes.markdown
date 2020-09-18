@@ -2,6 +2,13 @@
 
 # Release notes for Flourish
 
+## 0.9.1 - 18 September 2020
+
+#### Bug fixes
+
+  * Remove stray `print` statement.
+
+
 ## 0.9 - 18 September 2020
 
 #### New

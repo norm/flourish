@@ -26,7 +26,6 @@ class CSVGenerator(SourcesMixin, BaseGenerator):
 
     def get_row(self, object):
         row = {}
-        print(object, object.title)
         for field in self.get_fields():
             row.update({field: self.get_field_value(object, field)})
         return row
