@@ -27,6 +27,7 @@ class FullGeneration(CompareDirectories):
         'error.html',
         'images/an-image.jpg',
         'index.atom',
+        'index.csv',
         'index.html',
         'logo.png',
         'markdown-page.html',
