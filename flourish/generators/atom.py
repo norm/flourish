@@ -49,11 +49,14 @@ class AtomGenerator(SourcesMixin, BaseGenerator):
 
         for _object in self.source_objects:
             entry = feed.add_entry(order='append')
-            entry.title(_object.title)
-            entry.id(_object.absolute_url)
+            entry.title(self.get_entry_title(_object))
+            entry.id(self.get_entry_id(_object))
             entry.link(href=_object.absolute_url, rel='alternate')
             entry.published(_object.published)
-            entry.content(content=_object.body, type='html')
+            entry.content(
+                content=self.get_entry_content(_object),
+                type='html'
+            )
 
             if 'author' in _object:
                 entry.author({'name': _object.author})
@@ -70,6 +73,15 @@ class AtomGenerator(SourcesMixin, BaseGenerator):
         feed.updated(last_updated)
 
         return feed.atom_str(pretty=True)
+
+    def get_entry_content(self, object):
+        return object.body
+
+    def get_entry_title(self, object):
+        return object.title
+
+    def get_entry_id(self, object):
+        return object.absolute_url
 
     # FIXME refactor
     def output_to_file(self):
