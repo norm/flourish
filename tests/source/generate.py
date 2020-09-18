@@ -48,6 +48,14 @@ class ArchivePage(SourceGenerator):
         return _context
 
 
+class AttributedAtom(AtomGenerator):
+    def get_entry_content(self, object):
+        return '%s<hr>Originally published on %s' % (
+            object.body,
+            'some website'
+        )
+
+
 def global_context(self):
     return {
         'copyright_year_range': publication_range(self),
@@ -101,7 +109,7 @@ PATHS = (
             'title': 'Not Found',
         },
     ),
-    AtomGenerator(
+    AttributedAtom(
         path = '/index.atom',
         name = 'atom-feed',
     ),

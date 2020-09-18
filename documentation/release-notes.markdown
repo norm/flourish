@@ -2,6 +2,26 @@
 
 # Release notes for Flourish
 
+## NEW_VERSION - UNRELEASED
+
+High level description, if applicable.
+
+#### New
+
+#### Other changes
+
+  * Update the [Atom generator][atom] to allow some values to be
+    overridden from the default. Mostly to allow the body of the Atom
+    entry to include more content than just the source's body.
+
+#### Bug fixes
+
+#### Dependency updates
+
+
+[atom]: https://flourish.readthedocs.io/en/latest/api-flourish-generators-atom/
+
+
 ## 0.8 - 2 August 2020
 
   * Always apply the MIME type of a file when uploading to S3.

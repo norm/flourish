@@ -46,9 +46,22 @@ not be included in the Atom feed.
 
 Bypasses `get_context_data`, `get_template`, `get_template_name` and 
 `render_template`, instead constructing the Atom feed programmatically
-using the `AtomFeed` class provided by [pyatom].
+using the `AtomFeed` class provided by [pyatom], calling `get_entry_content`,
+`get_entry_title`, and `get_entry_id`.
 
 [pyatom]: https://pypi.python.org/pypi/pyatom
+
+### get_entry_content(object)
+
+Return the Atom entry's content. By default just the source object's body.
+
+### get_entry_title(object)
+
+Return the Atom entry's title. By default the source object's title.
+
+### get_entry_id(object)
+
+Return the Atom entry's ID. By default the source object's URL.
 
 ### get_context_data()
 
