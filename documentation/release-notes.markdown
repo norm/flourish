@@ -8,6 +8,8 @@ High level description, if applicable.
 
 #### New
 
+  * Add a [CSV generator][csv].
+
 #### Other changes
 
   * Update the [Atom generator][atom] to allow some values to be
@@ -19,6 +21,7 @@ High level description, if applicable.
 #### Dependency updates
 
 
+[csv]: https://flourish.readthedocs.io/en/latest/api-flourish-generators-csv/
 [atom]: https://flourish.readthedocs.io/en/latest/api-flourish-generators-atom/
 
 

@@ -4,6 +4,7 @@ from flourish.generators.calendar import (
     CalendarMonthGenerator,
     CalendarDayGenerator,
 )
+from flourish.generators.csv import CSVGenerator
 from flourish.generators.base import (
     IndexGenerator,
     PaginatedIndexGenerator,
@@ -54,6 +55,10 @@ class AttributedAtom(AtomGenerator):
             object.body,
             'some website'
         )
+
+
+class TagsCSV(CSVGenerator):
+    fields = ['title', 'published', 'tag']
 
 
 def global_context(self):
@@ -116,6 +121,10 @@ PATHS = (
     AtomGenerator(
         path = '/tags/#tag/index.atom',
         name = 'tags-atom-feed',
+    ),
+    TagsCSV(
+        path = '/index.csv',
+        name = 'all-articles-csv',
     ),
     ArchivePage(
         path = '/archives',
