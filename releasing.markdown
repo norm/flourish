@@ -7,7 +7,7 @@ To release a new version
 * Edit the release note to include the date for this release
 * Bump the version in `flourish/version.py`
 * Build and upload to pypi:
-    * `make dist`
+    * `make pypi`
     * `twine upload dist/flourish-$v*`
 * Push, PR, and merge the branch
 * Tag the merge commit
