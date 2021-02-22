@@ -1,3 +1,4 @@
 author = 'Wendy Testaburger'
 base_url = 'http://withaflourish.net'
 title = 'Flourish Blog'
+future = false

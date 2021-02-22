@@ -1,5 +1,5 @@
 from collections import defaultdict
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from operator import attrgetter
 import warnings
 
@@ -9,6 +9,7 @@ class SourceList:
         'filters',
         'ordering',
         'slice',
+        'future',
     ]
 
     def __init__(self, sources, **kwargs):
@@ -16,6 +17,7 @@ class SourceList:
         self.ordering = []
         self.filters = []
         self.slice = None
+        self.future = True
 
         for arg in self.ARGS:
             if arg in kwargs:
@@ -47,6 +49,11 @@ class SourceList:
             clone.filters.append((key, value))
         return clone
 
+    def exclude_future(self):
+        clone = self.clone()
+        clone.filters.append(('published__lt', datetime.now(tz=timezone.utc)))
+        return clone
+
     def order_by(self, *args):
         return self.clone(ordering=args)
 
@@ -63,6 +70,9 @@ class SourceList:
         sources = []
         for source in self.sources:
             add = True
+            if 'published' in source and not self.future:
+                if source['published'] > datetime.now(tz=timezone.utc):
+                    add = False
             if len(self.filters):
                 for filter in self.filters:
                     if not add:

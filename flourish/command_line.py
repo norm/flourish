@@ -173,6 +173,22 @@ def main():
         help='Report each URL as it is generated'
     )
     parser_generate.add_argument(
+        '--include-future',
+        action='store_true',
+        help=(
+            'Include sources with a publication date in the future, '
+            'overriding the "future" setting in _site.toml.'
+        ),
+    )
+    parser_generate.add_argument(
+        '--exclude-future',
+        action='store_true',
+        help=(
+            'Exclude sources with a publication date in the future, '
+            'overriding the "future" setting in _site.toml.'
+        ),
+    )
+    parser_generate.add_argument(
         'path',
         nargs='*',
         help=(
@@ -242,11 +258,17 @@ def main():
 
 
 def generate(args):
+    future = None
+    if args.exclude_future:
+        future = False
+    if args.include_future:
+        future = True
     flourish = Flourish(
         source_dir=args.source,
         templates_dir=args.templates,
         fragments_dir=args.fragments,
         output_dir=args.output,
+        future=future,
     )
     if args.path:
         for path in args.path:

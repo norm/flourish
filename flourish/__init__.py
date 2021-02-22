@@ -34,6 +34,7 @@ class Flourish(object):
         output_dir='output',
         sass_dir='sass',
         fragments_dir=None,
+        future=None,
         skip_scan=False,
     ):
         self.source_dir = source_dir
@@ -41,6 +42,7 @@ class Flourish(object):
         self.fragments_dir = fragments_dir
         self.output_dir = output_dir
         self.sass_dir = sass_dir
+        self.future = future
         self._assets = {}
         self._cache = {}
         self._source_files = []
@@ -97,7 +99,19 @@ class Flourish(object):
 
     @property
     def sources(self):
-        return SourceList(self._source_files)
+        try:
+            future = self.site_config['future'] 
+        except KeyError:
+            future = True
+
+        # object instantiation takes precedence over site config
+        if self.future is not None:
+            future = self.future
+
+        return SourceList(
+            self._source_files,
+            future = future
+        )
 
     def get(self, slug):
         """ Get a single source document by slug. """
