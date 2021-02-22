@@ -2,7 +2,7 @@
 
 # Release notes for Flourish
 
-## 0.9.2 - UNRELEASED
+## 0.9.2 - 22 February 2021
 
 ### New
 
