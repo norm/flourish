@@ -1004,3 +1004,44 @@ class TestFlourish:
 
         # ensure still unfiltered
         assert all_dates == self.flourish.publication_dates
+
+class TestFlourishFuture:
+    @classmethod
+    def setup_class(cls):
+        with pytest.warns(None) as warnings:
+            cls.flourish = Flourish(
+                'tests/future/source'
+            )
+            assert len(warnings) == 0
+            assert cls.flourish.sources.count() == 4
+
+    def test_get_all_sources(self):
+        sources = self.flourish.sources.all()
+        assert type(sources) == SourceList
+        assert len(sources) == 4
+        # os.walk order, root dir before subdirs, alphabetical order
+        assert [
+                'nineteenth-century',
+                'twentieth-century',
+                'twenty-first-century',
+                'twenty-second-century',
+            ] == [source.slug for source in sources]
+
+        published = sources.order_by('-published')
+        assert [
+                'twenty-second-century',
+                'twenty-first-century',
+                'twentieth-century',
+                'nineteenth-century',
+            ] == [source.slug for source in published]
+
+    def test_exclude_future(self):
+        sources = self.flourish.sources.exclude_future()
+        assert type(sources) == SourceList
+        assert len(sources) == 3
+        # os.walk order, root dir before subdirs, alphabetical order
+        assert [
+                'nineteenth-century',
+                'twentieth-century',
+                'twenty-first-century',
+            ] == [source.slug for source in sources]

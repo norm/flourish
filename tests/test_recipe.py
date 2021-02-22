@@ -52,7 +52,8 @@ class TestRecipe:
             'global': {'copyright_year_range': '2015–2016'},
             'site': {'author': 'Wendy Testaburger',
                      'base_url': 'http://withaflourish.net',
-                     'title': 'Flourish Blog'},
+                     'title': 'Flourish Blog',
+                     'future': False},
             'tokens': {},
         }
         assert recipe['context'].items() >= context_contains.items()
@@ -129,7 +130,8 @@ class TestRecipe:
             'global': {'copyright_year_range': '2015–2016'},
             'site': {'author': 'Wendy Testaburger',
                      'base_url': 'http://withaflourish.net',
-                     'title': 'Flourish Blog'},
+                     'title': 'Flourish Blog',
+                     'future': False},
             'tokens': {},
         }
         assert recipe['context'].items() >= context_contains.items()

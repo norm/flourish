@@ -1,16 +1,53 @@
 # The site configuration file
 
-If a file called `_site.toml` exists in the source directory, the values 
-in it are made available in all templates. For example, if it contains:
+A file called `_site.toml` must exist in the source directory, and has to
+contain at least the following three keys:
 
-```python
-name = "Wendy's Blog"
-by = 'Wendy Testaburger'
+```toml
+author = ''
+base_url = ''
+title = ''
 ```
 
-then templates can use `site.by` to get "Wendy Testaburger",
-and `site.name` to get "Wendy's Blog". This makes templates more reusable
-across different websites.
+Although these are required, they can be left blank if you are not
+generating Atom feeds.
 
-This file does not have to exist, and there are no required entries in this
-file — unless you are using [Atom feeds](/atom-feeds/).
+Values for author, title, and the base URL of the published site are
+required to generate valid Atom feeds.
+
+
+## Optional keys
+
+There are other keys that Flourish will treat as having special meaning.
+
+  * `future`
+
+    ```toml
+    future = false
+    ```
+
+    If `future` is set to `false`, any source that has a `publication` date
+    that is in the future at the point the site is generated will be ignored.
+
+    By default future publications are included.
+
+  * `bucket`
+
+    ```toml
+    bucket = 'some.bucket'
+    ```
+
+    When using `flourish upload` to push changes to an Amazon S3 bucket,
+    this setting tells Flourish what bucket to use.
+
+
+## Using in templates
+
+The values in the file are made available to all templates under the `site`
+key. For example, a site's footer could include:
+
+```html
+<footer>
+  <p>Copyright {{global.copyright_year_range}} {{site.author}}.</p>
+</footer>
+```

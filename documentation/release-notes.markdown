@@ -2,6 +2,20 @@
 
 # Release notes for Flourish
 
+## 0.9.2 - UNRELEASED
+
+### New
+
+  * Add `exclude_future` filter to sources that will remove anything with
+    a `published` date in the future
+  * Add `future` setting to the `_site.toml` that, when set to true,
+    removes anything with a `published` date in the future from appearing
+    to any generator (easier than filtering future sources individually)
+  * Add `--exclude-future` and `--include-future` arguments to the
+    `flourish generate` command, that will override the setting in
+    `_site.toml` if necessary.
+
+
 ## 0.9.1 - 18 September 2020
 
 #### Bug fixes
