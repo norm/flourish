@@ -2,20 +2,12 @@
 
 # Release notes for Flourish
 
-## 0.9.3 - UNRELEASED
-
-High level description, if applicable.
+## 0.9.3 - 3 March 2021
 
 #### New
 
   * Add `--invalidate` option to `flourish upload` that issues a CloudFront
     invalidation on the paths uploaded.
-
-#### Other changes
-
-#### Bug fixes
-
-#### Dependency updates
 
 
 ## 0.9.2 - 22 February 2021
