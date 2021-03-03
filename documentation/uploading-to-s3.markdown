@@ -8,7 +8,7 @@ credentials][creds] for using the AWS Command Line Interface, you can
 upload your website to S3 with one command:
 
 ```bash
-flourish --bucket <bucketname> upload
+flourish upload <bucketname>
 ```
 
 Or, if you prefer, you can keep the bucket name in the
@@ -22,6 +22,26 @@ then you need only run:
 
 ```bash
 flourish upload
+```
+
+If you have put the S3 bucket behind a CloudFront distribution, you can
+issue a targetted invalidation when new files are uploaded:
+
+```bash
+flourish upload --invalidate <bucketname> <cloudfront ID>
+```
+
+Again, you can keep the bucket and distribution ID in the site configuration:
+
+```python
+bucket = "<bucketname>"
+cloudfront_id = "<cloudfront ID>"
+```
+
+and then you need only run:
+
+```bash
+flourish upload --invalidate
 ```
 
 

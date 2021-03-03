@@ -1,8 +1,10 @@
 import argparse
+from datetime import datetime
 from hashlib import md5
 import mimetypes
 import os
 from textwrap import dedent
+import time
 
 import boto3
 from flask import Flask, request, send_from_directory
@@ -226,9 +228,19 @@ def main():
         help='only list what would be uploaded',
     )
     parser_upload.add_argument(
+        '--invalidate',
+        action='store_true',
+        help='invalidate uploaded paths in CloudFront',
+    )
+    parser_upload.add_argument(
         'bucket',
         nargs='?',
         help='bucket to upload to (default: bucket entry in _site.toml)',
+    )
+    parser_upload.add_argument(
+        'cloudfront_id',
+        nargs='?',
+        help='the CloudFront distribution ID',
     )
 
     parser_example = subparsers.add_parser(             # noqa: F841
@@ -344,22 +356,27 @@ def create_example(args):
 def upload(args):
     mimetypes.init()
 
+    flourish = Flourish(
+        source_dir=args.source,
+        templates_dir=args.templates,
+        fragments_dir=args.fragments,
+        output_dir=args.output,
+        skip_scan=True,
+    )
+
     _bucket_name = args.bucket
+    _cloudfront = args.cloudfront_id
     if _bucket_name is None:
-        flourish = Flourish(
-            source_dir=args.source,
-            templates_dir=args.templates,
-            fragments_dir=args.fragments,
-            output_dir=args.output,
-            skip_scan=True,
-        )
         _bucket_name = flourish.site_config['bucket']
+    if args.invalidate and args.cloudfront_id is None:
+        _cloudfront = flourish.site_config['cloudfront_id']
 
     # FIXME remove nonexistent files
     _s3 = boto3.resource('s3')
     _bucket = _s3.Bucket(_bucket_name)
     _files = relative_list_of_files_in_directory(args.output)
     _objects = dict()
+    _invalidations = []
     for _object in _bucket.objects.all():
         _objects.update({_object.key: _object})
 
@@ -392,7 +409,38 @@ def upload(args):
                     'ContentType': _type,
                 }
                 _bucket.put_object(**_object_args)
+                invalidate = '/' + _s3path
+                if invalidate.endswith('index.html'):
+                    invalidate = invalidate[:-10]
+                _invalidations.append(invalidate)
 
+    if args.invalidate and _invalidations:
+        cf = boto3.client('cloudfront')
+        result = cf.create_invalidation(
+            DistributionId=_cloudfront,
+            InvalidationBatch={
+                'Paths': {
+                    'Quantity': len(_invalidations),
+                    'Items': _invalidations,
+                },
+                'CallerReference': datetime.now().isoformat(),
+            }
+        )
+        invalidation_id = result['Invalidation']['Id']
+        print('Invalidating distribution %s: %s' % (_cloudfront, invalidation_id))
+        while True:
+            time.sleep(15)
+            status = cf.get_invalidation(
+                DistributionId = _cloudfront,
+                Id = invalidation_id,
+            )
+            print(
+                datetime.now().strftime('%H:%M:%S'),
+                invalidation_id,
+                status['Invalidation']['Status'],
+            )
+            if status['Invalidation']['Status'] == 'Completed':
+                break
 
 ACTIONS = {
     'generate': generate,

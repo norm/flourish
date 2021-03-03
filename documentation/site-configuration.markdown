@@ -40,6 +40,15 @@ There are other keys that Flourish will treat as having special meaning.
     When using `flourish upload` to push changes to an Amazon S3 bucket,
     this setting tells Flourish what bucket to use.
 
+  * `cloudfront_id`
+
+    ```toml
+    cloudfront_id = 'E3ZZZZSOMETHING'
+    ```
+
+    When using `flourish upload --invalidate` to push changes to an Amazon
+    S3 bucket that is behind a CloudFront distribution, this setting
+    tells Flourish what the distribution ID is.
 
 ## Using in templates
 
