@@ -2,6 +2,18 @@
 
 # Release notes for Flourish
 
+## 0.9.4 - 22 March 2021
+
+#### Bug fixes
+
+  * Three keys were enforced to exist in the `_site.toml` configuration
+    which were used by the [Atom generator][atom], even if no Atom feeds were
+    going to be generated. These requirements have been moved to the
+    Atom generator, and the `_site.toml` is now optional.
+  * Made some runtime errors in the command-line just use the error string
+    without a full stacktrace, as the stacktrace adds no useful information.
+
+
 ## 0.9.3 - 3 March 2021
 
 #### New
