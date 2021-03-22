@@ -7,7 +7,7 @@ from flourish import Flourish, JsonSourceFile, SourceList, TomlSourceFile
 
 class TestFlourishNoArgs:
     def test_without_source_raises(self):
-        with pytest.raises(AttributeError):
+        with pytest.raises(Flourish.RuntimeError):
             Flourish()
 
 
