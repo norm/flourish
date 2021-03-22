@@ -131,6 +131,14 @@ class Flourish(object):
         path.setup(self)
         if path.name == 'source':
             self._source_path = path
+        if hasattr(path, 'required_config_keys'):
+            for key in path.required_config_keys:
+                if key not in self.site_config:
+                    raise Flourish.MissingKey(
+                        '%s requires an entry "%s" in _site.toml' % (
+                            path.__class__.__name__,
+                            key,
+                        ))
         self._paths.update({path.name: path})
 
     def resolve_path(self, name, **kwargs):
@@ -206,13 +214,11 @@ class Flourish(object):
 
     def _read_site_config(self):
         _config_file = '%s/_site.toml' % self.source_dir
-        with open(_config_file) as _file:
-            _config = toml.loads(_file.read())
-        for key in ('author', 'title', 'base_url'):
-            if key not in _config:
-                raise RuntimeError(
-                    '"%s" is a required entry in _site.toml' % key)
-        return _config
+        try:
+            with open(_config_file) as _file:
+                return toml.loads(_file.read())
+        except FileNotFoundError:
+            return {}
 
     def _rescan_sources(self):
         """ Find source documents and register them. """
@@ -331,3 +337,7 @@ class Flourish(object):
 
     def __repr__(self):
         return '<flourish.Flourish object (source=%s)>' % self.source_dir
+
+
+    class MissingKey(Exception):
+        pass

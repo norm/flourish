@@ -1,19 +1,31 @@
 # The site configuration file
 
-A file called `_site.toml` must exist in the source directory, and has to
-contain at least the following three keys:
+The file called `_site.toml` in the source directory can be used to set
+configuration parameters used by Flourish's code and in templates.
+It is not a requirement unless you are using a generator that needs
+specific keys set.
 
-```toml
-author = ''
-base_url = ''
-title = ''
-```
 
-Although these are required, they can be left blank if you are not
-generating Atom feeds.
+## Required by generators
 
-Values for author, title, and the base URL of the published site are
-required to generate valid Atom feeds.
+  * `AtomGenerator`
+
+        ```toml
+        author = 'Wendy Testaburger'
+        base_url = 'http://wendytestaburger.com'
+        title = 'Wendyblog'
+        ```
+
+    In order to generate valid Atom feeds, the
+    [`AtomGenerator`](/api-flourish-generators-atom/) needs three values:
+
+      * `author` is used in the `<author>` element at the root of the
+        Atom feed, and is used as the default author name for each
+        entry (but can be overridden)
+      * `base_url` is prepended to the paths of entries in the Atom
+        feed
+      * `title` is used in the `<title>` element at the root of the
+        Atom feed.
 
 
 ## Optional keys
