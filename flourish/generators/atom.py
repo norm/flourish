@@ -11,6 +11,7 @@ class AtomGenerator(SourcesMixin, BaseGenerator):
     order_by = ('-published')
     file_extension = '.atom'
     limit = 20
+    required_config_keys = ('author', 'base_url', 'title')
 
     def get_objects(self, tokens):
         """

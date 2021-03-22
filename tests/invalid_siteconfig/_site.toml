@@ -1,1 +1,2 @@
+# AtomGenerator requires the keys 'author', 'base_url', and 'title'
 keys = 'missing'

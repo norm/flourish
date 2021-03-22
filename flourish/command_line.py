@@ -3,6 +3,7 @@ from datetime import datetime
 from hashlib import md5
 import mimetypes
 import os
+import sys
 from textwrap import dedent
 import time
 
@@ -275,13 +276,18 @@ def generate(args):
         future = False
     if args.include_future:
         future = True
-    flourish = Flourish(
-        source_dir=args.source,
-        templates_dir=args.templates,
-        fragments_dir=args.fragments,
-        output_dir=args.output,
-        future=future,
-    )
+    try:
+        flourish = Flourish(
+            source_dir=args.source,
+            templates_dir=args.templates,
+            fragments_dir=args.fragments,
+            output_dir=args.output,
+            future=future,
+        )
+    except Flourish.MissingKey as e:
+        sys.exit('Error: %s' % str(e))
+    except Flourish.RuntimeError as e:
+        sys.exit('Error: %s' % str(e))
     if args.path:
         for path in args.path:
             flourish.generate_path(path, report=args.verbose)
@@ -291,12 +297,17 @@ def generate(args):
 
 def preview_server(args):
     output_dir = os.path.abspath(args.output)
-    flourish = Flourish(
-        source_dir=args.source,
-        templates_dir=args.templates,
-        fragments_dir=args.fragments,
-        output_dir=args.output,
-    )
+    try:
+        flourish = Flourish(
+            source_dir=args.source,
+            templates_dir=args.templates,
+            fragments_dir=args.fragments,
+            output_dir=args.output,
+        )
+    except Flourish.MissingKey as e:
+        sys.exit('Error: %s' % str(e))
+    except Flourish.RuntimeError as e:
+        sys.exit('Error: %s' % str(e))
     app = Flask(__name__)
 
     # TODO 3xx redirects
@@ -356,13 +367,18 @@ def create_example(args):
 def upload(args):
     mimetypes.init()
 
-    flourish = Flourish(
-        source_dir=args.source,
-        templates_dir=args.templates,
-        fragments_dir=args.fragments,
-        output_dir=args.output,
-        skip_scan=True,
-    )
+    try:
+        flourish = Flourish(
+            source_dir=args.source,
+            templates_dir=args.templates,
+            fragments_dir=args.fragments,
+            output_dir=args.output,
+            skip_scan=True,
+        )
+    except Flourish.MissingKey as e:
+        sys.exit('Error: %s' % str(e))
+    except Flourish.RuntimeError as e:
+        sys.exit('Error: %s' % str(e))
 
     _bucket_name = args.bucket
     _cloudfront = args.cloudfront_id

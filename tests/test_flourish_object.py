@@ -7,13 +7,13 @@ from flourish import Flourish, JsonSourceFile, SourceList, TomlSourceFile
 
 class TestFlourishNoArgs:
     def test_without_source_raises(self):
-        with pytest.raises(AttributeError):
+        with pytest.raises(Flourish.RuntimeError):
             Flourish()
 
 
 class TestFlourishSiteConfigRequirements:
     def test_empty_site_config_is_error(self):
-        with pytest.raises(RuntimeError):
+        with pytest.raises(Flourish.MissingKey):
             Flourish('tests/invalid_siteconfig')
 
 
