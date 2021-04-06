@@ -18,12 +18,19 @@ class TestFlourishSiteConfigRequirements:
 
 
 class TestFlourish:
+    WARNINGS = (
+        '"body_markdown" in series/part-three overriden by Markdown attachment.',
+        '"body" in series/part-two overriden by Markdown conversion.',
+    )
+
     @classmethod
     def setup_class(cls):
         with pytest.warns(None) as warnings:
             cls.flourish = Flourish('tests/source')
-            assert len(warnings) == 2
             assert cls.flourish.sources.count() == 9
+            assert cls.WARNINGS == tuple(
+                item.message.args[0] for item in warnings
+            )
 
     def test_get_all_sources(self):
         sources = self.flourish.sources.all()

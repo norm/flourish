@@ -10,8 +10,6 @@ class TestFlourishPaths:
     def setup_class(cls):
         with pytest.warns(None) as warnings:
             cls.flourish = Flourish('tests/source')
-            assert len(warnings) == 2
-            assert cls.flourish.sources.count() == 9
 
     def test_homepage_resolves(self):
         assert self.flourish.resolve_path('homepage') == '/'
@@ -171,9 +169,6 @@ class TestFlourishSourcesPath:
     def test_category_prefixed_sources(self):
         with pytest.warns(None) as _warnings:
             _flourish = Flourish('tests/source')
-            assert len(_warnings) == 2
-            assert _flourish.sources.count() == 9
-
             _flourish.add_path(
                 SourceGenerator(
                     path = '/#category/#slug',
@@ -196,9 +191,6 @@ class TestFlourishSourcesPath:
     def test_invalid_prefixed_sources(self):
         with pytest.warns(None) as _warnings:
             _flourish = Flourish('tests/source')
-            assert len(_warnings) == 2
-            assert _flourish.sources.count() == 9
-
             _flourish.add_path(
                 SourceGenerator(
                     path = '/#page_type/#slug',
@@ -222,9 +214,6 @@ class TestFlourishSourcesPath:
     def test_multiple_option_prefixed_sources(self):
         with pytest.warns(None) as _warnings:
             _flourish = Flourish('tests/source')
-            assert len(_warnings) == 2
-            assert _flourish.sources.count() == 9
-
             _flourish.add_path(
                 SourceGenerator(
                     path = '/#tag/#slug',
