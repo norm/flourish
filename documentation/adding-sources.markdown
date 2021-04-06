@@ -4,12 +4,13 @@
 
 Flourish uses source files to contain the content of site to be generated.
 
-Three types of source file are supported, and they can be mixed and matched
+Four types of source file are supported, and they can be mixed and matched
 at will:
 
 * [TOML][toml]
 * [JSON][json]
 * [Markdown][md]
+* [CSV][csv]
 
 All sources are treated as though they contain UTF-8 content. If they contain
 characters of a different character set, you will have problems. Modern text
@@ -34,6 +35,13 @@ periods (`.`) or quotation marks (`'"`).
 **Note**: a slug that ends `/index`  will be trimmed to ending `/` when
 treated as a URL. For example, a source file `more/about/index.toml` will have
 the slug `more/about/index` and the URL `more/about/` when rendered.
+
+### Slugs in CSV sources
+
+When using CSV files to add multiple sources, the slug cannot come from the
+filename of the CSV or each row would have the same slug. Instead there should
+be a `slug` column in the CSV.
+
 
 ## Source data
 
@@ -125,6 +133,15 @@ immediately obvious when looking at a source file that it may have more
 keys that are currently shown.
 
 
+### Example sources from a CSV file
+
+```
+slug,title,published,body_markdown
+hello-world,"Hello world",2021-04-06T17:00:00Z,"# Hello world!"
+goodbye-world,"Goodbye world",2021-04-06T17:30:00Z,"# Goodbye world."
+```
+
+
 ## Adding HTML to sources
 
 In the same manner as adding Markdown shown above, raw HTML can be added.
@@ -167,3 +184,4 @@ be aware of:
 [toml]: https://github.com/toml-lang/toml
 [tomlspec]: https://github.com/toml-lang/toml#user-content-spec
 [utc]: https://en.wikipedia.org/wiki/Coordinated_Universal_Time
+[csv]: https://en.wikipedia.org/wiki/Comma-separated_values

@@ -19,6 +19,7 @@ from .source import (
     MarkdownSourceFile,
     SourceFile,
     TomlSourceFile,
+    CsvSourceFile,
 )
 from .sourcelist import SourceList
 from .version import __version__    # noqa: F401
@@ -252,16 +253,32 @@ class Flourish(object):
 
                 if _file.endswith('.toml'):
                     self._cache[slug] = TomlSourceFile(self, _file)
+                    _seen[slug] = 1
                 elif (
                     _file.endswith('.markdown')
                     and len(_file.split('.')) == 2
                 ):
                     self._cache[slug] = MarkdownSourceFile(self, _file)
+                    _seen[slug] = 1
                 elif _file.endswith('.json'):
                     self._cache[slug] = JsonSourceFile(self, _file)
+                    _seen[slug] = 1
+                elif _file.endswith('.csv'):
+                    for src in CsvSourceFile(self, _file).get_sources():
+                        if src['slug'] in _seen:
+                            warnings.warn(
+                                (
+                                    'Existing source "%s" has been '
+                                    'overriden by "%s"'
+                                ) % (
+                                    src['slug'],
+                                    src,
+                                )
+                            )
+                        self._cache[src['slug']] = src
+                        _seen[src['slug']] = 1
                 elif not is_attachment_file:
                     self._assets[_file] = True
-                _seen[slug] = 1
 
         # remove anything no longer there
         # FIXME will also need output removing

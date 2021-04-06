@@ -1,0 +1,7 @@
+slug,title,published,page_type,category,series,tag[],index_fkey,body_markdown
+/series/,"A Series in Three Parts",2016-06-04T10:00:00Z,series_index,article,series-in-three-parts,"series,index",,
+/series/part-three,"Part Three",2016-06-06T10:00:00Z,post,article,series-in-three-parts,three:series,series/index,"
+# Part Troi
+
+Embedded Markdown.
+"

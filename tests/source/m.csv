@@ -1,0 +1,2 @@
+slug,title,published,page_type,body_markdown
+/markdown-page,"Not the real markdown page",never,blank,"# This row gets completely replaced by markdown-page.markdown"

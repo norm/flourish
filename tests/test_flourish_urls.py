@@ -138,10 +138,10 @@ class TestFlourishPaths:
             '/nothing',
             '/thing-one',
             '/thing-two',
-            '/series/',
             '/series/part-one',
             '/series/part-three',
             '/series/part-two',
+            '/series/',
         ] == [source.path for source in self.flourish.sources.all()]
 
     def test_lookup_path_handler(self):
@@ -182,10 +182,10 @@ class TestFlourishSourcesPath:
                 None,
                 '/thing/thing-one',
                 '/thing/thing-two',
-                '/article/series/',
                 '/article/series/part-one',
                 '/article/series/part-three',
                 '/article/series/part-two',
+                '/article/series/',
             ] == [source.path for source in _flourish.sources.all()]
 
     def test_invalid_prefixed_sources(self):
@@ -204,10 +204,10 @@ class TestFlourishSourcesPath:
                 None,
                 '/post/thing-one',
                 '/post/thing-two',
-                '/series_index/series/',
                 '/post/series/part-one',
                 '/post/series/part-three',
                 '/post/series/part-two',
+                '/series_index/series/',
             ] == [source.path for source in _flourish.sources.all()]
             # FIXME catch third warning
 
@@ -227,9 +227,9 @@ class TestFlourishSourcesPath:
                 None,
                 '/basically/thing-one',
                 '/basically/thing-two',
-                '/series/series/',
                 '/series/series/part-one',
                 '/three/series/part-three',
                 '/series/series/part-two',
+                '/series/series/',
             ] == [source.path for source in _flourish.sources.all()]
             # FIXME catch third warning
