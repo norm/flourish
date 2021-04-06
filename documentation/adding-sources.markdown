@@ -40,7 +40,8 @@ the slug `more/about/index` and the URL `more/about/` when rendered.
 
 When using CSV files to add multiple sources, the slug cannot come from the
 filename of the CSV or each row would have the same slug. Instead there should
-be a `slug` column in the CSV.
+be a `slug` column in the CSV. The same rules on valid slugs apply to this
+column.
 
 
 ## Source data

@@ -19,7 +19,9 @@ class TestFlourishSiteConfigRequirements:
 
 class TestFlourish:
     WARNINGS = (
-        '"broken.csv", row 0 has no slug',
+        '"broken.csv" has no column "slug"',
+        '"invalid.csv" row 0, has an invalid slug ""',
+        '"invalid.csv" row 1, has an invalid slug "broken.slug"',
         '"body" in series/part-two overriden by Markdown conversion.',
         '"body_markdown" in series/part-three overriden by Markdown attachment.',
         'Existing source "series/part-three" has been overriden by "<flourish.CsvRowSource object (series/series.csv, row 1)>"'

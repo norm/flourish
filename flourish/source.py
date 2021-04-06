@@ -257,18 +257,28 @@ class MultipleSourcesFile:
 
 
 class CsvSourceFile(MultipleSourcesFile):
+    VALID_SLUG = re.compile(r'^/?[a-zA-Z0-9][a-zA-Z0-9_/-]*$')
+
     def _read_file(self, filename):
         _sources = []
         _source = '%s/%s' % (self._parent.source_dir, filename)
         with open(_source) as handle:
             reader = csv.DictReader(handle)
-            for i, row in enumerate(reader):
-                if 'slug' not in row or not row['slug']:
-                    warnings.warn(
-                        '"%s", row %d has no slug' % (filename, i)
-                    )
+            for line, row in enumerate(reader):
+                if 'slug' not in row:
+                    warnings.warn('"%s" has no column "slug"' % filename)
+                    break
                 else:
+                    if not self.VALID_SLUG.match(row['slug']):
+                        warnings.warn(
+                            '"%s" row %d, has an invalid slug "%s"' % (
+                                filename,
+                                line,
+                                row['slug'],
+                            )
+                        )
+                        continue
                     _sources.append(
-                        CsvRowSource(self._parent, filename, i, row)
+                        CsvRowSource(self._parent, filename, line, row)
                     )
         return _sources
