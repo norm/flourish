@@ -1,10 +1,10 @@
 title,published,tag
-Basic Page,2015-12-25 10:00:00+00:00,basic-page
-Plain Markdown Page,2016-02-29 10:30:00+00:00,
+Basic Page,2015-12-25T10:00:00Z,basic-page
+Plain Markdown Page,2016-02-29T10:30:00Z,
 "Nothing, nothing, tralala",,
-Thing—the First,2016-06-04 12:30:00+00:00,basically:first:one
-Second Thing,2016-06-04 12:30:00+00:00,basically:second:two
-Part One,2016-06-04 11:00:00+00:00,one:series
-Part Three,2016-06-06 10:00:00+00:00,series:three
-Part Two,2016-06-04 12:00:00+00:00,series:two
-A Series in Three Parts,2016-06-04 10:00:00+00:00,index:series
+Thing—the First,2016-06-04T12:30:00Z,basically:first:one
+Second Thing,2016-06-04T12:30:00Z,basically:second:two
+Part One,2016-06-04T11:00:00Z,one:series
+Part Three,2016-06-06T10:00:00Z,series:three
+Part Two,2016-06-04T12:00:00Z,series:two
+A Series in Three Parts,2016-06-04T10:00:00Z,index:series

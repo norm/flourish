@@ -80,11 +80,11 @@ Second, the key `published` contains a timestamp. This is in a specific
 format, called [ISO 8601][iso]. Although this format supports more 
 variation, Flourish currently only understands timestamps in the format 
 `YYYY-MM-DDTHH:MM:SSZ` (the year, a hyphen, the month as two digits, a hyphen,
-the day of the month as two digits, a hyphen, the letter `T`, the hours
-of the day expressed as a 24-hour clock, the minutes, and the seconds, and
-lastly the letter `Z`). This expresses the time as being in [UTC][utc] 
-(or Greenwich Mean Time). Better support for dates and times outside of UTC
-will come in a later version.
+the day of the month as two digits, the letter `T`, the hours of the day
+expressed as a 24-hour clock, a colon, the minutes, a colon, the seconds, and
+lastly the letter `Z`). This expresses the time as being in [UTC][utc] (or
+Greenwich Mean Time). Better support for dates and times outside of UTC will
+come in a later version.
 
 
 ### Example Markdown source

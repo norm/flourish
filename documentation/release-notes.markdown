@@ -9,6 +9,10 @@
   * Sources can now include CSV files, which contain multiple sources
     in one file.
 
+#### Other changes
+
+  * Timestamps in generated CSV files now match the expected input format.
+
 
 ## 0.9.4 - 22 March 2021
 
