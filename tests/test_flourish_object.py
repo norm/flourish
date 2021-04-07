@@ -18,12 +18,23 @@ class TestFlourishSiteConfigRequirements:
 
 
 class TestFlourish:
+    WARNINGS = (
+        '"broken.csv" has no column "slug"',
+        '"invalid.csv" row 0, has an invalid slug ""',
+        '"invalid.csv" row 1, has an invalid slug "broken.slug"',
+        '"body" in series/part-two overriden by Markdown conversion.',
+        '"body_markdown" in series/part-three overriden by Markdown attachment.',
+        'Existing source "series/part-three" has been overriden by "<flourish.CsvRowSource object (series/series.csv, row 1)>"'
+    )
+
     @classmethod
     def setup_class(cls):
         with pytest.warns(None) as warnings:
             cls.flourish = Flourish('tests/source')
-            assert len(warnings) == 2
             assert cls.flourish.sources.count() == 9
+            assert cls.WARNINGS == tuple(
+                item.message.args[0] for item in warnings
+            )
 
     def test_get_all_sources(self):
         sources = self.flourish.sources.all()
@@ -36,10 +47,10 @@ class TestFlourish:
                 'nothing',
                 'thing-one',
                 'thing-two',
-                'series/index',
                 'series/part-one',
                 'series/part-three',
                 'series/part-two',
+                'series/index',
             ] == [source.slug for source in sources]
 
     def test_get_one_source_by_slug(self):
@@ -86,15 +97,15 @@ class TestFlourish:
         assert type(sources) == SourceList
         assert len(sources) == 4
         assert [
-                'series/index',
                 'series/part-one',
                 'series/part-three',
                 'series/part-two',
+                'series/index',
             ] == [source.slug for source in sources]
 
         assert [
-                'series/part-three',
                 'series/part-two',
+                'series/index',
             ] == [source.slug for source in sources[2:]]
 
     def test_get_sources_by_negative_values(self):
@@ -102,8 +113,8 @@ class TestFlourish:
         assert type(sources) == SourceList
         assert len(sources) == 2
         assert [
-                'series/part-one',
                 'series/part-three',
+                'series/part-two',
             ] == [source.slug for source in sources]
 
     def test_get_sources_by_negative_stop(self):
@@ -201,10 +212,10 @@ class TestFlourish:
                     'nothing',
                     'thing-one',
                     'thing-two',
-                    'series/index',
                     'series/part-one',
                     'series/part-three',
                     'series/part-two',
+                    'series/index',
                 ] == [source.slug for source in sources]
             # twice, once for `len(sources)`, once for `for source in sources`
             assert len(warnings) == 2
@@ -253,10 +264,10 @@ class TestFlourish:
                 'basic-page',
                 'markdown-page',
                 'nothing',
-                'series/index',
                 'series/part-one',
                 'series/part-three',
                 'series/part-two',
+                'series/index',
             ] == [source.slug for source in sources]
 
     def test_filter_equal_to_where_sources_have_missing_keys(self):
@@ -265,10 +276,10 @@ class TestFlourish:
         assert type(sources) == SourceList
         assert len(sources) == 4
         assert [
-                'series/index',
                 'series/part-one',
                 'series/part-three',
                 'series/part-two',
+                'series/index',
             ] == [source.slug for source in sources]
 
     def test_filter_less_than(self):
@@ -279,9 +290,9 @@ class TestFlourish:
         assert [
                 'basic-page',
                 'markdown-page',
-                'series/index',
                 'series/part-one',
                 'series/part-two',
+                'series/index',
             ] == [source.slug for source in sources]
 
     def test_exclude_less_than(self):
@@ -305,9 +316,9 @@ class TestFlourish:
                 'markdown-page',
                 'thing-one',
                 'thing-two',
-                'series/index',
                 'series/part-one',
                 'series/part-two',
+                'series/index',
             ] == [source.slug for source in sources]
 
     def test_exclude_less_than_or_equal_to(self):
@@ -338,9 +349,9 @@ class TestFlourish:
                 'markdown-page',
                 'thing-one',
                 'thing-two',
-                'series/index',
                 'series/part-one',
                 'series/part-two',
+                'series/index',
             ] == [source.slug for source in sources]
 
     def test_filter_greater_than_or_equal_to(self):
@@ -362,9 +373,9 @@ class TestFlourish:
         assert [
                 'basic-page',
                 'markdown-page',
-                'series/index',
                 'series/part-one',
                 'series/part-two',
+                'series/index',
             ] == [source.slug for source in sources]
 
     def test_filter_contains_on_string(self):
@@ -383,10 +394,10 @@ class TestFlourish:
                 'basic-page',
                 'markdown-page',
                 'thing-two',
-                'series/index',
                 'series/part-one',
                 'series/part-three',
                 'series/part-two',
+                'series/index',
             ] == [source.slug for source in sources]
 
     def test_filter_excludes_on_string(self):
@@ -397,10 +408,10 @@ class TestFlourish:
                 'basic-page',
                 'markdown-page',
                 'thing-two',
-                'series/index',
                 'series/part-one',
                 'series/part-three',
                 'series/part-two',
+                'series/index',
             ] == [source.slug for source in sources]
 
     def test_exclude_excludes_on_string(self):
@@ -433,10 +444,10 @@ class TestFlourish:
         assert [
                 'markdown-page',
                 'nothing',
-                'series/index',
                 'series/part-one',
                 'series/part-three',
                 'series/part-two',
+                'series/index',
             ] == [source.slug for source in sources]
 
     def test_filter_excludes_on_list(self):
@@ -448,10 +459,10 @@ class TestFlourish:
         assert [
                 'markdown-page',
                 'nothing',
-                'series/index',
                 'series/part-one',
                 'series/part-three',
                 'series/part-two',
+                'series/index',
             ] == [source.slug for source in sources]
 
     def test_exclude_excludes_on_list(self):
@@ -482,10 +493,10 @@ class TestFlourish:
                 'nothing',
                 'thing-one',
                 'thing-two',
-                'series/index',
                 'series/part-one',
                 'series/part-three',
                 'series/part-two',
+                'series/index',
             ] == [source.slug for source in sources]
 
     def test_filter_exludes_invalid_value(self):
@@ -499,10 +510,10 @@ class TestFlourish:
                 'nothing',
                 'thing-one',
                 'thing-two',
-                'series/index',
                 'series/part-one',
                 'series/part-three',
                 'series/part-two',
+                'series/index',
             ] == [source.slug for source in sources]
 
     def test_exclude_excludes_invalid_value(self):
@@ -520,10 +531,10 @@ class TestFlourish:
         assert [
                 'thing-one',
                 'thing-two',
-                'series/index',
                 'series/part-one',
                 'series/part-three',
                 'series/part-two',
+                'series/index',
             ] == [source.slug for source in sources]
 
     def test_exclude_in_list(self):
@@ -556,10 +567,10 @@ class TestFlourish:
         assert [
                 'thing-one',
                 'thing-two',
-                'series/index',
                 'series/part-one',
                 'series/part-three',
                 'series/part-two',
+                'series/index',
             ] == [source.slug for source in sources]
 
     def test_filter_set(self):
@@ -569,10 +580,10 @@ class TestFlourish:
         assert [
                 'thing-one',
                 'thing-two',
-                'series/index',
                 'series/part-one',
                 'series/part-three',
                 'series/part-two',
+                'series/index',
             ] == [source.slug for source in sources]
 
     def test_exclude_set(self):
@@ -602,10 +613,10 @@ class TestFlourish:
         assert [
                 'thing-one',
                 'thing-two',
-                'series/index',
                 'series/part-one',
                 'series/part-three',
                 'series/part-two',
+                'series/index',
             ] == [source.slug for source in sources]
 
     def test_filter_inside_or_equal(self):
@@ -646,10 +657,10 @@ class TestFlourish:
                 'nothing',
                 'thing-one',
                 'thing-two',
-                'series/index',
                 'series/part-one',
                 'series/part-three',
                 'series/part-two',
+                'series/index',
             ] == [source.slug for source in sources]
 
         # ... but 'basically' should
@@ -660,10 +671,10 @@ class TestFlourish:
                 'basic-page',
                 'markdown-page',
                 'nothing',
-                'series/index',
                 'series/part-one',
                 'series/part-three',
                 'series/part-two',
+                'series/index',
             ] == [source.slug for source in sources]
 
         # ... as should 'basic-page'
@@ -675,10 +686,10 @@ class TestFlourish:
                 'nothing',
                 'thing-one',
                 'thing-two',
-                'series/index',
                 'series/part-one',
                 'series/part-three',
                 'series/part-two',
+                'series/index',
             ] == [source.slug for source in sources]
 
     def test_filter_multiple_arguments(self):
@@ -803,10 +814,10 @@ class TestFlourish:
                 'nothing',
                 'thing-one',
                 'thing-two',
-                'series/index',
                 'series/part-one',
                 'series/part-three',
                 'series/part-two',
+                'series/index',
             ] == [source.slug for source in unfiltered]
 
     def test_order_after_filter_works(self):
@@ -818,10 +829,10 @@ class TestFlourish:
                 'markdown-page',
                 'thing-one',
                 'thing-two',
-                'series/index',
                 'series/part-one',
                 'series/part-three',
                 'series/part-two',
+                'series/index',
             ] == [source.slug for source in sources]
 
         sources = sources.order_by('published')
@@ -847,10 +858,10 @@ class TestFlourish:
                 'markdown-page',
                 'thing-one',
                 'thing-two',
-                'series/index',
                 'series/part-one',
                 'series/part-three',
                 'series/part-two',
+                'series/index',
             ] == [source.slug for source in sources]
 
         sources = sources.order_by('published')

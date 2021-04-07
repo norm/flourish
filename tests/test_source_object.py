@@ -18,9 +18,6 @@ class TestFlourishPage:
     def setup_class(cls):
         with pytest.warns(None) as warnings:
             cls.flourish = Flourish('tests/source')
-            assert len(warnings) == 2
-            assert cls.flourish.sources.count() == 9
-            cls.warnings = warnings
 
     def test_toml_configuration(self):
         page = self.flourish.get('basic-page')
@@ -79,13 +76,6 @@ class TestFlourishPage:
                 'title': 'Part Three',
                 'page_type': 'post',
             } == page._config
-        # a warning is issued for this source during the initialisation of
-        # Flourish, which is captured in setup_class
-        assert (
-            str(self.warnings[0].message) ==
-            '"body_markdown" in series/part-three '
-            'overriden by Markdown attachment.'
-        )
 
     def test_toml_with_adherent_markdown(self):
         page = self.flourish.get('series/part-two')
@@ -103,12 +93,6 @@ class TestFlourishPage:
                 'title': 'Part Two',
                 'page_type': 'post',
             } == page._config
-        # a warning is issued for this source during the initialisation of
-        # Flourish, which is captured in setup_class
-        assert (
-            str(self.warnings[1].message) ==
-            '"body" in series/part-two overriden by Markdown conversion.'
-        )
 
     def test_page_markdown_with_frontmatter(self):
         page = self.flourish.get('markdown-page')

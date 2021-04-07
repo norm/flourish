@@ -10,8 +10,6 @@ class TestFlourishPaths:
     def setup_class(cls):
         with pytest.warns(None) as warnings:
             cls.flourish = Flourish('tests/source')
-            assert len(warnings) == 2
-            assert cls.flourish.sources.count() == 9
 
     def test_homepage_resolves(self):
         assert self.flourish.resolve_path('homepage') == '/'
@@ -140,10 +138,10 @@ class TestFlourishPaths:
             '/nothing',
             '/thing-one',
             '/thing-two',
-            '/series/',
             '/series/part-one',
             '/series/part-three',
             '/series/part-two',
+            '/series/',
         ] == [source.path for source in self.flourish.sources.all()]
 
     def test_lookup_path_handler(self):
@@ -171,9 +169,6 @@ class TestFlourishSourcesPath:
     def test_category_prefixed_sources(self):
         with pytest.warns(None) as _warnings:
             _flourish = Flourish('tests/source')
-            assert len(_warnings) == 2
-            assert _flourish.sources.count() == 9
-
             _flourish.add_path(
                 SourceGenerator(
                     path = '/#category/#slug',
@@ -187,18 +182,15 @@ class TestFlourishSourcesPath:
                 None,
                 '/thing/thing-one',
                 '/thing/thing-two',
-                '/article/series/',
                 '/article/series/part-one',
                 '/article/series/part-three',
                 '/article/series/part-two',
+                '/article/series/',
             ] == [source.path for source in _flourish.sources.all()]
 
     def test_invalid_prefixed_sources(self):
         with pytest.warns(None) as _warnings:
             _flourish = Flourish('tests/source')
-            assert len(_warnings) == 2
-            assert _flourish.sources.count() == 9
-
             _flourish.add_path(
                 SourceGenerator(
                     path = '/#page_type/#slug',
@@ -212,19 +204,16 @@ class TestFlourishSourcesPath:
                 None,
                 '/post/thing-one',
                 '/post/thing-two',
-                '/series_index/series/',
                 '/post/series/part-one',
                 '/post/series/part-three',
                 '/post/series/part-two',
+                '/series_index/series/',
             ] == [source.path for source in _flourish.sources.all()]
             # FIXME catch third warning
 
     def test_multiple_option_prefixed_sources(self):
         with pytest.warns(None) as _warnings:
             _flourish = Flourish('tests/source')
-            assert len(_warnings) == 2
-            assert _flourish.sources.count() == 9
-
             _flourish.add_path(
                 SourceGenerator(
                     path = '/#tag/#slug',
@@ -238,9 +227,9 @@ class TestFlourishSourcesPath:
                 None,
                 '/basically/thing-one',
                 '/basically/thing-two',
-                '/series/series/',
                 '/series/series/part-one',
                 '/three/series/part-three',
                 '/series/series/part-two',
+                '/series/series/',
             ] == [source.path for source in _flourish.sources.all()]
             # FIXME catch third warning

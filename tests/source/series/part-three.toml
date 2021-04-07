@@ -1,12 +1,8 @@
-body_markdown = """
-# Part Three
-
-Embedded Markdown.
-"""
-category = 'article'
-index_fkey = 'series/index'
-published = 2016-06-06T10:00:00Z
-series = 'series-in-three-parts'
-tag = ['three', 'series']
-title = 'Part Three'
-page_type = 'post'
+# this file should be completely overridden by the "series.csv" source,
+# so use silly settings, to check nothing in this file leaks through
+category = 'snarf'
+index_fkey = 'series/gtfo'
+published = 2010-01-01T10:00:00Z
+series = 'series-in-NO-parts'
+title = 'Part Troi'
+page_type = 'flange'

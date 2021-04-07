@@ -13,7 +13,6 @@ class TestRecipe:
                 source_dir='tests/source',
                 templates_dir='tests/templates',
             )
-            assert len(warnings) == 2
 
         recipe = flourish.path_recipe('/')
         assert recipe['path'] == '/'
@@ -68,7 +67,6 @@ class TestRecipe:
                 source_dir='tests/source',
                 fragments_dir='tests/fragments',
             )
-            assert len(warnings) == 2
 
         recipe = flourish.path_recipe('/')
         assert recipe['path'] == '/'

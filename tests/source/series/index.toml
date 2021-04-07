@@ -1,9 +1,0 @@
-body_markdown = """
-# A Series in Three Parts
-"""
-category = 'article'
-published = 2016-06-04T10:00:00Z
-series = 'series-in-three-parts'
-tag = ['series', 'index']
-title = 'A Series in Three Parts'
-page_type = 'series_index'

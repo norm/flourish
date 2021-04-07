@@ -1,4 +1,5 @@
 import codecs
+import csv
 from datetime import datetime, timezone
 from glob import glob
 import json
@@ -10,20 +11,7 @@ import markdown2
 import toml
 
 
-class SourceFile(object):
-    def __init__(self, parent, filename):
-        slug, _ = os.path.splitext(filename)
-        self._source = filename
-        self._slug = slug
-        self._parent = parent
-        self._config = self._read_configuration(filename)
-        self._timestamp = os.stat(
-                os.path.join(self._parent.source_dir, filename)
-            ).st_mtime
-        self._add_markdown_attachments()
-        self._add_html_attachments()
-        self._convert_markdown()
-
+class SourceBase:
     @property
     def slug(self):
         return self._slug
@@ -71,17 +59,12 @@ class SourceFile(object):
         except KeyError:
             return []
 
-    def _read_configuration(self, filename):
-        toml_file = '%s/%s' % (self._parent.source_dir, filename)
-        with codecs.open(toml_file, encoding='utf-8') as configuration:
-            return toml.loads(configuration.read())
-
     def _add_html_attachments(self):
         pattern = '%s/%s.*.html' % (self._parent.source_dir, self.slug)
         for attachment in glob(pattern):
             key = attachment.split('.')[-2]
             with codecs.open(attachment, encoding='utf-8') as content:
-                if key in self._config:
+                if key in self._config and len(self._config[key]):
                     warnings.warn(
                         '"%s" in %s overriden by HTML attachment.' % (
                             key, self.slug))
@@ -92,7 +75,7 @@ class SourceFile(object):
         for attachment in glob(pattern):
             key = attachment.split('.')[-2] + '_markdown'
             with codecs.open(attachment, encoding='utf-8') as content:
-                if key in self._config:
+                if key in self._config and len(self._config[key]):
                     warnings.warn(
                         '"%s" in %s overriden by Markdown attachment.' % (
                             key, self.slug))
@@ -104,7 +87,7 @@ class SourceFile(object):
             if key[-9:] == '_markdown':
                 dest = key[:-9]
                 add[dest] = markdown2.markdown(self._config[key])
-                if dest in self._config:
+                if dest in self._config and len(self._config[dest]):
                     warnings.warn(
                         '"%s" in %s overriden by Markdown conversion.' % (
                             dest, self.slug))
@@ -141,11 +124,31 @@ class SourceFile(object):
         _keys.append('slug')
         return iter(_keys)
 
-    def __repr__(self):
-        return '<flourish.TomlSourceFile object (%s)>' % self._source
-
     class DoesNotExist(Exception):
         pass
+
+
+class SourceFile(SourceBase):
+    def __init__(self, parent, filename):
+        slug, _ = os.path.splitext(filename)
+        self._source = filename
+        self._slug = slug
+        self._parent = parent
+        self._config = self._read_configuration(filename)
+        self._timestamp = os.stat(
+                os.path.join(self._parent.source_dir, filename)
+            ).st_mtime
+        self._add_markdown_attachments()
+        self._convert_markdown()
+        self._add_html_attachments()
+
+    def _read_configuration(self, filename):
+        toml_file = '%s/%s' % (self._parent.source_dir, filename)
+        with codecs.open(toml_file, encoding='utf-8') as configuration:
+            return toml.loads(configuration.read())
+
+    def __repr__(self):
+        return '<flourish.SourceFile object (%s)>' % self._source
 
 
 class MarkdownSourceFile(SourceFile):
@@ -169,9 +172,13 @@ class MarkdownSourceFile(SourceFile):
             config['body_markdown'] = content
         return config
 
+    def __repr__(self):
+        return '<flourish.MarkdownSourceFile object (%s)>' % self._source
+
 
 class TomlSourceFile(SourceFile):
-    pass
+    def __repr__(self):
+        return '<flourish.TomlSourceFile object (%s)>' % self._source
 
 
 class JsonSourceFile(SourceFile):
@@ -188,3 +195,90 @@ class JsonSourceFile(SourceFile):
                         _value, "%Y-%m-%dT%H:%M:%SZ"
                     ).replace(tzinfo=timezone.utc)
         return _config
+
+    def __repr__(self):
+        return '<flourish.JsonSourceFile object (%s)>' % self._source
+
+
+class CsvRowSource(SourceBase):
+    ISO8601 = re.compile(r'^\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}:\d{2}Z$')
+
+    def __init__(self, parent, filename, index, row):
+        self._parent = parent
+        self._source = filename
+        self._index = index
+        self._config = row
+        if row['slug'].startswith('/'):
+            self._slug = row['slug'][1:]
+        else:
+            self._slug = row['slug']
+        if self._slug.endswith('/'):
+            self._slug += 'index'
+
+        _add = {}
+        for _key, _value in row.items():
+            # convert timestamps
+            if type(_value) == str and self.ISO8601.match(_value):
+                row[_key] = datetime.strptime(
+                        _value, "%Y-%m-%dT%H:%M:%SZ"
+                    ).replace(tzinfo=timezone.utc)
+            # split string arrays
+            if _key.endswith('[]'):
+                _akey = _key[:-2]
+                if _value.find(',') > -1:
+                    _add[_akey] = _value.split(',')
+                else:
+                    _add[_akey] = _value.split(':')
+        self._config.update(_add)
+
+        # clean up unwanted keys from the original CSV
+        del(row['slug'])
+        for _key in _add:
+            del(row['%s[]' % _key])
+
+        self._add_markdown_attachments()
+        self._convert_markdown()
+        self._add_html_attachments()
+
+    def __repr__(self):
+        return '<flourish.CsvRowSource object (%s, row %d)>' % (
+                self._source,
+                self._index,
+            )
+
+
+class MultipleSourcesFile:
+    def __init__(self, parent, filename):
+        self._parent = parent
+        self._sources = self._read_file(filename)
+
+    def get_sources(self):
+        return self._sources
+
+
+class CsvSourceFile(MultipleSourcesFile):
+    VALID_SLUG = re.compile(r'^/?[a-zA-Z0-9][a-zA-Z0-9_/-]*$')
+
+    def _read_file(self, filename):
+        _sources = []
+        _source = '%s/%s' % (self._parent.source_dir, filename)
+        with open(_source) as handle:
+            reader = csv.DictReader(handle)
+            for line, row in enumerate(reader):
+                if 'slug' not in row:
+                    warnings.warn('"%s" has no column "slug"' % filename)
+                    break
+                else:
+                    if not self.VALID_SLUG.match(row['slug']):
+                        warnings.warn(
+                            '"%s" row %d, has an invalid slug "%s"' % (
+                                filename,
+                                line,
+                                row['slug'],
+                            )
+                        )
+                        continue
+                    _sources.append(
+                        CsvRowSource(self._parent, filename, line, row)
+                    )
+        return _sources

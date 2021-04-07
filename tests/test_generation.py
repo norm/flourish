@@ -84,7 +84,6 @@ class TestFlourishGeneration(FullGeneration):
                 sass_dir='tests/sass',
                 output_dir=self.tempdir,
             )
-            assert len(warnings) == 2
 
         with pytest.warns(None) as warnings:
             # one template has an invalid url() use
@@ -104,7 +103,6 @@ class TestSectileTemplatesGeneration(FullGeneration):
                 sass_dir='tests/sass',
                 output_dir=self.tempdir,
             )
-            assert len(warnings) == 2
 
         with pytest.warns(None) as warnings:
             # one template has an invalid url() use
@@ -131,7 +129,6 @@ class TestSinglePathGeneration(CompareDirectories):
                 templates_dir='tests/templates',
                 output_dir=self.tempdir,
             )
-            assert len(warnings) == 2
 
         flourish.generate_path('/')
         flourish.generate_path('/tags/first/?')

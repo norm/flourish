@@ -1,4 +1,5 @@
 import csv
+from datetime import datetime
 
 from flourish.generators.base import BaseGenerator
 from flourish.generators.mixins import SourcesMixin
@@ -35,4 +36,6 @@ class CSVGenerator(SourcesMixin, BaseGenerator):
         if type(value) == list:
             if type(value[0]) == str:
                 return ':'.join(sorted(value))
+        elif type(value) == datetime:
+            return value.isoformat().replace('+00:00', 'Z')
         return value
