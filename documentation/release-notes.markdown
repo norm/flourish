@@ -2,6 +2,15 @@
 
 # Release notes for Flourish
 
+## 0.9.6 - 22 April 2021
+
+#### Bug fixes
+
+  * Months and days in date-based path segments are treated as
+    2-character segments, so now 4th June 2016 is generated
+    as `/2016/06/04` not `/2016/6/4`.
+
+
 ## 0.9.5 - 7 April 2021
 
 #### New
