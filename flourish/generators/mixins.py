@@ -36,7 +36,10 @@ class PathMixin:
                 if key in kwargs:
                     if kwargs[key] is None:
                         raise RuntimeError
-                    resolved = '%s%s' % (resolved, kwargs[key])
+                    if key == 'month' or key == 'day':
+                        resolved = '%s%02d' % (resolved, int(kwargs[key]))
+                    else:
+                        resolved = '%s%s' % (resolved, kwargs[key])
                 else:
                     raise KeyError
             else:
