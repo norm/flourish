@@ -58,6 +58,8 @@ class PathMixin:
         check_path = path
         segments = re.split(self.PATH_SEGMENTS, self.path)
         while len(segments) > 1:
+            if check_path == '?':
+                break
             pos = check_path.find(segments[0])
             if pos < 0:
                 return []
@@ -67,11 +69,12 @@ class PathMixin:
                 check_path = stripped[1]
             segments.pop(0)
             segments.pop(0)
-        if check_path.endswith('?'):
-            if segments[0].find(check_path[:-1]) < 0:
+        if segments[0]:
+            if check_path.endswith('?'):
+                if segments[0].find(check_path[:-1]) < 0:
+                    return []
+            elif not check_path.endswith(segments[0]):
                 return []
-        elif not check_path.endswith(segments[0]):
-            return []
 
         for _filter in self.all_valid_filters():
             filter_path = self.resolve(**_filter)
