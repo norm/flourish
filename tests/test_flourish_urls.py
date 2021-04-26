@@ -164,6 +164,17 @@ class TestFlourishPaths:
         ]
         assert expected == self.flourish.get_handler_for_path('/tags/first/?')
 
+    def test_lookup_path_handler_wildcard_submatches(self):
+        expected = [
+            ('year-index',  {'year': '2016'}),
+            ('month-index', {'month': '02', 'year': '2016'}),
+            ('month-index', {'month': '06', 'year': '2016'}),
+            ('day-index',   {'day': '29', 'month': '02', 'year': '2016'}),
+            ('day-index',   {'day': '04', 'month': '06', 'year': '2016'}),
+            ('day-index',   {'day': '06', 'month': '06', 'year': '2016'}),
+        ]
+        assert expected == self.flourish.get_handler_for_path('/2016?')
+
 
 class TestFlourishSourcesPath:
     def test_category_prefixed_sources(self):

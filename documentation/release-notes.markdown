@@ -2,6 +2,24 @@
 
 # Release notes for Flourish
 
+## 0.9.7 - UNRELEASED
+
+High level description, if applicable.
+
+#### New
+
+#### Other changes
+
+#### Bug fixes
+
+  * Fix wildcard generation of URLs. Some patterns were not matching, for
+    example `flourish generate /2021/?` was generating `/2021/index.html` but
+    not `/2021/04/21/index.html`, or any source with a slug starting
+    `/2021/...`.
+
+#### Dependency updates
+
+
 ## 0.9.6 - 22 April 2021
 
 #### Bug fixes
