@@ -297,12 +297,16 @@ def generate(args):
 
 def preview_server(args):
     output_dir = os.path.abspath(args.output)
+    reloading = False
+    if args.generate:
+        reloading = True
     try:
         flourish = Flourish(
             source_dir=args.source,
             templates_dir=args.templates,
             fragments_dir=args.fragments,
             output_dir=args.output,
+            reloading=reloading,
         )
     except Flourish.MissingKey as e:
         sys.exit('Error: %s' % str(e))
@@ -331,7 +335,6 @@ def preview_server(args):
 
             # regenerate if requested
             if args.generate:
-                flourish._rescan_sources()
                 flourish.generate_path(generate, report=True)
 
             return send_from_directory(output_dir, path)

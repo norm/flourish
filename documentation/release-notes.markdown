@@ -16,6 +16,9 @@ High level description, if applicable.
     example `flourish generate /2021/?` was generating `/2021/index.html` but
     not `/2021/04/21/index.html`, or any source with a slug starting
     `/2021/...`.
+  * Stop live preview caching sectile-generated templates, which invalidated
+    the point of being able to live preview changes as they are made.
+
 
 #### Dependency updates
 
