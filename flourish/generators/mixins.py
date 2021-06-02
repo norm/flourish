@@ -65,7 +65,9 @@ class PathMixin:
                 return []
             check_path = check_path[(pos + len(segments[0])):]
             stripped = re.split(self.STRIP_PATH, check_path)
-            if len(stripped) > 1:
+            if segments[1] == '#slug' and check_path.endswith('/'):
+                path = path + 'index'
+            elif len(stripped) > 1:
                 check_path = stripped[1]
             segments.pop(0)
             segments.pop(0)
