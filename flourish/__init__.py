@@ -37,6 +37,7 @@ class Flourish(object):
         fragments_dir=None,
         future=None,
         skip_scan=False,
+        reloading=False,
     ):
         self.source_dir = source_dir
         self.templates_dir = templates_dir
@@ -44,6 +45,7 @@ class Flourish(object):
         self.output_dir = output_dir
         self.sass_dir = sass_dir
         self.future = future
+        self.reloading = reloading
         self._assets = {}
         self._cache = {}
         self._source_files = []
@@ -52,10 +54,14 @@ class Flourish(object):
 
         # using sectile fragments overrides standard filesystem templates
         if self.fragments_dir:
+            cache_size = 400
+            if self.reloading:
+                cache_size = 0
             self.using_sectile = True
             self.jinja = Environment(
                 loader=SectileLoader(self.fragments_dir),
                 keep_trailing_newline=True,
+                cache_size=cache_size,
             )
         else:
             self.using_sectile = False
@@ -188,6 +194,8 @@ class Flourish(object):
             self._paths[path].generate(report)
 
     def generate_path(self, path, report=False):
+        if self.reloading:
+            self._rescan_sources()
         handlers = self.get_handler_for_path(path)
         for key, args in handlers:
             path = self._paths[key]
