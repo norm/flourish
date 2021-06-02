@@ -8,6 +8,9 @@ High level description, if applicable.
 
 #### New
 
+  * Serve asset files (eg CSS, images, etc) from the source directory
+    during live preview.
+
 #### Other changes
 
 #### Bug fixes

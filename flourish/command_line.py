@@ -297,6 +297,7 @@ def generate(args):
 
 def preview_server(args):
     output_dir = os.path.abspath(args.output)
+    source_dir = os.path.abspath(args.source)
     reloading = False
     if args.generate:
         reloading = True
@@ -337,7 +338,10 @@ def preview_server(args):
             if args.generate:
                 flourish.generate_path(generate, report=True)
 
-            return send_from_directory(output_dir, path)
+            if os.path.exists(os.path.join(output_dir, path)):
+                return send_from_directory(output_dir, path)
+            else:
+                return send_from_directory(source_dir, path)
 
     @app.after_request
     def add_header(response):
