@@ -150,13 +150,19 @@ class SourcesMixin:
 
 
 class GeneratorMixin:
+    class DoNotGenerate(Exception):
+        pass
+
     def generate(self, report=False, tokens=None):
         self.report = report
         if not tokens:
             tokens = self.get_path_tokens()
         for tokenset in tokens:
             self.tokens = tokenset
-            self.generate_path(tokenset)
+            try:
+                self.generate_path(tokenset)
+            except self.DoNotGenerate:
+                pass
 
     def get_path_tokens(self):
         return self.flourish.all_valid_filters_for_path(self.name)
