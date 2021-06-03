@@ -33,9 +33,8 @@ class AtomGenerator(SourcesMixin, BaseGenerator):
 
     def render_output(self):
         feed = FeedGenerator()
-        feed.author({'name': self.flourish.site_config['author']})
-        feed.title(self.flourish.site_config['title'])
-        # feed.link(self.flourish.site_config['base_url'])
+        feed.author(self.get_feed_author())
+        feed.title(self.get_feed_title())
         feed.id('%s%s' % (
             self.flourish.site_config['base_url'],
             self.current_path,
@@ -51,6 +50,7 @@ class AtomGenerator(SourcesMixin, BaseGenerator):
         for _object in self.source_objects:
             entry = feed.add_entry(order='append')
             entry.title(self.get_entry_title(_object))
+            entry.author(self.get_entry_author(_object))
             entry.id(self.get_entry_id(_object))
             entry.link(href=_object.absolute_url, rel='alternate')
             entry.published(_object.published)
@@ -58,11 +58,6 @@ class AtomGenerator(SourcesMixin, BaseGenerator):
                 content=self.get_entry_content(_object),
                 type='html'
             )
-
-            if 'author' in _object:
-                entry.author({'name': _object.author})
-            else:
-                entry.author({'name': self.flourish.site_config['author']})
 
             if 'updated' in _object:
                 entry.updated(_object.updated)
@@ -74,6 +69,18 @@ class AtomGenerator(SourcesMixin, BaseGenerator):
         feed.updated(last_updated)
 
         return feed.atom_str(pretty=True)
+
+    def get_feed_author(self):
+        return {'name': self.flourish.site_config['author']}
+
+    def get_feed_title(self):
+        return self.flourish.site_config['title']
+
+    def get_entry_author(self, entry):
+        if 'author' in entry:
+            return {'name': entry.author}
+        else:
+            return self.get_feed_author()
 
     def get_entry_content(self, object):
         return object.body

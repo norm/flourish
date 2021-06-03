@@ -15,6 +15,8 @@ High level description, if applicable.
 
 #### Other changes
 
+  * Allow overriding an Atom feed's author and title values.
+
 #### Bug fixes
 
   * Fix wildcard generation of URLs. Some patterns were not matching, for
