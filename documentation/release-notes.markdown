@@ -2,9 +2,7 @@
 
 # Release notes for Flourish
 
-## 0.9.7 - UNRELEASED
-
-High level description, if applicable.
+## 0.9.7 - 3 June 2021
 
 #### New
 
@@ -26,9 +24,6 @@ High level description, if applicable.
   * Stop live preview caching sectile-generated templates, which invalidated
     the point of being able to live preview changes as they are made.
   * An Atom feed without entries will still generate now.
-
-
-#### Dependency updates
 
 
 ## 0.9.6 - 22 April 2021
