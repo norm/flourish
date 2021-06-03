@@ -46,11 +46,11 @@ not be included in the Atom feed.
 
 Bypasses `get_context_data`, `get_template`, `get_template_name` and 
 `render_template`, instead constructing the Atom feed programmatically
-using the `AtomFeed` class provided by [pyatom], calling `get_feed_author`,
-`get_feed_title`, and for every entry, `get_entry_author`,
+using the `FeedGenerator` class provided by [feedgen], calling
+`get_feed_author`, `get_feed_title`, and for every entry, `get_entry_author`,
 `get_entry_content`, `get_entry_title`, and `get_entry_id`.
 
-[pyatom]: https://pypi.python.org/pypi/pyatom
+[feedgen]: https://pypi.python.org/pypi/feedgen
 
 ### get_feed_author()
 
