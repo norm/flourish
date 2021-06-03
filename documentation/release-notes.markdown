@@ -25,6 +25,7 @@ High level description, if applicable.
     `/2021/...`.
   * Stop live preview caching sectile-generated templates, which invalidated
     the point of being able to live preview changes as they are made.
+  * An Atom feed without entries will still generate now.
 
 
 #### Dependency updates

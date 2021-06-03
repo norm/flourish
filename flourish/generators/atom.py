@@ -45,7 +45,7 @@ class AtomGenerator(SourcesMixin, BaseGenerator):
             ), rel='self')
         feed.link(href=self.flourish.site_config['base_url'], rel='alternate')
 
-        last_updated = self.source_objects[0].published
+        last_updated = datetime(1970,1,1,0,0,0).replace(tzinfo=timezone.utc)
 
         for _object in self.source_objects:
             entry = feed.add_entry(order='append')
@@ -59,6 +59,8 @@ class AtomGenerator(SourcesMixin, BaseGenerator):
                 type='html'
             )
 
+            if _object.published > last_updated:
+                last_updated = _object.published
             if 'updated' in _object:
                 entry.updated(_object.updated)
                 if _object.updated > last_updated:
