@@ -10,6 +10,8 @@ High level description, if applicable.
 
   * Serve asset files (eg CSS, images, etc) from the source directory
     during live preview.
+  * Raising `self.DoNotGenerate` in a generator will stop the current
+    page from being generated, without causing any errors.
 
 #### Other changes
 

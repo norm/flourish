@@ -47,3 +47,15 @@ values available for use in templates.
 ### PageIndexContextMixin
 
 Adds the list of source objects to the template context as `pages`.
+
+
+## Stopping generation
+
+Sometimes you may want to not generate a page (for example, due to a lack of
+content). To do this, raise `DoNotGenerate` and the generator will skip that
+page without it counting as an error.
+
+    def get_objects(self, tokens):
+        sources = self.get_filtered_sources().filter(**tokens)
+        if sources.count() == 0:
+            raise self.DoNotGenerate

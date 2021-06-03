@@ -39,6 +39,13 @@ class NotFound(StaticGenerator):
     template_name = '404.html'
 
 
+class NotGenerated(StaticGenerator):
+    template_name = '404.html'
+
+    def get_context_data(self):
+        raise self.DoNotGenerate
+
+
 class ArchivePage(SourceGenerator):
     template_name = 'archive.html'
 
@@ -112,6 +119,13 @@ PATHS = (
         name = 'not-found-page',
         context = {
             'title': 'Not Found',
+        },
+    ),
+    NotGenerated(
+        path = '/404b',
+        name = 'not-generated-page',
+        context = {
+            'title': 'Not Generated',
         },
     ),
     AttributedAtom(
