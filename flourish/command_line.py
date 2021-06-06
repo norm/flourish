@@ -8,110 +8,12 @@ from textwrap import dedent
 import time
 
 import boto3
-from flask import Flask, request, send_from_directory
+from flask import Flask, make_response, request, send_from_directory
 from jinja2 import Template
 
-from . import Flourish, __version__
+from . import Flourish, __version__, blueprint
 from .examples import example_files
 from .lib import relative_list_of_files_in_directory
-
-
-recipe_html = Template(dedent("""\
-    <html>
-    <head>
-      <style>
-        #dimensions dt {
-          float: left;
-          margin-right: 20px;
-          min-width: 100px;
-        }
-        #dimensions dd {
-          font-weight: bold;
-        }
-        #template ol {
-          margin: 0;
-          padding: 0;
-        }
-        #template ol ol li {
-          padding: 0 0 0 17px;
-          border-left: 1px solid #999;
-          margin-left: 3px;
-          margin-bottom: 15px;
-        }
-        #template li {
-          list-style: none;
-          margin-top: 10px;
-        }
-        #template li i {
-          color: #66a;
-          font-size: 0.8em;
-        }
-        #template li.missing {
-          margin-bottom: 10px;
-        }
-        #template li.missing > i {
-          font-weight: bold;
-          color: #f99;
-        }
-        #template li pre {
-          margin: 0;
-        }
-      </style>
-    </head>
-    <body>
-      <h1>Recipe for {{path|e}}</h1>
-      <div id='template'>
-        {% if sectile_dimensions %}
-          <h2>Dimensions</h2>
-          <dl id='dimensions'>
-          {% for dim in sectile_dimensions %}
-            <dt>{{dim}}</dt>
-            <dd>{{sectile_dimensions[dim]}}</dd>
-          {% endfor %}
-          </dl>
-        {% endif %}
-        <h2>Template: <i>{{template_name|e}}</i></h2>
-        {% if sectile_fragments %}
-          {% set depth = namespace(previous=-1) %}
-          {% for fragment in sectile_fragments %}
-            {% if depth.previous < fragment.depth %}
-              <ol>
-            {% elif depth.previous > fragment.depth %}
-              {% for i in range(fragment.depth, depth.previous) %}
-                </li></ol>
-              {% endfor %}
-            {% else %}
-              </li>
-            {% endif %}
-            <li class='{% if not fragment.found %}missing{% endif %}'>
-            {% if not fragment.found %}
-              <i>{{fragment.file}}: None</i>
-            {% else %}
-              <i>{{fragment.found}}</i>
-              <pre>{{fragment.fragment|e}}</pre>
-            {% endif %}
-
-            {% if depth.previous < fragment.depth %}
-
-            {% elif depth.previous > fragment.depth %}
-            {% else %}
-              </li>
-            {% endif %}
-            {% set depth.previous = fragment.depth %}
-          {% endfor %}
-          </ol>
-          {% for i in range(depth.previous) %}
-            </li></ol>
-          {% endfor %}
-          <p>Result:</p>
-        {% endif %}
-        <pre>{{template|e}}</pre>
-      </div>
-      <h2>Context:</h2>
-      <div id='context'>{{context|e}}</div>
-    </body>
-    </html>
-    """))
 
 
 def main():
@@ -323,8 +225,16 @@ def preview_server(args):
     def send_file(path=''):
         generate = '/%s' % path
 
-        if 'showrecipe' in request.args:
-            return recipe_html.render(flourish.path_recipe(generate))
+        if 'blueprint' in request.args:
+            response = make_response(
+                Template(
+                    blueprint.template
+                ).render(
+                    flourish.path_blueprint(generate)
+                )
+            )
+            response.headers.set('X-Blueprint-Page', 'true')
+            return response
         else:
             # fix URLs for .html
             filename = os.path.basename(path)
@@ -345,6 +255,15 @@ def preview_server(args):
 
     @app.after_request
     def add_header(response):
+        if (
+            response.content_type.startswith('text/html')
+            and args.generate
+            and not 'X-Blueprint-Page' in response.headers
+        ):
+            response.direct_passthrough = False
+            response.data = (
+                response.data + bytes(blueprint.toolbar, 'utf-8')
+            )
         response.cache_control.max_age = 0
         return response
 

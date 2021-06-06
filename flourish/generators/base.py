@@ -23,6 +23,11 @@ class BaseGenerator(ContextMixin, PathMixin, GeneratorMixin, TemplateMixin):
     def setup(self, flourish):
         self.flourish = flourish
 
+    def get_context_data(self):
+        context = super().get_context_data()
+        context['generator'] = self.name
+        return context
+
     def output_to_file(self):
         filename = self.get_output_filename()
         if self.report:

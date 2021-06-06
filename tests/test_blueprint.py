@@ -6,17 +6,17 @@ from flourish import Flourish
 from flourish.sourcelist import SourceList
 
 
-class TestRecipe:
-    def test_recipe_file_templates(self):
+class TestBlueprint:
+    def test_blueprint_file_templates(self):
         with pytest.warns(None) as warnings:
             flourish = Flourish(
                 source_dir='tests/source',
                 templates_dir='tests/templates',
             )
 
-        recipe = flourish.path_recipe('/')
-        assert recipe['path'] == '/'
-        assert recipe['template_name'] == 'index.html'
+        blueprint = flourish.path_blueprint('/')
+        assert blueprint['path'] == '/'
+        assert blueprint['template_name'] == 'index.html'
 
         expected_template = dedent("""\
             {% extends "base.html" %}
@@ -45,7 +45,7 @@ class TestRecipe:
               {% endif %}
             {% endblock %}
         """)
-        assert recipe['template'] == expected_template
+        assert blueprint['template'] == expected_template
 
         context_contains = {
             'global': {'copyright_year_range': '2015–2016'},
@@ -55,22 +55,66 @@ class TestRecipe:
                      'future': False},
             'tokens': {},
         }
-        assert recipe['context'].items() >= context_contains.items()
-        assert type(recipe['context']['sources']) == SourceList
-        assert recipe['context']['sources'].count() == 8
-        assert type(recipe['context']['pages']) == SourceList
-        assert recipe['context']['pages'].count() == 8
+        assert blueprint['context'].items() >= context_contains.items()
+        assert type(blueprint['context']['sources']) == SourceList
+        assert blueprint['context']['sources'].count() == 8
+        assert type(blueprint['context']['pages']) == SourceList
+        assert blueprint['context']['pages'].count() == 8
+        assert blueprint['debug_page_context'] == dedent("""\
+            {
+              "site": {
+                "author": "Wendy Testaburger",
+                "base_url": "http://withaflourish.net",
+                "title": "Flourish Blog",
+                "future": false
+              },
+              "tokens": {},
+              "generator": "homepage",
+              "sources": {
+                "sources": null,
+                "ordering": [
+                  "-published"
+                ],
+                "filters": [
+                  [
+                    "published__set",
+                    ""
+                  ]
+                ],
+                "slice": null,
+                "future": false
+              },
+              "pages": {
+                "sources": null,
+                "ordering": [
+                  "-published"
+                ],
+                "filters": [
+                  [
+                    "published__set",
+                    ""
+                  ]
+                ],
+                "slice": null,
+                "future": false
+              }
+            }""")
+        assert blueprint['debug_global_context'] == dedent("""\
+            {
+              "copyright_year_range": "2015\\u20132016"
+            }""")
 
-    def test_recipe_sectile_templates(self):
+
+    def test_blueprint_sectile_templates(self):
         with pytest.warns(None) as warnings:
             flourish = Flourish(
                 source_dir='tests/source',
                 fragments_dir='tests/fragments',
             )
 
-        recipe = flourish.path_recipe('/')
-        assert recipe['path'] == '/'
-        assert recipe['template_name'] == 'index.html'
+        blueprint = flourish.path_blueprint('/')
+        assert blueprint['path'] == '/'
+        assert blueprint['template_name'] == 'index.html'
 
         expected_template = dedent("""\
             <html lang='en-GB'>
@@ -122,7 +166,7 @@ class TestRecipe:
             </body>
             </html>
         """)  # noqa: E501
-        assert recipe['template'] == expected_template
+        assert blueprint['template'] == expected_template
 
         context_contains = {
             'global': {'copyright_year_range': '2015–2016'},
@@ -132,11 +176,11 @@ class TestRecipe:
                      'future': False},
             'tokens': {},
         }
-        assert recipe['context'].items() >= context_contains.items()
-        assert type(recipe['context']['sources']) == SourceList
-        assert recipe['context']['sources'].count() == 8
-        assert type(recipe['context']['pages']) == SourceList
-        assert recipe['context']['pages'].count() == 8
+        assert blueprint['context'].items() >= context_contains.items()
+        assert type(blueprint['context']['sources']) == SourceList
+        assert blueprint['context']['sources'].count() == 8
+        assert type(blueprint['context']['pages']) == SourceList
+        assert blueprint['context']['pages'].count() == 8
 
         with open('tests/fragments/index/all/body', 'r') as handle:
             body = handle.read()
@@ -197,5 +241,51 @@ class TestRecipe:
                 'fragment': '',
             },
         ]
-        assert recipe['sectile_fragments'] == expected_fragments
-        assert recipe['sectile_dimensions'] == {'generator': 'homepage'}
+        assert blueprint['sectile_fragments'] == expected_fragments
+        assert blueprint['sectile_dimensions'] == {
+            'generator': 'homepage',
+            'page_type': 'all',
+        }
+        assert blueprint['debug_page_context'] == dedent("""\
+            {
+              "site": {
+                "author": "Wendy Testaburger",
+                "base_url": "http://withaflourish.net",
+                "title": "Flourish Blog",
+                "future": false
+              },
+              "tokens": {},
+              "generator": "homepage",
+              "sources": {
+                "sources": null,
+                "ordering": [
+                  "-published"
+                ],
+                "filters": [
+                  [
+                    "published__set",
+                    ""
+                  ]
+                ],
+                "slice": null,
+                "future": false
+              },
+              "pages": {
+                "sources": null,
+                "ordering": [
+                  "-published"
+                ],
+                "filters": [
+                  [
+                    "published__set",
+                    ""
+                  ]
+                ],
+                "slice": null,
+                "future": false
+              }
+            }""")
+        assert blueprint['debug_global_context'] == dedent("""\
+            {
+              "copyright_year_range": "2015\\u20132016"
+            }""")

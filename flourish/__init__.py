@@ -201,13 +201,13 @@ class Flourish(object):
             path = self._paths[key]
             path.generate(report, tokens=[args])
 
-    def path_recipe(self, path):
+    def path_blueprint(self, path):
         handlers = self.get_handler_for_path(path)
         for key, args in handlers:
             path = self._paths[key]
-            recipe = path.get_recipe(tokens=[args])
-            if recipe:
-                return recipe
+            blueprint = path.get_blueprint(tokens=[args])
+            if blueprint:
+                return blueprint
         return None
 
     def set_global_context(self, global_context):
