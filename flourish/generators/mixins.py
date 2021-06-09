@@ -236,11 +236,11 @@ class GeneratorMixin:
                     if dimension not in dimensions:
                         dimensions[dimension] = 'all'
                 blueprint['sectile_dimensions'] = dimensions
-                blueprint['sectile_fragment_paths'] = sectile.get_fragment_paths(
-                    name,
-                    self.current_path,
-                    **dimensions,
-                )
+                blueprint['sectile_fragment_paths'] \
+                    = sectile.get_dimension_paths(
+                            self.current_path,
+                            **dimensions,
+                        )
             else:
                 filename = os.path.join(self.flourish.templates_dir, name)
                 with open(filename, 'r') as handle:
