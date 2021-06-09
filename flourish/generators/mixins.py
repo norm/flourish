@@ -231,6 +231,11 @@ class GeneratorMixin:
                         name,
                         **dimensions
                     )
+                blueprint['sectile_dimension_possibilities'] \
+                    = sectile.get_dimension_possibilities(
+                            self.current_path,
+                            **dimensions
+                        )
                 # expand unspecified dimensions for debugging
                 for dimension in self.flourish.jinja.loader.dimensions():
                     if dimension not in dimensions:

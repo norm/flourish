@@ -8,8 +8,9 @@ from textwrap import dedent
 import time
 
 import boto3
-from flask import Flask, make_response, request, send_from_directory
+from flask import Flask, make_response, redirect, request, send_from_directory
 from jinja2 import Template
+from sectile import Sectile
 
 from . import Flourish, __version__, blueprint
 from .examples import example_files
@@ -252,6 +253,45 @@ def preview_server(args):
                 return send_from_directory(output_dir, path)
             else:
                 return send_from_directory(source_dir, path)
+
+    @app.route('/_sectile/update', methods=['GET', 'POST'])
+    def edit_sectile_fragment():
+        sectile = Sectile(fragments=args.fragments)
+        if request.method == 'GET':
+            return make_response(
+                    Template(
+                        blueprint.update_template
+                    ).render({
+                        'fragment': request.args['fragment'],
+                        'content': sectile.get_fragment_file(request.args['fragment']),
+                        '_return': request.args['_return'],
+                    })
+                )
+        else:
+            sectile.update_fragment(
+                request.form['fragment'],
+                request.form['content'],
+            )
+            return redirect(request.form['_return'])
+
+    @app.route('/_sectile/delete', methods=['POST'])
+    def delete_sectile_fragment():
+        sectile = Sectile(fragments=args.fragments)
+        sectile.delete_fragment(request.form['fragment'])
+        return redirect(request.form['_return'])
+
+    @app.route('/_sectile/create', methods=['POST'])
+    def create_sectile_fragment():
+        sectile = Sectile(fragments=args.fragments)
+        dimensions = {}
+        for dimension in sectile.get_dimensions_list():
+            dimensions[dimension] = request.form[dimension]
+        sectile.create_fragment(
+            request.form['fragment'],
+            request.form['path'],
+            **dimensions,
+        )
+        return redirect(request.form['_return'])
 
     @app.after_request
     def add_header(response):

@@ -32,7 +32,7 @@ setup(
         'feedgen',
         'toml',
         'libsass',
-        'sectile>=0.3.1',
+        'sectile>=0.3.5',
         'jsonpickle',
     ],
     python_requires='>=3.6',

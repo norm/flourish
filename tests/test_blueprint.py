@@ -190,12 +190,22 @@ class TestBlueprint:
         expected_fragments = [
             {
                 'depth': 0,
+                'dimensions': {
+                    'generator': 'all',
+                    'page_type': 'all',
+                    'path': 'index.html',
+                },
                 'file': 'index.html',
                 'found': 'default/index.html',
                 'fragment': '[[ sectile insert base.html ]]\n',
             },
             {
                 'depth': 1,
+                'dimensions': {
+                    'generator': 'all',
+                    'page_type': 'all',
+                    'path': 'base.html',
+                },
                 'file': 'base.html',
                 'found': 'default/base.html',
                 'fragment': (
@@ -207,6 +217,11 @@ class TestBlueprint:
             },
             {
                 'depth': 2,
+                'dimensions': {
+                    'generator': 'all',
+                    'page_type': 'all',
+                    'path': 'head_wrapper',
+                },
                 'file': 'head_wrapper',
                 'found': 'default/head_wrapper',
                 'fragment': dedent("""\
@@ -218,24 +233,44 @@ class TestBlueprint:
             },
             {
                 'depth': 2,
+                'dimensions': {
+                    'generator': 'all',
+                    'page_type': 'all',
+                    'path': 'body_wrapper',
+                },
                 'file': 'body_wrapper',
                 'found': 'default/body_wrapper',
                 'fragment': body_wrapper,
             },
             {
                 'depth': 3,
+                'dimensions': {
+                    'generator': None,
+                    'page_type': None,
+                    'path': None,
+                },
                 'file': 'body_class',
                 'found': None,
                 'fragment': '',
             },
             {
                 'depth': 3,
+                'dimensions': {
+                    'generator': 'index',
+                    'page_type': 'all',
+                    'path': 'body',
+                },
                 'file': 'body',
                 'found': 'index/all/body',
                 'fragment': body,
             },
             {
                 'depth': 3,
+                'dimensions': {
+                    'generator': None,
+                    'page_type': None,
+                    'path': None,
+                },
                 'file': 'related',
                 'found': None,
                 'fragment': '',
