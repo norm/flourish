@@ -20,6 +20,10 @@ setup(
         'console_scripts': ['flourish=flourish.command_line:main'],
     },
 
+    package_data={
+        '': ['*.html'],
+    },
+
     install_requires=[
         'boto3',
         'Flask',
@@ -28,7 +32,8 @@ setup(
         'feedgen',
         'toml',
         'libsass',
-        'sectile>=0.3',
+        'sectile>=0.3.5',
+        'jsonpickle',
     ],
     python_requires='>=3.6',
 

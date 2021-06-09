@@ -1,4 +1,7 @@
+import json
+import jsonpickle
 import os
+from pprint import pformat
 import re
 
 from sectile import Sectile
@@ -172,37 +175,82 @@ class GeneratorMixin:
         self.get_objects(tokens)
         self.output_to_file()
 
-    def get_recipe(self, tokens):
+    def get_blueprint_context_as_strings(self):
+        # jump through hoops to get context "pretty" printed without
+        # the ridiculous indentation that pprint generates
+        context = self.get_context_data()
+        global_context = context['global']
+        del context['global']
+
+        obj = json.loads(
+                jsonpickle.encode(context, unpicklable=False)
+            )
+        # do not need to see all this data in the blueprint page
+        if 'page' in obj:
+            del obj['page']['_parent']['_cache']
+        context_string = json.dumps(obj, indent=2)
+
+        global_context_string = json.dumps(
+            json.loads(
+                jsonpickle.encode(global_context, unpicklable=False)
+            ),
+            indent=2,
+        )
+        return context_string, global_context_string
+
+    def get_blueprint(self, tokens):
         for tokenset in tokens:
             self.tokens = tokenset
             self.get_current_path(tokenset)
             self.get_objects(tokenset)
             context = self.get_context_data()
             name = self.get_template_name()
-            recipe = {
+
+            page_context_string, global_context_string \
+                = self.get_blueprint_context_as_strings()
+
+            # FIXME no pages in context on index page
+            blueprint = {
                 'path': self.current_path,
                 'context': context,
+                'debug_page_context': page_context_string,
+                'debug_global_context': global_context_string,
                 'template_name': name,
             }
             if self.flourish.using_sectile:
                 sectile = Sectile(fragments=self.flourish.fragments_dir)
-                dimensions = {
-                    'generator': self.name,
-                }
+                dimensions = {}
                 for dimension in self.flourish.jinja.loader.dimensions():
                     if dimension in context:
                         dimensions[dimension] = context[dimension]
-                recipe['template'], recipe['sectile_fragments'] = sectile.generate(
-                    self.current_path,
-                    name,
-                    **dimensions
-                )
-                recipe['sectile_dimensions'] = dimensions
+                (
+                    blueprint['template'],
+                    blueprint['sectile_fragments'] 
+                ) = sectile.generate(
+                        self.current_path,
+                        name,
+                        **dimensions
+                    )
+                blueprint['sectile_dimension_possibilities'] \
+                    = sectile.get_dimension_possibilities(
+                            self.current_path,
+                            **dimensions
+                        )
+                # expand unspecified dimensions for debugging
+                for dimension in self.flourish.jinja.loader.dimensions():
+                    if dimension not in dimensions:
+                        dimensions[dimension] = 'all'
+                blueprint['sectile_dimensions'] = dimensions
+                blueprint['sectile_fragment_paths'] \
+                    = sectile.get_dimension_paths(
+                            self.current_path,
+                            **dimensions,
+                        )
             else:
                 filename = os.path.join(self.flourish.templates_dir, name)
                 with open(filename, 'r') as handle:
-                    recipe['template'] = handle.read()
-            return recipe
+                    blueprint['template'] = handle.read()
+            return blueprint
 
 
 class TemplateMixin:
@@ -221,9 +269,7 @@ class TemplateMixin:
             # doesn't allow any extra context than the name of the template to
             # be passed, we pre-construct and cache a template and then use
             # that cached value as the template's "name".
-            dimensions = {
-                'generator': self.name,
-            }
+            dimensions = {}
             for dimension in self.flourish.jinja.loader.dimensions():
                 if dimension in context:
                     dimensions[dimension] = context[dimension]

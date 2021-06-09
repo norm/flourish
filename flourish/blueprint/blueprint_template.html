@@ -1,0 +1,288 @@
+<html>
+<head>
+  <style>
+    body {
+      background: #def;
+      color: #003;
+    }
+    #flourish-toolbar {
+      position: absolute !important;
+      top: 0 !important;
+      right: 0 !important;
+      padding: 5px !important;
+      z-index: 99 !important;
+    }
+    #flourish-toolbar a {
+      font-size: 30px !important;
+      text-decoration: none !important;
+      border: none !important;
+    }
+    #dimensions dt {
+      float: left;
+      margin-right: 20px;
+      min-width: 100px;
+    }
+    #dimensions dd {
+      font-weight: bold;
+    }
+    #template ol {
+      margin: 0;
+      padding: 0;
+    }
+    #template ol ol li {
+      padding: 0 0 0 17px;
+      border-left: 1px solid #999;
+      margin-left: 3px;
+      margin-bottom: 15px;
+    }
+    #template li {
+      list-style: none;
+      margin-top: 10px;
+    }
+    #template li h3 {
+      color: #66a;
+      font-size: 1.2em;
+      margin: 0;
+      padding: 0;
+    }
+    #template li ol {
+      clear: both;
+      padding-top: 20px;
+    }
+    #template li form .grow-wrap {
+      display: grid;
+    }
+    #template li form .grow-wrap::after {
+      content: attr(data-replicated-value) " ";
+      white-space: pre-wrap;
+      visibility: hidden;
+    }
+    #template li form textarea {
+      display: block;
+      resize: none;
+      overflow: hidden;
+    }
+    #template li form .grow-wrap > textarea,
+    #template li form .grow-wrap::after {
+      background: #def;
+      border: 1px solid #bcd;
+      padding: 0.5rem;
+      font-size: 16px;
+      font-family: monospace;
+      grid-area: 1 / 1 / 2 / 2;
+    }
+    #template li form fieldset {
+      position: relative;
+      border: 1px solid #9ab;
+      padding: 5px 2px;
+    }
+    #template li form.specialise label {
+      color: #999;
+      right: 30px;
+      margin-right: 10px;
+      font-family: sans-serif;
+      font-size: 14px;
+    }
+    #template li form.specialise select {
+      margin: 2px 0 0;
+    }
+    #template li form.specialise button {
+      /*margin-top: 19px;*/
+    }
+    #template li label {
+      float: left;
+    }
+    #template li label select {
+      display: block;
+    }
+    #template li.missing {
+      margin-bottom: 10px;
+    }
+    #template li.missing > i {
+      font-weight: bold;
+      color: #f99;
+    }
+
+    #template li .updates form {
+      margin: 0;
+    }
+    #template li .updates {
+      display: grid;
+      grid-template-rows: auto auto auto auto;
+      grid-template-columns: auto auto 1fr auto;
+    }
+    #template li .updates h3 {
+      grid-row-start: 1;
+      grid-row-end: span 1;
+      grid-column-start: 1;
+      grid-column-end: span 6;
+    }
+    #template li .updates form.fragment {
+      grid-row-start: 2;
+      grid-row-end: span 1;
+      grid-column-start: 1;
+      grid-column-end: span 6;
+      display: block;
+      margin-bottom: 5px;
+    }
+    #template li .updates .save {
+      grid-row-start: 3;
+      grid-row-end: span 1;
+      grid-column-start: 1;
+      grid-column-end: span 1;
+      padding-top: 7px;
+    }
+    #template li .updates form.delete {
+      grid-row-start: 3;
+      grid-row-end: span 1;
+      grid-column-start: 4;
+      grid-column-end: span 1;
+      padding-top: 7px;
+    }
+    #template li .updates form.specialise {
+      grid-row-start: 3;
+      grid-row-end: span 2;
+      grid-column-start: 2;
+      grid-column-end: span 1;
+      margin-left: 20px;
+    }
+
+    details {
+      margin-bottom: 1em;
+      margin-left: 30px;
+    }
+    summary {
+      margin-left: -30px;
+    }
+    summary h2 {
+      display: inline-block;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+<div id='flourish-toolbar'>
+  <a href='?'>📄</a>
+</div>
+
+  <h1>Blueprint for {{path|e}}</h1>
+  {% if sectile_dimensions %}
+    <details open>
+      <summary><h2>Dimensions</h2></summary>
+      <dl id='dimensions'>
+      {% for dim in sectile_dimensions %}
+        <dt>{{dim}}</dt>
+        <dd>{{sectile_dimensions[dim]}}</dd>
+      {% endfor %}
+      </dl>
+    </details>
+    <details>
+      <summary>
+        <h2>Fragment paths</h2>
+      </summary>
+      <ol id='fragments'>
+        {% for fragment_path in sectile_fragment_paths %}
+          <li>{{fragment_path}}</li>
+        {% endfor %}
+      </ol>
+    </details>
+  {% endif %}
+  <div id='template'>
+    {% if sectile_fragments %}
+      <details open>
+        <summary>
+          <h2>Template fragments: <i>{{template_name|e}}</i></h2>
+        </summary>
+        {% set depth = namespace(previous=-1) %}
+        {% for fragment in sectile_fragments %}
+          {% if depth.previous < fragment.depth %}
+            <ol>
+          {% elif depth.previous > fragment.depth %}
+            {% for i in range(fragment.depth, depth.previous) %}
+              </li></ol>
+            {% endfor %}
+          {% else %}
+            </li>
+          {% endif %}
+          <li class='{% if not fragment.found %}missing{% endif %}'>
+          <div class='updates'>
+          {% if not fragment.found %}
+            <h3>{{fragment.file}}: None</h3>
+          {% else %}
+            <h3>{{fragment.found}}</h3>
+              {% set lines = fragment.fragment.split('\n')|count %}
+              <form method='post' action='/_sectile/update' class='fragment' id='update-{{loop.index}}'>
+                <input type='hidden' name='_return' value='{{path|e}}?blueprint'>
+                <input type='hidden' name='fragment' value='{{fragment.found}}'>
+                <div class='grow-wrap'>
+                  <textarea
+                    name='content'
+                    onInput='this.parentNode.dataset.replicatedValue = this.value'
+                    onfocus='this.parentNode.dataset.replicatedValue = this.value'
+                    rows='{{lines}}'
+                      >{{fragment.fragment|e}}</textarea>
+                </div>
+              </form>
+              <div class='save'>
+                <button type='submit' class='update' form='update-{{loop.index}}'>save fragment</button>
+              </div>
+              <form action='/_sectile/delete' method='post' class='delete'>
+                <input type='hidden' name='_return' value='{{path|e}}?blueprint'>
+                <input type='hidden' name='fragment' value='{{fragment.found}}'>
+                <button type='submit'>delete fragment</button>
+              </form>
+          {% endif %}
+          <form action='/_sectile/create' method='post' class='specialise'>
+            <fieldset>
+              <input type='hidden' name='_return' value='{{path|e}}?blueprint'>
+              <input type='hidden' name='fragment' value='{{fragment.file}}'>
+              {% for dimension in sectile_dimension_possibilities %}
+                <label>
+                  <select name='{{dimension.name}}'>
+                    {% for setting in dimension['options']|reverse %}
+                      <option {% if setting == fragment.dimensions[dimension.name] %}selected{% endif %} value='{{setting}}'>{{setting}}</option>
+                    {% endfor %}
+                  </select>
+                  {{dimension.name}}
+                </label>
+              {% endfor %}
+              <button type='submit'>specialise</button>
+            </fieldset>
+          </form>
+          </div>
+
+          {% if depth.previous < fragment.depth %}
+
+          {% elif depth.previous > fragment.depth %}
+          {% else %}
+            </li>
+          {% endif %}
+          {% set depth.previous = fragment.depth %}
+        {% endfor %}
+        </ol>
+        {% for i in range(depth.previous) %}
+          </li></ol>
+        {% endfor %}
+      </details>
+    {% endif %}
+    <details {% if not sectile_fragments %}open{% endif %}>
+      <summary><h2>
+        {% if sectile_fragments %}
+          Assembled template
+        {% else %}
+          Template: <i>{{template_name|e}}</i>
+        {% endif %}
+      </h2></summary>
+      <pre>{{template|e}}</pre>
+    </details>
+  </div>
+  <details>
+    <summary><h2>Page context:</h2></summary>
+    <pre id='page_context'><code>{{debug_page_context|e}}</code></pre>
+  </details>
+  <details>
+    <summary><h2>Global context:</h2></summary>
+    <pre id='context'><code>{{debug_global_context|e}}</code></pre>
+  </details>
+</body>
+</html>
