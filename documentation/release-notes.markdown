@@ -2,7 +2,7 @@
 
 # Release notes for Flourish
 
-## 0.10.0 - UNRELEASED
+## 0.10.0 - 11 Jun 2021
 
 Improvements to the blueprint (previously called "recipe") page.
 
@@ -14,15 +14,11 @@ Improvements to the blueprint (previously called "recipe") page.
     * Edit/create/delete Sectile fragments directly in page.
     * List the full Sectile fragments search path.
 
-#### Other changes
-
 #### Bug fixes
 
   * In the blueprint:
     * show all Sectile dimensions, not just the ones that are set
     * pretty print the context data
-
-#### Dependency updates
 
 
 ## 0.9.7 - 3 June 2021
