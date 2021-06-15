@@ -7,6 +7,11 @@ from flourish.sourcelist import SourceList
 
 
 class TestBlueprint:
+    def test_blueprint_resources_imported(self):
+        from flourish import blueprint
+        assert blueprint.toolbar
+        assert blueprint.template
+
     def test_blueprint_file_templates(self):
         with pytest.warns(None) as warnings:
             flourish = Flourish(

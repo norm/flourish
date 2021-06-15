@@ -34,6 +34,7 @@ setup(
         'libsass',
         'sectile>=0.3.5',
         'jsonpickle',
+        'importlib_resources; python_version <= "3.9"',
     ],
     python_requires='>=3.6',
 

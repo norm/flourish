@@ -13,7 +13,8 @@ High level description, if applicable.
 #### Bug fixes
 
   * Stop reusing previously generated files in the live preview.
-
+  * Use backwards-compatible importlib_resources for older pythons, and
+    test that part of the code.
 
 #### Dependency updates
 
