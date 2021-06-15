@@ -2,9 +2,7 @@
 
 # Release notes for Flourish
 
-## NEW_VERSION - UNRELEASED
-
-High level description, if applicable.
+## 0.10.1 - 15 Jun 2021
 
 #### New
 
@@ -19,15 +17,11 @@ High level description, if applicable.
         previous_slug = ['/page']
 
 
-#### Other changes
-
 #### Bug fixes
 
   * Stop reusing previously generated files in the live preview.
   * Use backwards-compatible importlib_resources for older pythons, and
     test that part of the code.
-
-#### Dependency updates
 
 
 ## 0.10.0 - 11 Jun 2021
