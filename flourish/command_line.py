@@ -247,6 +247,10 @@ def preview_server(args):
 
             # regenerate if requested
             if args.generate:
+                try:
+                    os.remove(os.path.join(output_dir, path))
+                except FileNotFoundError:
+                    pass
                 flourish.generate_path(generate, report=True)
 
             if os.path.exists(os.path.join(output_dir, path)):

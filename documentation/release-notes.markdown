@@ -2,6 +2,22 @@
 
 # Release notes for Flourish
 
+## NEW_VERSION - UNRELEASED
+
+High level description, if applicable.
+
+#### New
+
+#### Other changes
+
+#### Bug fixes
+
+  * Stop reusing previously generated files in the live preview.
+
+
+#### Dependency updates
+
+
 ## 0.10.0 - 11 Jun 2021
 
 Improvements to the blueprint (previously called "recipe") page.
