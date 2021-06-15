@@ -16,6 +16,8 @@ from . import Flourish, __version__, blueprint
 from .examples import example_files
 from .lib import relative_list_of_files_in_directory
 
+REDIRECT_ETAG='"d41d8cd98f00b204e9800998ecf8427e"'      # 0 byte file
+
 
 def main():
     version = ('Flourish static site generator, version %s -- '
@@ -226,6 +228,9 @@ def preview_server(args):
     def send_file(path=''):
         generate = '/%s' % path
 
+        if generate in flourish.redirects:
+            return redirect(flourish.redirects[generate])
+
         if 'blueprint' in request.args:
             response = make_response(
                 Template(
@@ -343,7 +348,6 @@ def upload(args):
             templates_dir=args.templates,
             fragments_dir=args.fragments,
             output_dir=args.output,
-            skip_scan=True,
         )
     except Flourish.MissingKey as e:
         sys.exit('Error: %s' % str(e))
@@ -365,6 +369,20 @@ def upload(args):
     _invalidations = []
     for _object in _bucket.objects.all():
         _objects.update({_object.key: _object})
+
+    redirects = flourish.redirects
+    for redirect in redirects:
+        _s3path = redirect[1:]
+        if _objects[_s3path].e_tag != REDIRECT_ETAG:
+            print('->', redirect, 'to', redirects[redirect])
+            if not args.dry_run:
+                print(_bucket.put_object(
+                    Key=_s3path,
+                    Body='',
+                    ContentType='text/html',
+                    WebsiteRedirectLocation=redirects[redirect],
+                ))
+                _invalidations.append(redirect)
 
     for _path in _files:
         _file = os.path.basename(_path)

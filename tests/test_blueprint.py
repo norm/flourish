@@ -53,11 +53,18 @@ class TestBlueprint:
         assert blueprint['template'] == expected_template
 
         context_contains = {
-            'global': {'copyright_year_range': '2015–2016'},
-            'site': {'author': 'Wendy Testaburger',
-                     'base_url': 'http://withaflourish.net',
-                     'title': 'Flourish Blog',
-                     'future': False},
+            'global': {
+                'copyright_year_range': '2015–2016'
+            },
+            'site': {
+                'author': 'Wendy Testaburger',
+                'base_url': 'http://withaflourish.net',
+                'title': 'Flourish Blog',
+                'future': False,
+                'permanent_redirects': {
+                    '/index.php': '/',
+                },
+            },
             'tokens': {},
         }
         assert blueprint['context'].items() >= context_contains.items()
@@ -71,7 +78,10 @@ class TestBlueprint:
                 "author": "Wendy Testaburger",
                 "base_url": "http://withaflourish.net",
                 "title": "Flourish Blog",
-                "future": false
+                "future": false,
+                "permanent_redirects": {
+                  "/index.php": "/"
+                }
               },
               "tokens": {},
               "generator": "homepage",
@@ -174,11 +184,18 @@ class TestBlueprint:
         assert blueprint['template'] == expected_template
 
         context_contains = {
-            'global': {'copyright_year_range': '2015–2016'},
-            'site': {'author': 'Wendy Testaburger',
-                     'base_url': 'http://withaflourish.net',
-                     'title': 'Flourish Blog',
-                     'future': False},
+            'global': {
+                'copyright_year_range': '2015–2016'
+            },
+            'site': {
+                'author': 'Wendy Testaburger',
+                'base_url': 'http://withaflourish.net',
+                'title': 'Flourish Blog',
+                'future': False,
+                'permanent_redirects': {
+                    '/index.php': '/',
+                },
+            },
             'tokens': {},
         }
         assert blueprint['context'].items() >= context_contains.items()
@@ -292,7 +309,10 @@ class TestBlueprint:
                 "author": "Wendy Testaburger",
                 "base_url": "http://withaflourish.net",
                 "title": "Flourish Blog",
-                "future": false
+                "future": false,
+                "permanent_redirects": {
+                  "/index.php": "/"
+                }
               },
               "tokens": {},
               "generator": "homepage",

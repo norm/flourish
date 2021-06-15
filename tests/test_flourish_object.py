@@ -1016,6 +1016,13 @@ class TestFlourish:
         # ensure still unfiltered
         assert all_dates == self.flourish.publication_dates
 
+    def test_redirects(self):
+        assert self.flourish.redirects == {
+            '/index.php': '/',
+            '/page': '/basic-page',
+        }
+
+
 class TestFlourishFuture:
     @classmethod
     def setup_class(cls):

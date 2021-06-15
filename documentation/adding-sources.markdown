@@ -177,6 +177,10 @@ be aware of:
   * `..._set` — anything ending `_set` is assumed to be part of a reverse
     foreign key lookup. See the advanced topic
     [Linking sources together](/linking-sources/).
+  * `previous_slug` — is an array of strings that represent the previous
+    location that source would have been found on the site, in the event
+    that you wish to change the path. The Flourish preview server and
+    S3/CloudFront will serve them as 301 Moved Permanently responses.
 
 
 [iso]: https://en.wikipedia.org/wiki/ISO_8601

@@ -62,6 +62,18 @@ There are other keys that Flourish will treat as having special meaning.
     S3 bucket that is behind a CloudFront distribution, this setting
     tells Flourish what the distribution ID is.
 
+  * `permanent_redirects`
+
+    ```toml
+    [permanent_redirects]
+    "/index.php" = "/"
+    ```
+
+    Any path declared under `permanent_redirects` will be served as a
+    `301 Moved Permanently` response by the Flourish preview server,
+    and by S3/CloudFront after the site is uploaded.
+
+
 ## Using in templates
 
 The values in the file are made available to all templates under the `site`

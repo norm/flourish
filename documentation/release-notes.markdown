@@ -8,6 +8,17 @@ High level description, if applicable.
 
 #### New
 
+  * Permanent (301) redirects from an old slug to a new location can be kept
+    in the `_site.toml`:
+
+        [permanent_redirects]
+        "/index.php" = "/"
+
+    and in an individual source:
+
+        previous_slug = ['/page']
+
+
 #### Other changes
 
 #### Bug fixes

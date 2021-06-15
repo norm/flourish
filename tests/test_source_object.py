@@ -28,6 +28,9 @@ class TestFlourishPage:
                     2015, 12, 25, 10, 0, 0, tzinfo=timezone.utc),
                 'tag': 'basic-page',
                 'title': 'Basic Page',
+                'previous_slug': [
+                    '/page',
+                ],
             } == page._config
 
     def test_toml_with_inherent_markdown(self):

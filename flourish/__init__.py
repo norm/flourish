@@ -36,7 +36,6 @@ class Flourish(object):
         sass_dir='sass',
         fragments_dir=None,
         future=None,
-        skip_scan=False,
         reloading=False,
     ):
         self.source_dir = source_dir
@@ -78,8 +77,7 @@ class Flourish(object):
                 'The source directory "%s" must exist' % self.source_dir)
 
         self.site_config = self._read_site_config()
-        if not skip_scan:
-            self._rescan_sources()
+        self._rescan_sources()
 
         try:
             generate = SourceFileLoader(
@@ -126,6 +124,18 @@ class Flourish(object):
             self._source_files,
             future = future
         )
+
+    @property
+    def redirects(self):
+        redirects = {}
+        if 'permanent_redirects' in self.site_config:
+            for redirect in self.site_config['permanent_redirects']:
+                redirects[redirect] \
+                    = self.site_config['permanent_redirects'][redirect]
+        for src in self.sources.filter(previous_slug__set=''):
+            for prev in src.previous_slug:
+                redirects[prev] = src.path
+        return redirects
 
     def get(self, slug):
         """ Get a single source document by slug. """
