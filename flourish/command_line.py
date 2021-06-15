@@ -373,15 +373,18 @@ def upload(args):
     redirects = flourish.redirects
     for redirect in redirects:
         _s3path = redirect[1:]
-        if _objects[_s3path].e_tag != REDIRECT_ETAG:
+        if (
+            _s3path not in _objects
+            or _objects[_s3path].e_tag != REDIRECT_ETAG
+        ):
             print('->', redirect, 'to', redirects[redirect])
             if not args.dry_run:
-                print(_bucket.put_object(
+                _bucket.put_object(
                     Key=_s3path,
                     Body='',
                     ContentType='text/html',
                     WebsiteRedirectLocation=redirects[redirect],
-                ))
+                )
                 _invalidations.append(redirect)
 
     for _path in _files:

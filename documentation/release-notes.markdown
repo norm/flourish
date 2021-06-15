@@ -2,6 +2,12 @@
 
 # Release notes for Flourish
 
+## 0.10.2 - 15 Jun 2021
+
+  * Fix a bug in the redirects uploader that stopped upload working
+    when there was a new file or redirect to upload
+
+
 ## 0.10.1 - 15 Jun 2021
 
 #### New
