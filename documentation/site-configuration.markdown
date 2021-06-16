@@ -73,6 +73,15 @@ There are other keys that Flourish will treat as having special meaning.
     `301 Moved Permanently` response by the Flourish preview server,
     and by S3/CloudFront after the site is uploaded.
 
+  * `404_page`
+
+    ```
+    404_page = '/not_found'
+    ```
+
+    If you are producing a custom 404 page, you can tell Flourish's
+    preview server to serve it instead of the default 404 error.
+
 
 ## Using in templates
 

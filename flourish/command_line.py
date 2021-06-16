@@ -11,6 +11,7 @@ import boto3
 from flask import Flask, make_response, redirect, request, send_from_directory
 from jinja2 import Template
 from sectile import Sectile
+from werkzeug.exceptions import NotFound
 
 from . import Flourish, __version__, blueprint
 from .examples import example_files
@@ -228,6 +229,13 @@ def preview_server(args):
     def send_file(path=''):
         generate = '/%s' % path
 
+        try:
+            not_found_page = flourish.site_config['404_page']
+            if not_found_page.startswith('/'):
+                not_found_page = not_found_page[1:]
+        except:
+            not_found_page = None
+
         if generate in flourish.redirects:
             return redirect(flourish.redirects[generate])
 
@@ -243,25 +251,37 @@ def preview_server(args):
             return response
         else:
             # fix URLs for .html
-            filename = os.path.basename(path)
-            if filename == '':
-                path = '%sindex.html' % path
-            _, ext = os.path.splitext(path)
+            send = path
+            if '' == os.path.basename(path):
+                send = send + 'index.html'
+            _, ext = os.path.splitext(send)
             if ext == '':
-                path += '.html'
+                send += '.html'
 
             # regenerate if requested
             if args.generate:
                 try:
-                    os.remove(os.path.join(output_dir, path))
+                    os.remove(os.path.join(output_dir, send))
                 except FileNotFoundError:
                     pass
                 flourish.generate_path(generate, report=True)
 
-            if os.path.exists(os.path.join(output_dir, path)):
-                return send_from_directory(output_dir, path)
+            if os.path.exists(os.path.join(output_dir, send)):
+                return send_from_directory(output_dir, send)
             else:
-                return send_from_directory(source_dir, path)
+                if not_found_page:
+                    try:
+                        return send_from_directory(source_dir, send)
+                    except NotFound:
+                        # avoid looping on 404 fetching 404
+                        if path != not_found_page:
+                            response = send_file(not_found_page)
+                            response.status_code = 404
+                            return response
+                        else:
+                            raise NotFound
+                else:
+                    return send_from_directory(source_dir, send)
 
     @app.route('/_sectile/update', methods=['GET', 'POST'])
     def edit_sectile_fragment():

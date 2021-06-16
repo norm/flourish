@@ -2,6 +2,22 @@
 
 # Release notes for Flourish
 
+## NEW_VERSION - UNRELEASED
+
+High level description, if applicable.
+
+#### New
+
+  * The preview server can now serve your custom 404 page.
+
+
+#### Other changes
+
+#### Bug fixes
+
+#### Dependency updates
+
+
 ## 0.10.2 - 15 Jun 2021
 
   * Fix a bug in the redirects uploader that stopped upload working
