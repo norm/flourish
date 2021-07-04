@@ -16,6 +16,7 @@ from werkzeug.exceptions import NotFound
 from . import Flourish, __version__, blueprint
 from .examples import example_files
 from .lib import relative_list_of_files_in_directory
+from .dirtrie import DirTrie
 
 REDIRECT_ETAG='"d41d8cd98f00b204e9800998ecf8427e"'      # 0 byte file
 
@@ -138,6 +139,15 @@ def main():
         '--invalidate',
         action='store_true',
         help='invalidate uploaded paths in CloudFront',
+    )
+    parser_upload.add_argument(
+        '--max-invalidations',
+        type=int,
+        default=100,
+        help=(
+            'maximum count of invalidation paths to request (will'
+            'collapse multiple paths to /a/b/* if count is exceeded)'
+        ),
     )
     parser_upload.add_argument(
         'bucket',
@@ -442,13 +452,17 @@ def upload(args):
                 _invalidations.append(invalidate)
 
     if args.invalidate and _invalidations:
+        trie = DirTrie()
+        for path in _invalidations:
+            trie.insert(path)
+        invalidation_paths = trie.collapse(args.max_invalidations)
         cf = boto3.client('cloudfront')
         result = cf.create_invalidation(
             DistributionId=_cloudfront,
             InvalidationBatch={
                 'Paths': {
-                    'Quantity': len(_invalidations),
-                    'Items': _invalidations,
+                    'Quantity': len(invalidation_paths),
+                    'Items': invalidation_paths,
                 },
                 'CallerReference': datetime.now().isoformat(),
             }

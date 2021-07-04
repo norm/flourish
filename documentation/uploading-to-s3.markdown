@@ -24,6 +24,8 @@ then you need only run:
 flourish upload
 ```
 
+## CloudFront invalidations
+
 If you have put the S3 bucket behind a CloudFront distribution, you can
 issue a targetted invalidation when new files are uploaded:
 
@@ -43,6 +45,21 @@ and then you need only run:
 ```bash
 flourish upload --invalidate
 ```
+
+The `--max-invalidations` option controls how many paths are requested to be
+invalidated, as more than 1,000 paths across an account in a month starts to
+be charged.
+
+```bash
+flourish upload --invalidate --max-invalidations 50
+```
+
+The default is 100 paths. If more than the maximum paths need to
+be invalidated, multiple paths with a common root will be invalidated as a
+whole. Multiple paths such as `/tags/a`, `/tags/b`, etc would result in
+`/tags/*` being invalidated, which may result in unchanged paths being
+invalidated. In most low- to medium-traffic sites, the cost of invalidating
+thousands of paths is more than content having to be recached from S3.
 
 
 [aws]: https://aws.amazon.com

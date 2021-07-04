@@ -9,6 +9,12 @@ High level description, if applicable.
 #### New
 
   * The preview server can now serve your custom 404 page.
+  * Adds an option `--max-invalidations` to control how many paths to
+    invalidate in CloudFront when uploading. Too many paths will end up being
+    charged. A large site being entirely rebuilt repeatedly can cost more in
+    invalidation charges than it would in the edge recaching content from S3.
+    Defaults to 100 paths. If this is set too low and a lot of paths need to
+    be invalidated, the entire site will be invalidated (`/*`).
 
 
 #### Other changes
