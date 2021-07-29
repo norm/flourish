@@ -19,6 +19,11 @@ High level description, if applicable.
 
 #### Other changes
 
+  * Turn on the Flask debugger in the live preview server. This provides more
+    information when the page fails to generate, and means automatic reloading
+    when `generate.py` is changed.
+
+
 #### Bug fixes
 
 #### Dependency updates
