@@ -2,9 +2,7 @@
 
 # Release notes for Flourish
 
-## NEW_VERSION - UNRELEASED
-
-High level description, if applicable.
+## 0.10.3 - 29 Jul 2021
 
 #### New
 
@@ -16,17 +14,11 @@ High level description, if applicable.
     Defaults to 100 paths. If this is set too low and a lot of paths need to
     be invalidated, the entire site will be invalidated (`/*`).
 
-
 #### Other changes
 
   * Turn on the Flask debugger in the live preview server. This provides more
     information when the page fails to generate, and means automatic reloading
     when `generate.py` is changed.
-
-
-#### Bug fixes
-
-#### Dependency updates
 
 
 ## 0.10.2 - 15 Jun 2021
