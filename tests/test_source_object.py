@@ -3,6 +3,7 @@
 from datetime import datetime, timezone
 
 import pytest
+import warnings
 
 from flourish import Flourish
 
@@ -16,7 +17,8 @@ class TestFlourishPageInvalidFrontmatter:
 class TestFlourishPage:
     @classmethod
     def setup_class(cls):
-        with pytest.warns(None) as warnings:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
             cls.flourish = Flourish('tests/source')
 
     def test_toml_configuration(self):

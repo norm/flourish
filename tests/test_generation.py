@@ -1,4 +1,5 @@
 import pytest
+import warnings
 
 from flourish import Flourish
 
@@ -77,7 +78,8 @@ class FullGeneration(CompareDirectories):
 
 class TestFlourishGeneration(FullGeneration):
     def test_generation(self):
-        with pytest.warns(None) as warnings:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
             flourish = Flourish(
                 source_dir='tests/source',
                 templates_dir='tests/templates',
@@ -85,18 +87,18 @@ class TestFlourishGeneration(FullGeneration):
                 output_dir=self.tempdir,
             )
 
-        with pytest.warns(None) as warnings:
+        with pytest.warns(UserWarning) as record:
             # one template has an invalid url() use
             flourish.generate_site()
-            assert len(warnings) == 1
-            assert 'tags-tag-page' in str(warnings[0].message)
+            assert len(record) == 1
+            assert 'tags-tag-page' in str(record[0].message)
 
         self.compare_directories()
 
 
 class TestSectileTemplatesGeneration(FullGeneration):
     def test_generation(self):
-        with pytest.warns(None) as warnings:
+        with pytest.warns(UserWarning) as warnings:
             flourish = Flourish(
                 source_dir='tests/source',
                 fragments_dir='tests/fragments',
@@ -104,7 +106,7 @@ class TestSectileTemplatesGeneration(FullGeneration):
                 output_dir=self.tempdir,
             )
 
-        with pytest.warns(None) as warnings:
+        with pytest.warns(UserWarning) as warnings:
             # one template has an invalid url() use
             flourish.generate_site()
             assert len(warnings) == 1
@@ -123,7 +125,8 @@ class TestSinglePathGeneration(CompareDirectories):
     ]
 
     def test_generation(self):
-        with pytest.warns(None) as warnings:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
             flourish = Flourish(
                 source_dir='tests/source',
                 templates_dir='tests/templates',

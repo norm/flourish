@@ -1,7 +1,6 @@
 import json
 import jsonpickle
 import os
-from pprint import pformat
 import re
 
 from sectile import Sectile
@@ -225,7 +224,7 @@ class GeneratorMixin:
                         dimensions[dimension] = context[dimension]
                 (
                     blueprint['template'],
-                    blueprint['sectile_fragments'] 
+                    blueprint['sectile_fragments']
                 ) = sectile.generate(
                         self.current_path,
                         name,

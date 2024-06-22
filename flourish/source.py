@@ -24,7 +24,7 @@ class SourceBase:
         for _arg in _path.arguments:
             try:
                 _value = getattr(self, _arg)
-                if type(_value) == list:
+                if type(_value) is list:
                     _filter[_arg] = _value[0]
                 else:
                     _filter[_arg] = _value
@@ -190,7 +190,7 @@ class JsonSourceFile(SourceFile):
             _config = json.loads(_configuration.read())
 
         for _key, _value in _config.items():
-            if type(_value) == str and self.ISO8601.match(_value):
+            if type(_value) is str and self.ISO8601.match(_value):
                 _config[_key] = datetime.strptime(
                         _value, "%Y-%m-%dT%H:%M:%SZ"
                     ).replace(tzinfo=timezone.utc)
@@ -218,7 +218,7 @@ class CsvRowSource(SourceBase):
         _add = {}
         for _key, _value in row.items():
             # convert timestamps
-            if type(_value) == str and self.ISO8601.match(_value):
+            if type(_value) is str and self.ISO8601.match(_value):
                 row[_key] = datetime.strptime(
                         _value, "%Y-%m-%dT%H:%M:%SZ"
                     ).replace(tzinfo=timezone.utc)
@@ -232,9 +232,9 @@ class CsvRowSource(SourceBase):
         self._config.update(_add)
 
         # clean up unwanted keys from the original CSV
-        del(row['slug'])
+        del (row['slug'])
         for _key in _add:
-            del(row['%s[]' % _key])
+            del (row['%s[]' % _key])
 
         self._add_markdown_attachments()
         self._convert_markdown()

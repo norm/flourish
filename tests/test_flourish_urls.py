@@ -3,12 +3,14 @@ from flourish.generators.base import SourceGenerator
 from flourish.source import SourceFile
 
 import pytest
+import warnings
 
 
 class TestFlourishPaths:
     @classmethod
     def setup_class(cls):
-        with pytest.warns(None) as warnings:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
             cls.flourish = Flourish('tests/source')
 
     def test_homepage_resolves(self):
@@ -18,10 +20,10 @@ class TestFlourishPaths:
         assert self.flourish.resolve_path('homepage', tag='series') == '/'
 
     def test_tag_index_with_arguments_resolves(self):
-        assert(self.flourish.resolve_path('tags-tag-page', tag='series') ==
-               '/tags/series/')
-        assert(self.flourish.resolve_path('tags-tag-page', tag='css') ==
-               '/tags/css/')
+        assert (self.flourish.resolve_path('tags-tag-page', tag='series')
+                == '/tags/series/')
+        assert (self.flourish.resolve_path('tags-tag-page', tag='css')
+                == '/tags/css/')
 
     def test_tag_index_without_arguments_raises(self):
         with pytest.raises(KeyError):
@@ -178,7 +180,8 @@ class TestFlourishPaths:
 
 class TestFlourishSourcesPath:
     def test_category_prefixed_sources(self):
-        with pytest.warns(None) as _warnings:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
             _flourish = Flourish('tests/source')
             _flourish.add_path(
                 SourceGenerator(
@@ -200,7 +203,8 @@ class TestFlourishSourcesPath:
             ] == [source.path for source in _flourish.sources.all()]
 
     def test_invalid_prefixed_sources(self):
-        with pytest.warns(None) as _warnings:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
             _flourish = Flourish('tests/source')
             _flourish.add_path(
                 SourceGenerator(
@@ -223,7 +227,8 @@ class TestFlourishSourcesPath:
             # FIXME catch third warning
 
     def test_multiple_option_prefixed_sources(self):
-        with pytest.warns(None) as _warnings:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
             _flourish = Flourish('tests/source')
             _flourish.add_path(
                 SourceGenerator(

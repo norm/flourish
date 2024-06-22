@@ -86,8 +86,7 @@ class Flourish(object):
         except FileNotFoundError:
             raise Flourish.RuntimeError(
                 ('The source directory "%s"'
-                 ' must contain the file "generate.py"')
-                    % self.source_dir
+                 ' must contain the file "generate.py"') % self.source_dir
             )
 
         try:
@@ -112,7 +111,7 @@ class Flourish(object):
     @property
     def sources(self):
         try:
-            future = self.site_config['future'] 
+            future = self.site_config['future']
         except KeyError:
             future = True
 
@@ -354,7 +353,7 @@ class Flourish(object):
                 _value = getattr(_source['published'], _first_token)
                 _values.add('%02d' % _value)
             elif _first_token in _source:
-                if type(_source[_first_token]) == list:
+                if type(_source[_first_token]) is list:
                     for _value in _source[_first_token]:
                         _values.add(_value)
                 else:
@@ -380,10 +379,8 @@ class Flourish(object):
     def __repr__(self):
         return '<flourish.Flourish object (source=%s)>' % self.source_dir
 
-
     class MissingKey(Exception):
         pass
 
     class RuntimeError(Exception):
         pass
-

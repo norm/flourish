@@ -80,16 +80,16 @@ class TestDirTrie:
         trie.insert('/2021/06/28/go-get-her')
         trie.insert('/2021/06/29/github_activity')
 
-        assert trie.find('/nope') == None
+        assert trie.find('/nope') is None
 
         ggh = trie.find('/2021/06/28/go-get-her')
-        assert type(ggh) == TrieNode
-        assert ggh.published == True
+        assert type(ggh) is TrieNode
+        assert ggh.published is True
         assert ggh.children == {}
 
         year = trie.find('/2021/')
-        assert type(year) == TrieNode
-        assert year.published == False
+        assert type(year) is TrieNode
+        assert year.published is False
         assert [k for k in year.children.keys()] == ['/2021/06/']
 
     def test_trie_collapse_to_all(self):

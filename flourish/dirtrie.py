@@ -130,11 +130,10 @@ class DirTrie:
                 return ['%s*' % node.path]
 
             children = [
-                x for x in
-                    sorted(
-                        node.children,
-                        key=lambda c: self.published_count(node.children[c]),
-                    )
+                x for x in sorted(
+                    node.children,
+                    key=lambda c: self.published_count(node.children[c]),
+                )
             ]
             remains = max - len(children)
             if node.published:

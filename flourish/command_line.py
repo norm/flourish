@@ -4,7 +4,6 @@ from hashlib import md5
 import mimetypes
 import os
 import sys
-from textwrap import dedent
 import time
 
 import boto3
@@ -18,7 +17,7 @@ from .examples import example_files
 from .lib import relative_list_of_files_in_directory
 from .dirtrie import DirTrie
 
-REDIRECT_ETAG='"d41d8cd98f00b204e9800998ecf8427e"'      # 0 byte file
+REDIRECT_ETAG = '"d41d8cd98f00b204e9800998ecf8427e"'      # 0 byte file
 
 
 def main():
@@ -243,7 +242,7 @@ def preview_server(args):
             not_found_page = flourish.site_config['404_page']
             if not_found_page.startswith('/'):
                 not_found_page = not_found_page[1:]
-        except:
+        except:     # noqa: E722
             not_found_page = None
 
         if generate in flourish.redirects:
@@ -302,7 +301,8 @@ def preview_server(args):
                         blueprint.update_template
                     ).render({
                         'fragment': request.args['fragment'],
-                        'content': sectile.get_fragment_file(request.args['fragment']),
+                        'content': sectile.get_fragment_file(
+                            request.args['fragment']),
                         '_return': request.args['_return'],
                     })
                 )
@@ -337,7 +337,7 @@ def preview_server(args):
         if (
             response.content_type.startswith('text/html')
             and args.generate
-            and not 'X-Blueprint-Page' in response.headers
+            and 'X-Blueprint-Page' not in response.headers
         ):
             response.direct_passthrough = False
             response.data = (
@@ -401,21 +401,21 @@ def upload(args):
         _objects.update({_object.key: _object})
 
     redirects = flourish.redirects
-    for redirect in redirects:
-        _s3path = redirect[1:]
+    for redir in redirects:
+        _s3path = redir[1:]
         if (
             _s3path not in _objects
             or _objects[_s3path].e_tag != REDIRECT_ETAG
         ):
-            print('->', redirect, 'to', redirects[redirect])
+            print('->', redir, 'to', redirects[redir])
             if not args.dry_run:
                 _bucket.put_object(
                     Key=_s3path,
                     Body='',
                     ContentType='text/html',
-                    WebsiteRedirectLocation=redirects[redirect],
+                    WebsiteRedirectLocation=redirects[redir],
                 )
-                _invalidations.append(redirect)
+                _invalidations.append(redir)
 
     for _path in _files:
         _file = os.path.basename(_path)
@@ -468,7 +468,10 @@ def upload(args):
             }
         )
         invalidation_id = result['Invalidation']['Id']
-        print('Invalidating distribution %s: %s' % (_cloudfront, invalidation_id))
+        print('Invalidating distribution %s: %s' % (
+            _cloudfront,
+            invalidation_id,
+        ))
         while True:
             time.sleep(15)
             status = cf.get_invalidation(
@@ -482,6 +485,7 @@ def upload(args):
             )
             if status['Invalidation']['Status'] == 'Completed':
                 break
+
 
 ACTIONS = {
     'generate': generate,

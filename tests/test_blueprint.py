@@ -1,6 +1,6 @@
-from textwrap import dedent, indent
+from textwrap import dedent
 
-import pytest
+import warnings
 
 from flourish import Flourish
 from flourish.sourcelist import SourceList
@@ -13,7 +13,8 @@ class TestBlueprint:
         assert blueprint.template
 
     def test_blueprint_file_templates(self):
-        with pytest.warns(None) as warnings:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
             flourish = Flourish(
                 source_dir='tests/source',
                 templates_dir='tests/templates',
@@ -68,9 +69,9 @@ class TestBlueprint:
             'tokens': {},
         }
         assert blueprint['context'].items() >= context_contains.items()
-        assert type(blueprint['context']['sources']) == SourceList
+        assert type(blueprint['context']['sources']) is SourceList
         assert blueprint['context']['sources'].count() == 8
-        assert type(blueprint['context']['pages']) == SourceList
+        assert type(blueprint['context']['pages']) is SourceList
         assert blueprint['context']['pages'].count() == 8
         assert blueprint['debug_page_context'] == dedent("""\
             {
@@ -119,9 +120,9 @@ class TestBlueprint:
               "copyright_year_range": "2015\\u20132016"
             }""")
 
-
     def test_blueprint_sectile_templates(self):
-        with pytest.warns(None) as warnings:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
             flourish = Flourish(
                 source_dir='tests/source',
                 fragments_dir='tests/fragments',
@@ -199,9 +200,9 @@ class TestBlueprint:
             'tokens': {},
         }
         assert blueprint['context'].items() >= context_contains.items()
-        assert type(blueprint['context']['sources']) == SourceList
+        assert type(blueprint['context']['sources']) is SourceList
         assert blueprint['context']['sources'].count() == 8
-        assert type(blueprint['context']['pages']) == SourceList
+        assert type(blueprint['context']['pages']) is SourceList
         assert blueprint['context']['pages'].count() == 8
 
         with open('tests/fragments/index/all/body', 'r') as handle:

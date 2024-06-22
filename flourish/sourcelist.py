@@ -60,7 +60,7 @@ class SourceList:
     def clone(self, **kwargs):
         for arg in self.ARGS:
             value = getattr(self, arg)
-            if type(value) == list:
+            if type(value) is list:
                 kwargs.setdefault(arg, value[:])
             else:
                 kwargs.setdefault(arg, value)
@@ -89,7 +89,7 @@ class SourceList:
                     is_date_filter = (
                         field in ['year', 'month', 'day'] and
                         'published' in source and
-                        type(source['published'] == datetime)
+                        type(source['published'] is datetime)
                     )
 
                     try:
@@ -188,7 +188,7 @@ class SourceList:
 
 
 def _equal_or_inside(value, test):
-    if type(value) == list:
+    if type(value) is list:
         return test in value
     else:
         return value == test
@@ -228,7 +228,7 @@ def _greater_than_or_equal_to(value, test):
 
 def _contains(value, test):
     try:
-        if type(value) == list:
+        if type(value) is list:
             for _v in value:
                 if test in _v:
                     return True

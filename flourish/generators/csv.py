@@ -33,9 +33,9 @@ class CSVGenerator(SourcesMixin, BaseGenerator):
 
     def get_field_value(self, object, field):
         value = getattr(object, field, None)
-        if type(value) == list:
-            if type(value[0]) == str:
+        if type(value) is list:
+            if type(value[0]) is str:
                 return ':'.join(sorted(value))
-        elif type(value) == datetime:
+        elif type(value) is datetime:
             return value.isoformat().replace('+00:00', 'Z')
         return value

@@ -45,7 +45,9 @@ class AtomGenerator(SourcesMixin, BaseGenerator):
             ), rel='self')
         feed.link(href=self.flourish.site_config['base_url'], rel='alternate')
 
-        last_updated = datetime(1970,1,1,0,0,0).replace(tzinfo=timezone.utc)
+        last_updated = datetime(
+            1970, 1, 1, 0, 0, 0
+        ).replace(tzinfo=timezone.utc)
 
         for _object in self.source_objects:
             entry = feed.add_entry(order='append')
