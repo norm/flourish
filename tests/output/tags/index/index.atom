@@ -8,7 +8,7 @@
   </author>
   <link href="http://withaflourish.net/tags/index/index.atom" rel="self"/>
   <link href="http://withaflourish.net" rel="alternate"/>
-  <generator uri="https://lkiesow.github.io/python-feedgen" version="0.9.0">python-feedgen</generator>
+  <generator uri="https://github.com/norm/flourish" version="0.10.4">flourish</generator>
   <entry>
     <id>http://withaflourish.net/series/</id>
     <title>A Series in Three Parts</title>

@@ -5,6 +5,7 @@ from feedgen.feed import FeedGenerator
 
 from flourish.generators.base import BaseGenerator
 from flourish.generators.mixins import SourcesMixin
+from flourish.version import __version__
 
 
 class AtomGenerator(SourcesMixin, BaseGenerator):
@@ -35,6 +36,11 @@ class AtomGenerator(SourcesMixin, BaseGenerator):
         feed = FeedGenerator()
         feed.author(self.get_feed_author())
         feed.title(self.get_feed_title())
+        feed.generator(
+            generator='flourish',
+            version=__version__,
+            uri='https://github.com/norm/flourish',
+        )
         feed.id('%s%s' % (
             self.flourish.site_config['base_url'],
             self.current_path,
