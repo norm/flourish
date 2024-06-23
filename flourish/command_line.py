@@ -359,9 +359,12 @@ def create_example(args):
     generate(argparse.Namespace(
         source='source',
         templates='templates',
+        fragments=None,
         output='output',
         action='generate',
         verbose=True,
+        include_future=True,
+        exclude_future=False,
         path=[],
     ))
     print('Example site created: run "flourish preview --generate"')

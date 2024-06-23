@@ -14,10 +14,9 @@ example_files = {
     """),
 
     'source/generate.py': dedent("""\
-        from flourish import helpers
-        from flourish.generators import (
+        from flourish.generators.base import (
             IndexGenerator,
-            PageGenerator,
+            SourceGenerator,
         )
 
 
@@ -28,32 +27,27 @@ example_files = {
 
         def global_context(self):
             return {
-                'dates': helpers.all_valid_dates(self.flourish),
+                'dates': self.publication_dates,
             }
 
         GLOBAL_CONTEXT = global_context
 
-
-        SOURCE_URL = (
-            '/#slug',
-            PageGenerator.as_generator(),
-        )
-
-        URLS = (
-            (
-                '/',
-                'homepage',
-                Homepage.as_generator()
+        PATHS = (
+            SourceGenerator(
+                path='/#slug',
+                name='source'
             ),
-            (
-                '/#year/',
-                'year-index',
-                IndexGenerator.as_generator()
+            Homepage(
+                path='/',
+                name='homepage'
             ),
-            (
-                '/#year/#month',
-                'month-index',
-                IndexGenerator.as_generator()
+            IndexGenerator(
+                path='/#year/',
+                name='year-index'
+            ),
+            IndexGenerator(
+                path='/#year/#month',
+                name='month-index'
             ),
         )
     """),
