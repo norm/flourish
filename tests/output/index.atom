@@ -20,7 +20,7 @@
 
 &lt;p&gt;The embedded Markdown gets overridden.&lt;/p&gt;
 &lt;hr&gt;Originally published on some website</content>
-    <link href="http://withaflourish.net/series/part-three" rel="alternate"/>
+    <link href="http://withaflourish.net/series/part-three"/>
     <published>2016-06-06T10:00:00+00:00</published>
   </entry>
   <entry>
@@ -33,7 +33,7 @@
     <content type="html">&lt;h1&gt;Thing the First&lt;/h1&gt;
 &lt;p&gt;This is raw HTML.&lt;/p&gt;
 &lt;hr&gt;Originally published on some website</content>
-    <link href="http://withaflourish.net/thing-one" rel="alternate"/>
+    <link href="http://withaflourish.net/thing-one"/>
     <published>2016-06-04T12:30:00+00:00</published>
   </entry>
   <entry>
@@ -45,7 +45,7 @@
     </author>
     <content type="html">&lt;p&gt;Body read from Markdown attachment‽&lt;/p&gt;
 &lt;hr&gt;Originally published on some website</content>
-    <link href="http://withaflourish.net/thing-two" rel="alternate"/>
+    <link href="http://withaflourish.net/thing-two"/>
     <published>2016-06-04T12:30:00+00:00</published>
   </entry>
   <entry>
@@ -59,7 +59,7 @@
 
 &lt;p&gt;I come from a Markdown file.&lt;/p&gt;
 &lt;hr&gt;Originally published on some website</content>
-    <link href="http://withaflourish.net/series/part-two" rel="alternate"/>
+    <link href="http://withaflourish.net/series/part-two"/>
     <published>2016-06-04T12:00:00+00:00</published>
   </entry>
   <entry>
@@ -73,7 +73,7 @@
 
 &lt;p&gt;I come from Markdown.&lt;/p&gt;
 &lt;hr&gt;Originally published on some website</content>
-    <link href="http://withaflourish.net/series/part-one" rel="alternate"/>
+    <link href="http://withaflourish.net/series/part-one"/>
     <published>2016-06-04T11:00:00+00:00</published>
   </entry>
   <entry>
@@ -85,7 +85,7 @@
     </author>
     <content type="html">&lt;h1&gt;A Series in Three Parts&lt;/h1&gt;
 &lt;hr&gt;Originally published on some website</content>
-    <link href="http://withaflourish.net/series/" rel="alternate"/>
+    <link href="http://withaflourish.net/series/"/>
     <published>2016-06-04T10:00:00+00:00</published>
   </entry>
   <entry>
@@ -99,7 +99,7 @@
 
 &lt;p&gt;I was generated from Markdown alone, no TOML.&lt;/p&gt;
 &lt;hr&gt;Originally published on some website</content>
-    <link href="http://withaflourish.net/markdown-page" rel="alternate"/>
+    <link href="http://withaflourish.net/markdown-page"/>
     <published>2016-02-29T10:30:00+00:00</published>
   </entry>
   <entry>
@@ -110,7 +110,7 @@
       <name>Wendy Testaburger</name>
     </author>
     <content type="html">&lt;p&gt;Hello “world”.&lt;/p&gt;&lt;hr&gt;Originally published on some website</content>
-    <link href="http://withaflourish.net/basic-page" rel="alternate"/>
+    <link href="http://withaflourish.net/basic-page"/>
     <published>2015-12-25T10:00:00+00:00</published>
   </entry>
 </feed>

@@ -19,7 +19,7 @@
     <content type="html">&lt;h1&gt;Thing the First&lt;/h1&gt;
 &lt;p&gt;This is raw HTML.&lt;/p&gt;
 </content>
-    <link href="http://withaflourish.net/thing-one" rel="alternate"/>
+    <link href="http://withaflourish.net/thing-one"/>
     <published>2016-06-04T12:30:00+00:00</published>
   </entry>
   <entry>
@@ -33,7 +33,7 @@
 
 &lt;p&gt;I come from Markdown.&lt;/p&gt;
 </content>
-    <link href="http://withaflourish.net/series/part-one" rel="alternate"/>
+    <link href="http://withaflourish.net/series/part-one"/>
     <published>2016-06-04T11:00:00+00:00</published>
   </entry>
 </feed>

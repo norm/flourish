@@ -20,7 +20,7 @@
 
 &lt;p&gt;The embedded Markdown gets overridden.&lt;/p&gt;
 </content>
-    <link href="http://withaflourish.net/series/part-three" rel="alternate"/>
+    <link href="http://withaflourish.net/series/part-three"/>
     <published>2016-06-06T10:00:00+00:00</published>
   </entry>
   <entry>
@@ -34,7 +34,7 @@
 
 &lt;p&gt;I come from a Markdown file.&lt;/p&gt;
 </content>
-    <link href="http://withaflourish.net/series/part-two" rel="alternate"/>
+    <link href="http://withaflourish.net/series/part-two"/>
     <published>2016-06-04T12:00:00+00:00</published>
   </entry>
   <entry>
@@ -48,7 +48,7 @@
 
 &lt;p&gt;I come from Markdown.&lt;/p&gt;
 </content>
-    <link href="http://withaflourish.net/series/part-one" rel="alternate"/>
+    <link href="http://withaflourish.net/series/part-one"/>
     <published>2016-06-04T11:00:00+00:00</published>
   </entry>
   <entry>
@@ -60,7 +60,7 @@
     </author>
     <content type="html">&lt;h1&gt;A Series in Three Parts&lt;/h1&gt;
 </content>
-    <link href="http://withaflourish.net/series/" rel="alternate"/>
+    <link href="http://withaflourish.net/series/"/>
     <published>2016-06-04T10:00:00+00:00</published>
   </entry>
 </feed>

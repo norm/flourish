@@ -18,7 +18,7 @@
     </author>
     <content type="html">&lt;p&gt;Body read from Markdown attachment‽&lt;/p&gt;
 </content>
-    <link href="http://withaflourish.net/thing-two" rel="alternate"/>
+    <link href="http://withaflourish.net/thing-two"/>
     <published>2016-06-04T12:30:00+00:00</published>
   </entry>
 </feed>
