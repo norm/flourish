@@ -2,7 +2,7 @@
 
 from collections import defaultdict
 from datetime import date, datetime
-from importlib.machinery import SourceFileLoader
+import importlib
 from operator import itemgetter
 import os
 from shutil import copyfile, rmtree
@@ -79,15 +79,16 @@ class Flourish(object):
         self.site_config = self._read_site_config()
         self._rescan_sources()
 
-        try:
-            generate = SourceFileLoader(
-                    'generate', '%s/generate.py' % self.source_dir
-                ).load_module()
-        except FileNotFoundError:
+        filename = '%s/generate.py' % self.source_dir
+        spec = importlib.util.spec_from_file_location("generate_module", filename)
+        if spec is None:
             raise Flourish.RuntimeError(
                 ('The source directory "%s"'
                  ' must contain the file "generate.py"') % self.source_dir
             )
+
+        generate = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(generate)
 
         try:
             self.set_global_context(getattr(generate, 'GLOBAL_CONTEXT'))
