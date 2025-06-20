@@ -80,7 +80,10 @@ class Flourish(object):
         self._rescan_sources()
 
         filename = '%s/generate.py' % self.source_dir
-        spec = importlib.util.spec_from_file_location("generate_module", filename)
+        spec = importlib.util.spec_from_file_location(
+            "generate_module",
+            filename,
+        )
         if spec is None:
             raise Flourish.RuntimeError(
                 ('The source directory "%s"'

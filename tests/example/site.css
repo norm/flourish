@@ -1,0 +1,77 @@
+body {
+    max-width: 600px;
+    margin: 2em auto;
+    font-size: 1.2em;
+    line-height: 1.4;
+}
+
+header {
+    margin: 0 -40px 0;
+    padding: 0 40px;
+    border-bottom: 1px solid #ccc;
+}
+header h1,
+header p {
+    font-size: 1.25em;
+    font-weight: bold;
+}
+
+header nav {
+    padding: 0;
+    margin: 0 0 1em;
+}
+header nav ul, header nav li {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+header nav li ul, header nav li li {
+    display: inline-block;
+}
+header nav ul ul li:after {
+    content: ', ';
+}
+header nav ul ul li:last-child:after {
+    content: '';
+}
+
+#posts {
+    margin: 2em 0;
+    padding: 0;
+}
+#posts li {
+    margin: 0 0 2em;
+    padding: 0;
+    list-style: none;
+}
+#posts li time {
+    color: #666;
+    display: block;
+}
+#posts li a {
+    font-size: 1.5em;
+}
+
+pre {
+    margin: 0 1em;
+    padding: 0.5em 1em;
+    overflow: scroll;
+    background: #dee;
+    border: 1px solid #599;
+}
+code {
+    color: #266;
+    background: #dee;
+}
+p > code {
+    border: 1px solid #599;
+    display: inline-block;
+    padding: 1px 3px;
+    line-height: 1.2;
+}
+
+footer {
+    margin: 4em -40px 2em;
+    padding: 0 40px;
+    border-top: 1px solid #ccc;
+}
