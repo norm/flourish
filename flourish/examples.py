@@ -30,7 +30,9 @@ example_files = {
                 'dates': self.publication_dates,
             }
 
+
         GLOBAL_CONTEXT = global_context
+
 
         PATHS = (
             SourceGenerator(
@@ -242,10 +244,10 @@ example_files = {
             <ul>
               {% for year in global.dates %}
                 <li>
-                  <a href='/{{year.year}}/'>{{year.year}}</a>:
+                  <a href='{{ path("year-index", year=year.year.year) }}'>{{year.year.year}}</a>:
                   <ul>
                     {% for month in year.months %}
-                      <li><a href='/{{year.year}}/{{month.month}}'>{{month.month}}</a></li>
+                      <li><a href='{{ path("month-index", year=year.year.year, month=month.month.month) }}'>{{month.month.strftime("%m")}}</a></li>
                     {% endfor %}
                   </ul>
                 </li>
@@ -291,7 +293,7 @@ example_files = {
                     {{page.published.strftime('%A %B %d, %Y')}}
                   </time>
                 {% endif %}
-                <a href='{{page.url}}'>{{page.title}}</a>
+                <a href='{{page.path}}'>{{page.title}}</a>
               </li>
             {% endfor %}
           </ul>
